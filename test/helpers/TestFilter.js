@@ -27,13 +27,13 @@ let TestFilter = exports.TestFilter = class TestFilter {
       for (let _arr2 = this.exclusions, _i = 0, _len2 = _arr2.length; _i < _len2; _i++) {
         const exclusion = _arr2[_i];
         if (name.indexOf(exclusion) > -1) return false;
-      }true;
+      }return true;
     } else if (this.inclusions) {
-      if (this.includePrefix && name.indexOf(this.includePrefix) === 0) return true;
+      if (this.includePrefix && name.startsWith(this.includePrefix)) return true;
       for (let _arr3 = this.inclusions, _i2 = 0, _len3 = _arr3.length; _i2 < _len3; _i2++) {
         const inclusion = _arr3[_i2];
         if (name === inclusion) return true;
-      }false;
+      }return false;
     }return true;
   }
 };

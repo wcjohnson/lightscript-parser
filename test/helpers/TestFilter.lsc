@@ -21,14 +21,14 @@ export class TestFilter:
     if this.exclusions:
       for elem exclusion in this.exclusions:
         if name.indexOf(exclusion) > -1: return false
-      true
+      return true
     elif this.inclusions:
-      if this.includePrefix and name.indexOf(this.includePrefix) == 0: return true
+      if this.includePrefix and name.startsWith(this.includePrefix): return true
       for elem inclusion in this.inclusions:
         if name == inclusion: return true
-      false
+      return false
 
-    true
+    return true
 
 export allTests = new TestFilter()
 

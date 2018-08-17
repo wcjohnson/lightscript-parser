@@ -37,7 +37,11 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
     if (this.actual) {
       // Get `it` from Jest global
       const testFn = typeof it !== 'undefined' ? this.disabled ? it == null ? void 0 : it.skip : it : void 0;
-      if (testFn) testFn(this.title, () => this.runTest());
+      if (testFn) {
+        testFn(this.title, () => this.runTest());
+      } else {
+        console.log("enqueuing", this.title);
+      }
     }
   }throwAnnotatedError(err) {
     err.message = this.title + ": " + err.message;
@@ -69,11 +73,16 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
 
     if (!this.expected && !this.options.throws && process.env.SAVE_EXPECTED) {
       this.saveExpected(ast);
+      return;
     }if (this.options.throws) {
       this.throwAnnotatedError(new Error("Expected error message: " + this.options.throws + ". But parsing succeeded."));
     } else {
-      const mis = (0, _misMatch2.default)(JSON.parse(this.expected), ast);
-      if (mis) this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis));
+      if (this.expected) {
+        const mis = (0, _misMatch2.default)(JSON.parse(this.expected), ast);
+        if (mis) this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis));
+      } else {
+        this.throwAnnotatedError(new Error("Empty expected output -- use SAVE_EXPECTED=1 to create expected output."));
+      }
     }
   }saveExpected(ast) {
     const toJSON = RegExp.prototype.toJSON;
@@ -81,7 +90,7 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
     const jsonAst = JSON.stringify(ast, null, "  ");
     RegExp.prototype.toJSON = toJSON;
 
-    this.saveLocalArtifact("expected.json", jsonAst);
+    this.saveLocalArtifact("output.json", jsonAst);
   }saveThrows(err) {
     const opts = this.readTestOptions() || {};
     opts.throws = err.message;

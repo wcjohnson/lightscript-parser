@@ -30,7 +30,10 @@ class ParserTestable extends Testable:
     if this.actual:
       // Get `it` from Jest global
       testFn = if typeof(it) != 'undefined': if this.disabled: it?.skip else: it
-      if testFn: testFn(this.title, => this.runTest())
+      if testFn:
+        testFn(this.title, => this.runTest())
+      else:
+        console.log("enqueuing", this.title)
 
   throwAnnotatedError(err): void ->
     err.message = this.title + ": " + err.message
@@ -64,14 +67,18 @@ class ParserTestable extends Testable:
 
     if (not this.expected) and (not this.options.throws) and (process.env.SAVE_EXPECTED):
       this.saveExpected(ast)
+      return
 
     if this.options.throws:
       this.throwAnnotatedError(new Error(
         "Expected error message: " + this.options.throws + ". But parsing succeeded."
       ))
     else:
-      mis = misMatch(JSON.parse(this.expected), ast)
-      if mis: this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis))
+      if this.expected:
+        mis = misMatch(JSON.parse(this.expected), ast)
+        if mis: this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis))
+      else:
+        this.throwAnnotatedError(new Error("Empty expected output -- use SAVE_EXPECTED=1 to create expected output."))
 
   saveExpected(ast): void ->
     toJSON = RegExp.prototype.toJSON
@@ -79,7 +86,7 @@ class ParserTestable extends Testable:
     jsonAst = JSON.stringify(ast, null, "  ")
     RegExp.prototype.toJSON = toJSON
 
-    this.saveLocalArtifact("expected.json", jsonAst)
+    this.saveLocalArtifact("output.json", jsonAst)
 
   saveThrows(err): void ->
     const opts = this.readTestOptions() or {}
