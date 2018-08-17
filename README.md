@@ -1,19 +1,20 @@
-# @babel/parser
+# @lightscript/parser
 
-> A JavaScript parser
+## If you are looking to get started with the LightScript language, this is the wrong place -- [check out the docs here!](http://wcjohnson.github.io/lightscript)
 
-See our website [@babel/parser](https://babeljs.io/docs/en/next/babel-parser.html) for more information or the [issues](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20babylon%22+is%3Aopen) associated with this package.
+@oigroup/lightscript is a futuristic fork of the [LightScript](http://lightscript.org) language with additional features, fixes, and tools. This is the parser for [@oigroup/LightScript](http://wcjohnson.github.io/lightscript).
+To be used with [@oigroup/babel-plugin-lightscript](https://github.com/wcjohnson/babel-plugin-lightscript).
 
-## Install
+Unless you are working on tooling or hacking the language itself, you don't need this -- get the [Babel preset](http://wcjohnson.github.io/lightscript) instead.
 
-Using npm:
+A fork of [@babel/parser](https://github.com/babel/babel).
 
-```sh
-npm install --save-dev @babel/parser
-```
+### Contributing
 
-or using yarn:
+To get up and running:
 
-```sh
-yarn add @babel/parser --dev
-```
+    npm install
+    npm run build
+    npm test
+
+Issues: https://github.com/wcjohnson/lightscript/issues
