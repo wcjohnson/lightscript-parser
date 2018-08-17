@@ -1,0 +1,36 @@
+export class TestFilter:
+  constructor() ->
+    this.exclusions = null
+    this.inclusions = null
+    this.includePrefix = null
+
+  exclude(name): void ->
+    this.inclusions = null
+    this.exclusions = (this.exclusions || []).concat([name])
+
+  only(name): void ->
+    if name:
+      this.exclusions = null
+      this.includePrefix = name
+      paths = name.split("/")
+      this.inclusions = [...for idx i in paths:
+        [paths.slice(0,i+1).join('/')]
+      ]
+
+  filter(name): boolean ->
+    if this.exclusions:
+      for elem exclusion in this.exclusions:
+        if name.indexOf(exclusion) > -1: return false
+      true
+    elif this.inclusions:
+      if this.includePrefix and name.indexOf(this.includePrefix) == 0: return true
+      for elem inclusion in this.inclusions:
+        if name == inclusion: return true
+      false
+
+    true
+
+export allTests = new TestFilter()
+
+export noTests = new TestFilter()
+noTests.filter(name) -> false

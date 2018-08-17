@@ -1,0 +1,101 @@
+// Test the test runner
+import { TestRun, Testable, TestOptions } from './TestRunner'
+import { allTests, TestFilter } from './TestFilter'
+import path from 'path'
+import { parse } from '../../lib'
+import misMatch from './misMatch'
+
+class ParserTestable extends Testable:
+  loadTest(): void ->
+    this.loadTestData()
+    this.enqueueTest()
+
+  readTestOptions() ->
+    options = this.readLocalArtifact("options.json", false)
+    if options: JSON.parse(options)
+
+  loadTestData(): void ->
+    if this.name and this.name[0] == '.':
+      this.disabled = true
+      return
+
+    options = this.readTestOptions()
+    if options: Object.assign(this.options, options)
+    //console.log("Test options:", this.title, this.options)
+
+    this.actual = this.readLocalArtifact("input", true)
+    this.expected = this.readLocalArtifact("output.json", false)
+
+  enqueueTest(): void ->
+    if this.actual:
+      // Get `it` from Jest global
+      testFn = if typeof(it) != 'undefined': if this.disabled: it?.skip else: it
+      if testFn: testFn(this.title, => this.runTest())
+
+  throwAnnotatedError(err): void ->
+    err.message = this.title + ": " + err.message
+    throw err
+
+  runTest(): void ->
+    if (this.options.throws && this.expected):
+      this.throwAnnotatedError(new Error("File expected.json exists although options specify throws."))
+
+    let ast
+    try {
+      now ast = this.run.parse(this.actual, this.options)
+    } catch(err) {
+      if this.options.throws:
+        if err.message == this.options.throws:
+          return
+        elif process.env.SAVE_THROWS:
+          this.saveThrows(err)
+          this.throwAnnotatedError(err)
+        else:
+          err.message = `Expected error message: ${opts.throws}. Got error message: ${err.message}`
+          this.throwAnnotatedError(err)
+      elif (not this.expected) and (process.env.SAVE_THROWS):
+        this.saveThrows(err)
+
+      this.throwAnnotatedError(err)
+    }
+
+    // Don't store comments in expected output
+    if (ast.comments && !ast.comments.length) delete ast.comments
+
+    if (not this.expected) and (not this.options.throws) and (process.env.SAVE_EXPECTED):
+      this.saveExpected(ast)
+
+    if this.options.throws:
+      this.throwAnnotatedError(new Error(
+        "Expected error message: " + this.options.throws + ". But parsing succeeded."
+      ))
+    else:
+      mis = misMatch(JSON.parse(this.expected), ast)
+      if mis: this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis))
+
+  saveExpected(ast): void ->
+    toJSON = RegExp.prototype.toJSON
+    RegExp.prototype.toJSON = RegExp.prototype.toString
+    jsonAst = JSON.stringify(ast, null, "  ")
+    RegExp.prototype.toJSON = toJSON
+
+    this.saveLocalArtifact("expected.json", jsonAst)
+
+  saveThrows(err): void ->
+    const opts = this.readTestOptions() or {}
+    opts.throws = err.message
+    this.saveLocalArtifact("options.json", JSON.stringify(opts, null, "  "))
+
+run = new TestRun()
+run.parse = parse
+run.getTestableConstructor() -> ParserTestable
+run.extensions = ['.js', '.lsc', '.lsx']
+opts = new TestOptions()
+
+filter = new TestFilter()
+if process.env.ONLY:
+  filter.only(process.env.ONLY)
+
+rootTestable = new Testable(run, null, filter)
+rootTestable.setTestPath(path.join(__dirname, '../fixtures'))
+rootTestable.readTestDirectory()

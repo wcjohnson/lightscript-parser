@@ -1,0 +1,103 @@
+import path from "path"
+import fs from "fs"
+import trimEnd from "lodash/trimEnd"
+
+export class TestOptions:
+  constructor(parentOptions) ->
+    this.inherits(parentOptions)
+
+  inherits(parentOptions): void ->
+    Object.assign(this, parentOptions)
+
+export class TestRun:
+  getTestableConstructor(thisTestable) ->
+    Object.getPrototypeOf(thisTestable).constructor
+
+  getOptionsConstructor(thisTestable) ->
+    if thisTestable.options:
+      Object.getPrototypeOf(thisTestable.options).constructor
+    elif thisTestable.parent?.options:
+      Object.getPrototypeOf(thisTestable.parent.options).constructor
+    else:
+      TestOptions
+
+export class Testable:
+  constructor(run, parent, filter, options) ->
+    this.run = run
+    this.parent = parent
+    this.filter = filter or allTests
+    this.options = options or new (run.getOptionsConstructor(this))(this.parent?.options)
+    this.subtests = []
+    this.name = ''
+    this.title = ''
+
+  setRelativeTestPath(subdir) ->
+    this.name = subdir
+    this.title = if this.parent?.title:
+      `${this.parent.title}/${subdir}`
+    else:
+      subdir
+    this.path = path.join(this.parent?.path or '', subdir)
+
+  setTestPath(path) ->
+    this.path = path
+
+  readTestDirectory() ->
+    testFiles = fs.readdirSync(this.path)
+    localTestFiles = []
+    subTestDirectories = []
+    for elem d in testFiles:
+      fullName = path.join(this.path, d)
+      // Subdirectories represent subtests
+      if fs.statSync(fullName).isDirectory():
+        subTestDirectories.push(d)
+      else:
+        localTestFiles.push(d)
+    this.localTestFiles = localTestFiles
+    this.loadTest()
+
+    for elem d in subTestDirectories:
+      this.addSubTestableFromRelativePath(d)
+
+  addSubTestableFromRelativePath(relativePath): void ->
+    subTestable = new (this.run.getTestableConstructor(this))(this.run, this, this.filter)
+    subTestable.setRelativeTestPath(relativePath)
+    // console.log("filtering", subTestable.title, "against", this.filter)
+    if this.filter.filter(subTestable.title):
+      // console.log("PASSED filter")
+      subTestable.readTestDirectory()
+      this.addSubTest(subTestable)
+
+  addSubTest(subTest): void ->
+    this.subtests.push(subTest)
+
+  loadTest(): void -> return
+
+  saveLocalArtifact(fileName, data): void ->
+    fs.writeFileSync(path.join(this.path, fileName), data)
+
+  resolveLocalArtifact(baseName, resolveExtension) ->
+    extensions = if resolveExtension:
+      this.run.extensions or ['']
+    else:
+      ['']
+
+    matches = [...for elem ext in extensions:
+      resolvedName = baseName + ext
+      if this.localTestFiles.indexOf(resolvedName) > -1: [resolvedName]
+    ]
+    if matches.length == 0: return null
+
+    { fileName: matches[0], fullPath: path.join(this.path, matches[0]) }
+
+  readLocalArtifact(fileName, resolveExtension) ->
+    result = this.resolveLocalArtifact(fileName, resolveExtension)
+    if not result: return ''
+    fullName = result.fullPath
+
+    if fs.existsSync(fullName):
+      let content = trimEnd(fs.readFileSync(fullName, "utf8"))
+      now content = content.replace(/\r\n/g, "\n")
+      content
+    else:
+      ''
