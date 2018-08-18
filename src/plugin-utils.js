@@ -86,14 +86,12 @@ import estree from "./plugins/estree";
 import flow from "./plugins/flow";
 import jsx from "./plugins/jsx";
 import typescript from "./plugins/typescript";
-import tildeCall from "./plugins/tildeCall"
 
 // NOTE: estree must load first; flow and typescript must load last.
-export const mixinPluginNames = ["estree", "jsx", "flow", "typescript", "tildeCall"];
+export const mixinPluginNames = ["estree", "jsx", "flow", "typescript"];
 export const mixinPlugins: { [name: string]: MixinPlugin } = {
   estree,
   jsx,
   flow,
   typescript,
-  tildeCall
 };
