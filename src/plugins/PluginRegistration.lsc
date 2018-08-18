@@ -1,0 +1,104 @@
+import estree from "./estree"
+import flow from "./flow"
+import jsx from "./jsx"
+import typescript from "./typescript"
+
+// c/p from plugin-utils.js
+PIPELINE_PROPOSALS = ["minimal"]
+
+// Registration for Babylon 7/Babel Parser plugins
+export registerPlugins(registerPlugin, Plugin) ->
+  registerPlugin(new Plugin({ name: 'functionSent' }))
+  registerPlugin(new Plugin({ name: 'functionBind' }))
+  registerPlugin(new Plugin({ name: 'importMeta' }))
+  registerPlugin(new Plugin({ name: 'classProperties' }))
+  registerPlugin(new Plugin({ name: 'classPrivateProperties' }))
+  registerPlugin(new Plugin({ name: 'classPrivateMethods' }))
+  registerPlugin(new Plugin({ name: 'numericSeparator' }))
+  registerPlugin(new Plugin({ name: 'bigInt' }))
+  registerPlugin(new Plugin({ name: 'nullishCoalescingOperator' }))
+  registerPlugin(new Plugin({ name: 'logicalAssignment' }))
+  registerPlugin(new Plugin({ name: 'throwExpressions' }))
+  registerPlugin(new Plugin({ name: 'optionalChaining' }))
+  registerPlugin(new Plugin({ name: 'dynamicImport' }))
+  registerPlugin(new Plugin({ name: 'doExpressions' }))
+  registerPlugin(new Plugin({ name: 'objectRestSpread' }))
+  registerPlugin(new Plugin({ name: 'asyncGenerators' }))
+  registerPlugin(new Plugin({ name: 'optionalCatchBinding' }))
+  registerPlugin(new Plugin({ name: 'exportDefaultFrom' }))
+  registerPlugin(new Plugin({ name: 'exportNamespaceFrom' }))
+  registerPlugin(new Plugin({ name: 'jsonStrings' }))
+
+  registerPlugin(new Plugin({
+    name: 'pipelineOperator'
+    validate(opts) ->
+      if (!PIPELINE_PROPOSALS.includes(opts?.proposal)) {
+        throw new Error(
+          "'pipelineOperator' requires 'proposal' option whose value should be one of: " +
+            PIPELINE_PROPOSALS.join(", "),
+        );
+      }
+  }))
+
+  registerPlugin(new Plugin({
+    name: 'decorators'
+    validate(opts, mgr) ->
+      // Preserve error message from original Babylon
+      if mgr.hasActualPlugin('decorators-legacy'):
+        throw new Error("Cannot use the decorators and decorators-legacy plugin together")
+
+      decoratorsBeforeExport = opts?.decoratorsBeforeExport
+      if (decoratorsBeforeExport == null) {
+        throw new Error(
+          "The 'decorators' plugin requires a" +
+            " 'decoratorsBeforeExport' option, whose value must be a boolean.",
+        );
+      } else if (typeof decoratorsBeforeExport !== "boolean") {
+        throw new Error("'decoratorsBeforeExport' must be a boolean.");
+      }
+  }))
+  registerPlugin(new Plugin({
+    name: 'decorators-legacy'
+  }))
+
+  registerPlugin(new Plugin({
+    name: 'typescript'
+    incompatibilities: ['flow']
+    mixin: typescript
+    loadOrderPriority: 100 // load last
+    explicit: true
+  }))
+  registerPlugin(new Plugin({
+    name: 'flow'
+    incompatibilities: ['typescript']
+    mixin: flow
+    loadOrderPriority: 100 // load last
+    explicit: true
+  }))
+  registerPlugin(new Plugin({
+    name: 'flowComments'
+    incompatibilities: ['typescript']
+  }))
+
+  registerPlugin(new Plugin({
+    name: 'estree'
+    mixin: estree
+    loadOrderPriority: -100 // load first
+    explicit: true
+  }))
+
+  registerPlugin(new Plugin({
+    name: 'jsx'
+    mixin: jsx
+    loadOrderPriority: -99 // load early
+  }))
+
+  registerNewPlugins(registerPlugin, Plugin)
+
+// Registration for plugins added by LightScript
+import tildeCall from './tildeCall'
+registerNewPlugins(registerPlugin, Plugin) ->
+  registerPlugin(new Plugin({
+    name: 'tildeCall'
+    mixin: tildeCall
+  }))

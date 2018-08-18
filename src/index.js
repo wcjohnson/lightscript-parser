@@ -9,6 +9,7 @@ import {
   type PluginList,
 } from "./plugin-utils";
 import Parser from "./parser";
+import { getParser as lscGetParser, Plugin, PluginManager } from './plugins/PluginCore'
 
 import { types as tokTypes } from "./tokenizer/types";
 import "./tokenizer/context";
@@ -22,7 +23,7 @@ export function parse(input: string, options?: Options): File {
     };
     try {
       options.sourceType = "module";
-      const parser = getParser(options, input);
+      const parser = lscGetParser(options, input);
       const ast = parser.parse();
 
       // Rather than try to parse as a script first, we opt to parse as a module and convert back
@@ -32,18 +33,18 @@ export function parse(input: string, options?: Options): File {
     } catch (moduleError) {
       try {
         options.sourceType = "script";
-        return getParser(options, input).parse();
+        return lscGetParser(options, input).parse();
       } catch (scriptError) {}
 
       throw moduleError;
     }
   } else {
-    return getParser(options, input).parse();
+    return lscGetParser(options, input).parse();
   }
 }
 
 export function parseExpression(input: string, options?: Options): Expression {
-  const parser = getParser(options, input);
+  const parser = lscGetParser(options, input);
   if (parser.options.strictMode) {
     parser.state.strict = true;
   }
@@ -51,6 +52,7 @@ export function parseExpression(input: string, options?: Options): Expression {
 }
 
 export { tokTypes };
+export { Plugin, PluginManager };
 
 function getParser(options: ?Options, input: string): Parser {
   let cls = Parser;
