@@ -54,7 +54,7 @@ class ParserTestable extends Testable:
           this.saveThrows(err)
           this.throwAnnotatedError(err)
         else:
-          err.message = `Expected error message: ${opts.throws}. Got error message: ${err.message}`
+          err.message = `Expected error message: ${this.options.throws}. Got error message: ${err.message}`
           this.throwAnnotatedError(err)
       elif (not this.expected) and (process.env.SAVE_THROWS):
         this.saveThrows(err)

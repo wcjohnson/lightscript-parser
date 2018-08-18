@@ -60,7 +60,7 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
           this.saveThrows(err);
           this.throwAnnotatedError(err);
         } else {
-          err.message = `Expected error message: ${opts.throws}. Got error message: ${err.message}`;
+          err.message = `Expected error message: ${this.options.throws}. Got error message: ${err.message}`;
           this.throwAnnotatedError(err);
         }
       } else if (!this.expected && process.env.SAVE_THROWS) {
