@@ -1,0 +1,12 @@
+import { keywords, types, TokenType } from './types'
+
+export registerToken(name, tt) ->
+  if types[name]:
+    throw new Error(`Duplicate registration of tokenType named '${name}'`)
+  types[name] = tt
+
+export registerKeywordToken(word, tt) ->
+  keywords[word] = tt
+  types["_" + word] = tt
+
+export { types, TokenType }

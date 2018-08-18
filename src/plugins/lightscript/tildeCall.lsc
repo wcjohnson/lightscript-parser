@@ -1,13 +1,14 @@
 import { Plugin } from '../core/plugin'
-import { types as tt, TokenType } from "../../tokenizer/types"
+import { types as tt, TokenType, registerToken } from "../../tokenizer/register"
 import * as charCodes from "charcodes"
 
 tildeCall = new Plugin({
   name: 'tildeCall'
-  mixin(ParserBase, opts) -> {
+  load() ->
     // Create token type
-    tt.tildeCall = new TokenType("~>")
+    registerToken('tildeCall', new TokenType("~>"))
 
+  mixin(ParserBase, opts) -> {
     clazz = class extends ParserBase {
       // Modify tokenizer to intercept `~`
       getTokenFromCode(code) ->
