@@ -6,8 +6,8 @@ import * as charCodes from "charcodes";
 import {
   isIdentifierStart,
   isIdentifierChar,
+  isKeyword,
 } from "../util/identifier";
-import { isKeyword } from '../util/keywords';
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
 import LocationParser from "../parser/location";
