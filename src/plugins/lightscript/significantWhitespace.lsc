@@ -74,6 +74,23 @@ significantWhitespace = new Plugin({
         }
       } // skipSpace
 
+      jsxReadNewLine(normalizeCRLF) ->
+        let out = super.jsxReadNewLine(normalizeCRLF)
+
+        this.state.indentLevel = 0;
+        while (this.input.charCodeAt(this.state.pos) === 32) {
+          if (this.input.charCodeAt(this.state.pos + 1) === 32) {
+            ++this.state.pos;
+            ++this.state.pos;
+            ++this.state.indentLevel;
+            now out += "  ";
+          } else {
+            break;
+          }
+        }
+
+        return out
+
       // Get indent level at the given input position.
       indentLevelAt(pos) -> {
         let indents = 0;
