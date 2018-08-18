@@ -1,78 +1,85 @@
+import { Plugin } from './core/plugin'
 import { types as tt, TokenType } from "../tokenizer/types"
 import * as charCodes from "charcodes"
 
-export default tildeCall(ParserBase) ->
-  // Create token type
-  tt.tilde = new TokenType("~")
+tildeCall = new Plugin({
+  name: 'tildeCall'
+  mixin(ParserBase) -> {
+    // Create token type
+    tt.tilde = new TokenType("~")
 
-  return class extends ParserBase:
-    // Modify tokenizer to intercept `~`
-    getTokenFromCode(code) ->
-      if code == charCodes.tilde:
-        if this.input.charCodeAt(this.state.pos + 1) == charCodes.greaterThan:
-          this.state.pos += 2
-          return this.finishToken(tt.tilde, "~>")
+    return class extends ParserBase:
+      // Modify tokenizer to intercept `~`
+      getTokenFromCode(code) ->
+        if code == charCodes.tilde:
+          if this.input.charCodeAt(this.state.pos + 1) == charCodes.greaterThan:
+            this.state.pos += 2
+            return this.finishToken(tt.tilde, "~>")
 
-        ++this.state.pos
-        return this.finishToken(tt.tilde)
+          ++this.state.pos
+          return this.finishToken(tt.tilde)
 
-      super.getTokenFromCode(code)
+        super.getTokenFromCode(code)
 
-    // Hook subscript parsing chain to catch `~` token
-    parseSubscript(base, startPos, startLoc, noCalls, state) ->
-      if (not noCalls) and this.match(tt.tilde):
-        node = this.startNodeAt(startPos, startLoc)
-        next = this.tildeCallParse(node, base)
-        if next:
-          return next
+      // Hook subscript parsing chain to catch `~` token
+      parseSubscript(base, startPos, startLoc, noCalls, state) ->
+        if (not noCalls) and this.match(tt.tilde):
+          node = this.startNodeAt(startPos, startLoc)
+          next = this.tildeCallParse(node, base)
+          if next:
+            return next
+          else:
+            state.stop = true
+            return node
+
+        super.parseSubscript(base, startPos, startLoc, noCalls, state)
+
+      // Parse callees for tilde-calls
+      tildeCallParseCallee() ->
+        if this.match(tt._this):
+          this.parseExprAtom()
         else:
-          state.stop = true
-          return node
+          this.parseIdentifier() // parseIdentifierOrPlaceholder() for match
 
-      super.parseSubscript(base, startPos, startLoc, noCalls, state)
+      // Parse `a~b(...)` or `a~>b(...)` subscript. Returns truthy iff
+      // the call is further subscriptable.
+      tildeCallParse(node, firstArg) ->
+        this.next()
 
-    // Parse callees for tilde-calls
-    tildeCallParseCallee() ->
-      if this.match(tt._this):
-        this.parseExprAtom()
-      else:
-        this.parseIdentifier() // parseIdentifierOrPlaceholder() for match
+        // allow `this`, Identifier or MemberExpression, but not calls
+        const callee = this.tildeCallParseCallee()
+        node.callee = this.parseSubscripts(callee, this.state.start, this.state.startLoc, true)
 
-    // Parse `a~b(...)` or `a~>b(...)` subscript. Returns truthy iff
-    // the call is further subscriptable.
-    tildeCallParse(node, firstArg) ->
-      this.next()
+        // Allow safe tilde calls (a~b?(c))
+        if (
+          this.hasPlugin("safeCallExpression") &&
+          this.state.lastTokEnd === (this.state.pos - 1) &&
+          this.eat(tt.question)
+        ) {
+          node.optional = true;
+        }
 
-      // allow `this`, Identifier or MemberExpression, but not calls
-      const callee = this.tildeCallParseCallee()
-      node.callee = this.parseSubscripts(callee, this.state.start, this.state.startLoc, true)
-
-      // Allow safe tilde calls (a~b?(c))
-      if (
-        this.hasPlugin("safeCallExpression") &&
-        this.state.lastTokEnd === (this.state.pos - 1) &&
-        this.eat(tt.question)
-      ) {
-        node.optional = true;
-      }
-
-      // Allow bang tilde calls
-      if (this.hasPlugin("bangCall") && this.isAdjacentBang()) {
-        const next = this.parseBangCall(node, "CallExpression");
-        node.arguments.unshift(firstArg);
-        node.tilde = true;
-        if (next) {
-          return next;
+        // Allow bang tilde calls
+        if (this.hasPlugin("bangCall") && this.isAdjacentBang()) {
+          const next = this.parseBangCall(node, "CallExpression");
+          node.arguments.unshift(firstArg);
+          node.tilde = true;
+          if (next) {
+            return next;
+          } else {
+            return false;
+          }
         } else {
-          return false;
+          if (node.optional && this.state.lastTokEnd !== (this.state.pos - 1)) {
+            this.unexpected(null, "Whitespace is forbidden after `?` in an optional call.");
+          }
+          this.expect(tt.parenL);
+          node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+          node.arguments.unshift(firstArg);
+          node.tilde = true;
+          return this.finishNode(node, "CallExpression");
         }
-      } else {
-        if (node.optional && this.state.lastTokEnd !== (this.state.pos - 1)) {
-          this.unexpected(null, "Whitespace is forbidden after `?` in an optional call.");
-        }
-        this.expect(tt.parenL);
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-        node.arguments.unshift(firstArg);
-        node.tilde = true;
-        return this.finishNode(node, "CallExpression");
-      }
+  } // mixin
+})
+
+export default tildeCall

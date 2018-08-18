@@ -1,0 +1,52 @@
+import { pluginForName, maybePluginForName } from './registry'
+
+export class Plugin:
+  constructor(opts) ->
+    this.name = opts.name
+    this.dependencies = opts.dependencies or []
+    this.incompatibilities = opts.incompatibilities or []
+    this.loadOrderPriority = opts.loadOrderPriority or 0
+    this._validate = opts.validate or (-> true)
+    this._load = opts.load or (-> return)
+    this._mixin = opts.mixin
+
+  getName() -> this.name
+
+  getLoadOrderPriority() -> this.loadOrderPriority
+
+  resolvedDependencies() ->
+    [...for elem name in this.dependencies: [pluginForName(name)]]
+
+  unwoundDependencies() ->
+    result = [...for elem dep in this.resolvedDependencies(): dep.unwoundDependencies()]
+    result.push(this)
+    result
+
+  dependents() ->
+    [...for key name, val plugin in pluginsByName:
+      if plugin.unwoundDependencies().indexOf(this) > -1:
+        [plugin]
+    ]
+
+  dependsOn(p): boolean ->
+    if typeof(p) == 'string':
+      this.dependsOn(maybePluginForName(p))
+    elif p:
+      this.unwoundDependencies().indexOf(p) > -1
+    else:
+      false
+
+  hasMixin(): boolean ->
+    if this._mixin: true else: false
+
+  mixin(ParserBase, opts) ->
+    this._mixin(ParserBase, opts)
+
+  validate(mgr, opts): void ->
+    for elem name in this.incompatibilities:
+      if mgr.hasActualPlugin(name):
+        throw new Error(`Plugin '${this.getName()}' is incompatible with plugin '${name}'`)
+    this._validate(opts, mgr)
+
+  load(opts): void ->
+    this._load(opts)

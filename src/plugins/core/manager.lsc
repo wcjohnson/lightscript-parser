@@ -1,4 +1,7 @@
-// Stable sort
+// Plugin manager
+import { pluginForName, parserClassCache } from './registry'
+
+// TODO: lodash.sortBy
 stableSort(arr, comparator) ->
   len = arr.length
   entries = Array(len)
@@ -7,52 +10,6 @@ stableSort(arr, comparator) ->
   entries.sort(newComparator)
   for (let index = 0; index < len; index++) arr[index] = entries[index][1]
   arr
-
-// New getParser implementation
-import Parser from '../parser'
-
-export function getParser(options, input) {
-  if (!options) now options = {};
-  if (!options.plugins) options.plugins = [];
-
-  // Create plugin manager
-  let pluginManager = new PluginManager();
-  if (options.pluginManager) {
-    now pluginManager = options.pluginManager;
-  }
-  pluginManager.addPlugins(options.plugins);
-
-  // Validate and load plugins
-  pluginManager.resolveActualPlugins();
-  pluginManager.validate();
-  pluginManager.load();
-
-  // Replace options.plugins with actual list
-  options.plugins = pluginManager.actualPluginBabelOpts()
-
-  const cls = pluginManager.getParserClass(Parser);
-  return new cls(options, input);
-}
-
-// Plugin registry
-pluginsByName = {}
-
-export registerPlugin(p): void ->
-  n = p.getName()
-  if pluginsByName[n]:
-    throw new Error(`Duplicate plugin named '${n}' has been registered.`)
-  pluginsByName[n] = p
-
-export pluginForName(n) ->
-  p = pluginsByName[n]
-  if not p:
-    throw new Error(`Could not find plugin named '${n}'`)
-  p
-
-export maybePluginForName(n) -> pluginsByName[n]
-
-// Plugin manager
-parserClassCache = {}
 
 export class PluginManager:
   constructor() ->
@@ -132,58 +89,3 @@ export class PluginManager:
 
     //console.log("mixinPlugins", mixinPlugins, "mixedClass", cls)
     cls
-
-export class Plugin:
-  constructor(opts) ->
-    this.name = opts.name
-    this.dependencies = opts.dependencies or []
-    this.incompatibilities = opts.incompatibilities or []
-    this.loadOrderPriority = opts.loadOrderPriority or 0
-    this._validate = opts.validate or (-> true)
-    this._load = opts.load or (-> return)
-    this._mixin = opts.mixin
-
-  getName() -> this.name
-
-  getLoadOrderPriority() -> this.loadOrderPriority
-
-  resolvedDependencies() ->
-    [...for elem name in this.dependencies: [pluginForName(name)]]
-
-  unwoundDependencies() ->
-    result = [...for elem dep in this.resolvedDependencies(): dep.unwoundDependencies()]
-    result.push(this)
-    result
-
-  dependents() ->
-    [...for key name, val plugin in pluginsByName:
-      if plugin.unwoundDependencies().indexOf(this) > -1:
-        [plugin]
-    ]
-
-  dependsOn(p): boolean ->
-    if typeof(p) == 'string':
-      this.dependsOn(maybePluginForName(p))
-    elif p:
-      this.unwoundDependencies().indexOf(p) > -1
-    else:
-      false
-
-  hasMixin(): boolean ->
-    if this._mixin: true else: false
-
-  mixin(ParserBase, opts) ->
-    this._mixin(ParserBase, opts)
-
-  validate(mgr, opts): void ->
-    for elem name in this.incompatibilities:
-      if mgr.hasActualPlugin(name):
-        throw new Error(`Plugin '${this.getName()}' is incompatible with plugin '${name}'`)
-    this._validate(opts, mgr)
-
-  load(opts): void ->
-    this._load(opts)
-
-// Register all available plugins.
-import { registerPlugins } from './PluginRegistration'
-registerPlugins(registerPlugin, Plugin)

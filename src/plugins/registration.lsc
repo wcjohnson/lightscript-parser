@@ -98,7 +98,4 @@ export registerPlugins(registerPlugin, Plugin) ->
 // Registration for plugins added by LightScript
 import tildeCall from './tildeCall'
 registerNewPlugins(registerPlugin, Plugin) ->
-  registerPlugin(new Plugin({
-    name: 'tildeCall'
-    mixin: tildeCall
-  }))
+  registerPlugin(tildeCall)

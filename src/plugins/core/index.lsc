@@ -1,0 +1,34 @@
+// New getParser implementation
+import Parser from '../../parser'
+import { PluginManager } from './manager'
+import { Plugin } from './plugin'
+import { registerPlugin } from './registry'
+import { registerPlugins } from '../registration'
+
+export function getParser(options, input) {
+  if (!options) now options = {};
+  if (!options.plugins) options.plugins = [];
+
+  // Create plugin manager
+  let pluginManager = new PluginManager();
+  if (options.pluginManager) {
+    now pluginManager = options.pluginManager;
+  }
+  pluginManager.addPlugins(options.plugins);
+
+  // Validate and load plugins
+  pluginManager.resolveActualPlugins();
+  pluginManager.validate();
+  pluginManager.load();
+
+  // Replace options.plugins with actual list
+  options.plugins = pluginManager.actualPluginBabelOpts()
+
+  const cls = pluginManager.getParserClass(Parser);
+  return new cls(options, input);
+}
+
+export { Plugin, PluginManager }
+
+// Register all available plugins.
+registerPlugins(registerPlugin, Plugin)

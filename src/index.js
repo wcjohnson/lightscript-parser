@@ -9,7 +9,7 @@ import {
   type PluginList,
 } from "./plugin-utils";
 import Parser from "./parser";
-import { getParser as lscGetParser, Plugin, PluginManager } from './plugins/PluginCore'
+import { getParser as lscGetParser, Plugin, PluginManager } from './plugins/core'
 
 import { types as tokTypes } from "./tokenizer/types";
 import "./tokenizer/context";

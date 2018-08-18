@@ -1,0 +1,19 @@
+// Plugin registry
+pluginsByName = {}
+parserClassCache = {}
+
+export registerPlugin(p): void ->
+  n = p.getName()
+  if pluginsByName[n]:
+    throw new Error(`Duplicate plugin named '${n}' has been registered.`)
+  pluginsByName[n] = p
+
+export pluginForName(n) ->
+  p = pluginsByName[n]
+  if not p:
+    throw new Error(`Could not find plugin named '${n}'`)
+  p
+
+export maybePluginForName(n) -> pluginsByName[n]
+
+export { parserClassCache }
