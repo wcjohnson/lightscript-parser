@@ -9,6 +9,9 @@ export class TestOptions:
   inherits(parentOptions): void ->
     Object.assign(this, parentOptions)
 
+  assign(childOptions): void ->
+    Object.assign(this, childOptions)
+
 export class TestRun:
   getTestableConstructor(thisTestable) ->
     Object.getPrototypeOf(thisTestable).constructor
@@ -91,9 +94,11 @@ export class Testable:
     { fileName: matches[0], fullPath: path.join(this.path, matches[0]) }
 
   readLocalArtifact(fileName, resolveExtension) ->
-    result = this.resolveLocalArtifact(fileName, resolveExtension)
-    if not result: return ''
-    fullName = result.fullPath
+    this.readResolvedArtifact(this.resolveLocalArtifact(fileName, resolveExtension))
+
+  readResolvedArtifact(resolution) ->
+    if not resolution: return ''
+    fullName = resolution.fullPath
 
     if fs.existsSync(fullName):
       let content = trimEnd(fs.readFileSync(fullName, "utf8"))

@@ -24,6 +24,8 @@ let TestOptions = exports.TestOptions = class TestOptions {
     this.inherits(parentOptions);
   }inherits(parentOptions) {
     Object.assign(this, parentOptions);
+  }assign(childOptions) {
+    Object.assign(this, childOptions);
   }
 };
 let TestRun = exports.TestRun = class TestRun {
@@ -109,9 +111,10 @@ let Testable = exports.Testable = class Testable {
 
     return { fileName: matches[0], fullPath: _path2.default.join(this.path, matches[0]) };
   }readLocalArtifact(fileName, resolveExtension) {
-    const result = this.resolveLocalArtifact(fileName, resolveExtension);
-    if (!result) return '';
-    const fullName = result.fullPath;
+    return this.readResolvedArtifact(this.resolveLocalArtifact(fileName, resolveExtension));
+  }readResolvedArtifact(resolution) {
+    if (!resolution) return '';
+    const fullName = resolution.fullPath;
 
     if (_fs2.default.existsSync(fullName)) {
       let content = (0, _trimEnd2.default)(_fs2.default.readFileSync(fullName, "utf8"));

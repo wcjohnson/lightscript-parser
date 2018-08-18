@@ -1,9 +1,25 @@
-// Test the test runner
 import { TestRun, Testable, TestOptions } from './TestRunner'
 import { allTests, TestFilter } from './TestFilter'
 import path from 'path'
 import { parse } from '../../lib'
 import misMatch from './misMatch'
+
+class ParserTestOptions extends TestOptions:
+  inherits(other): void ->
+    if not other: return
+    for key k, val v in other:
+      match k:
+        | 'throws': null
+        | else: this[k] = v
+
+  assign(other): void ->
+    if not other: return
+    for key k, val v in other:
+      match k:
+        | 'includePlugins', 'banPlugins':
+          this[k] = (this[k] or []).concat(v)
+        | else:
+          this[k] = v
 
 class ParserTestable extends Testable:
   loadTest(): void ->
@@ -11,8 +27,13 @@ class ParserTestable extends Testable:
     this.enqueueTest()
 
   readTestOptions() ->
-    options = this.readLocalArtifact("options.json", false)
-    if options: JSON.parse(options)
+    optionsData = this.readLocalArtifact("options.json", false)
+    options = if optionsData: JSON.parse(optionsData) else: {}
+    // Allow test options to be overridden
+    overrideData = this.readLocalArtifact("options.override.json", false)
+    if overrideData:
+      Object.assign(options, JSON.parse(overrideData))
+    options
 
   loadTestData(): void ->
     if this.name and this.name[0] == '.':
@@ -20,11 +41,16 @@ class ParserTestable extends Testable:
       return
 
     options = this.readTestOptions()
-    if options: Object.assign(this.options, options)
+    if options: this.options.assign(options)
     //console.log("Test options:", this.title, this.options)
 
     this.actual = this.readLocalArtifact("input", true)
     this.expected = this.readLocalArtifact("output.json", false)
+
+    // Use parent input if no child input.
+    if (not this.expected) and (not this.actual) and (this.parent) and (this.parent.actual):
+      this.expected = this.parent.expected
+      this.actual = this.parent.actual
 
   enqueueTest(): void ->
     if this.actual:
@@ -34,15 +60,15 @@ class ParserTestable extends Testable:
         testFn(this.title, => this.runTest())
       else:
         console.log("enqueuing", this.title)
+    else:
+      // console.log("skipping (no input)", this.title)
+      return
 
   throwAnnotatedError(err): void ->
     err.message = this.title + ": " + err.message
     throw err
 
   runTest(): void ->
-    if (this.options.throws && this.expected):
-      this.throwAnnotatedError(new Error("File expected.json exists although options specify throws."))
-
     let ast
     try {
       now ast = this.run.parse(this.actual, this.options)
@@ -61,6 +87,9 @@ class ParserTestable extends Testable:
 
       this.throwAnnotatedError(err)
     }
+
+    if this.options.throws:
+      this.throwAnnotatedError(new Error(`Expected error message '${this.options.throws}' but no error was thrown.`))
 
     // Don't store comments in expected output
     if (ast.comments && !ast.comments.length) delete ast.comments
@@ -96,13 +125,13 @@ class ParserTestable extends Testable:
 run = new TestRun()
 run.parse = parse
 run.getTestableConstructor() -> ParserTestable
+run.getOptionsConstructor() -> ParserTestOptions
 run.extensions = ['.js', '.lsc', '.lsx']
-opts = new TestOptions()
 
 filter = new TestFilter()
 if process.env.ONLY:
   filter.only(process.env.ONLY)
 
-rootTestable = new Testable(run, null, filter)
+rootTestable = new ParserTestable(run, null, filter)
 rootTestable.setTestPath(path.join(__dirname, '../fixtures'))
 rootTestable.readTestDirectory()

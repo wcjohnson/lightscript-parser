@@ -1,4 +1,4 @@
-import { pluginForName, maybePluginForName } from './registry'
+import { pluginForName, maybePluginForName, pluginsByName } from './registry'
 
 export class Plugin:
   constructor(opts) ->

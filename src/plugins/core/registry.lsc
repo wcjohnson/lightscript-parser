@@ -16,4 +16,4 @@ export pluginForName(n) ->
 
 export maybePluginForName(n) -> pluginsByName[n]
 
-export { parserClassCache }
+export { pluginsByName, parserClassCache }

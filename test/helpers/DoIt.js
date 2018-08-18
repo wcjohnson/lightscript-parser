@@ -16,23 +16,57 @@ var _misMatch2 = _interopRequireDefault(_misMatch);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+let ParserTestOptions = class ParserTestOptions extends _TestRunner.TestOptions {
+  inherits(other) {
+    if (!other) return;
+    for (let _i = 0, _keys = Object.keys(other), _len = _keys.length; _i < _len; _i++) {
+      const k = _keys[_i];const v = other[k];
+      if (k === 'throws') {
+        null;
+      } else {
+        this[k] = v;
+      }
+    }
+  }assign(other) {
+    if (!other) return;
+    for (let _i2 = 0, _keys2 = Object.keys(other), _len2 = _keys2.length; _i2 < _len2; _i2++) {
+      const k = _keys2[_i2];const v = other[k];
+      if (k === 'includePlugins' || k === 'banPlugins') {
+        this[k] = (this[k] || []).concat(v);
+      } else {
+        this[k] = v;
+      }
+    }
+  }
+};
 let ParserTestable = class ParserTestable extends _TestRunner.Testable {
   loadTest() {
     this.loadTestData();
     this.enqueueTest();
   }readTestOptions() {
-    const options = this.readLocalArtifact("options.json", false);
-    if (options) return JSON.parse(options);
+    const optionsData = this.readLocalArtifact("options.json", false);
+    const options = optionsData ? JSON.parse(optionsData) : {};
+    // Allow test options to be overridden
+    const overrideData = this.readLocalArtifact("options.override.json", false);
+    if (overrideData) {
+      Object.assign(options, JSON.parse(overrideData));
+    }return options;
   }loadTestData() {
     if (this.name && this.name[0] === '.') {
       this.disabled = true;
       return;
     }const options = this.readTestOptions();
-    if (options) Object.assign(this.options, options);
+    if (options) this.options.assign(options);
     //console.log("Test options:", this.title, this.options)
 
     this.actual = this.readLocalArtifact("input", true);
     this.expected = this.readLocalArtifact("output.json", false);
+
+    // Use parent input if no child input.
+    if (!this.expected && !this.actual && this.parent && this.parent.actual) {
+      this.expected = this.parent.expected;
+      this.actual = this.parent.actual;
+    }
   }enqueueTest() {
     if (this.actual) {
       // Get `it` from Jest global
@@ -42,14 +76,15 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
       } else {
         console.log("enqueuing", this.title);
       }
+    } else {
+      // console.log("skipping (no input)", this.title)
+      return;
     }
   }throwAnnotatedError(err) {
     err.message = this.title + ": " + err.message;
     throw err;
   }runTest() {
-    if (this.options.throws && this.expected) {
-      this.throwAnnotatedError(new Error("File expected.json exists although options specify throws."));
-    }let ast;
+    let ast;
     try {
       ast = this.run.parse(this.actual, this.options);
     } catch (err) {
@@ -68,7 +103,9 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
       }this.throwAnnotatedError(err);
     }
 
-    // Don't store comments in expected output
+    if (this.options.throws) {
+      this.throwAnnotatedError(new Error(`Expected error message '${this.options.throws}' but no error was thrown.`));
+    } // Don't store comments in expected output
     if (ast.comments && !ast.comments.length) delete ast.comments;
 
     if (!this.expected && !this.options.throws && process.env.SAVE_EXPECTED) {
@@ -96,18 +133,18 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
     opts.throws = err.message;
     this.saveLocalArtifact("options.json", JSON.stringify(opts, null, "  "));
   }
-}; // Test the test runner
-
+};
 const run = new _TestRunner.TestRun();
 run.parse = _lib.parse;
 run.getTestableConstructor = function getTestableConstructor() {
   return ParserTestable;
+};run.getOptionsConstructor = function getOptionsConstructor() {
+  return ParserTestOptions;
 };run.extensions = ['.js', '.lsc', '.lsx'];
-const opts = new _TestRunner.TestOptions();
 
 const filter = new _TestFilter.TestFilter();
 if (process.env.ONLY) {
   filter.only(process.env.ONLY);
-}const rootTestable = new _TestRunner.Testable(run, null, filter);
+}const rootTestable = new ParserTestable(run, null, filter);
 rootTestable.setTestPath(_path2.default.join(__dirname, '../fixtures'));
 rootTestable.readTestDirectory();
