@@ -1,0 +1,3 @@
+{
+  "throws": "Only '\\n' and '\\r\\n' are legal newlines in significant-whitespace mode. (1:1)"
+}

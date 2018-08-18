@@ -98,7 +98,9 @@ export registerPlugins(registerPlugin, Plugin) ->
 // Registration for plugins added by LightScript
 import tildeCall from './lightscript/tildeCall'
 import disableBitwiseOperators from './lightscript/disableBitwiseOperators'
+import significantWhitespace from './lightscript/significantWhitespace'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tildeCall)
   registerPlugin(disableBitwiseOperators)
+  registerPlugin(significantWhitespace)

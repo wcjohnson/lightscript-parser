@@ -1,0 +1,134 @@
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType } from "../../tokenizer/types"
+import * as charCodes from "charcodes"
+import { nonASCIIwhitespace } from "../../util/whitespace"
+
+significantWhitespace = new Plugin({
+  name: 'significantWhitespace'
+  mixin(ParserBase, opts) -> {
+    clazz = class extends ParserBase:
+      skipSpace(): void -> {
+        let isNewLine = (this.state.pos == 0)
+        loop: while (this.state.pos < this.input.length) {
+          const ch = this.input.charCodeAt(this.state.pos);
+          switch (ch) {
+            case charCodes.nonBreakingSpace:
+              this.unexpected(this.state.pos, "Non-breaking space is illegal in " +
+              "significant-whitespace mode; use a normal space.");
+
+            case charCodes.space:
+              ++this.state.pos;
+              // LightScript: Increase indent level when encountering '(space)(space)'
+              if isNewLine and (this.input.charCodeAt(this.state.pos) == charCodes.space):
+                ++this.state.pos
+                ++this.state.indentLevel
+              break;
+
+            case charCodes.carriageReturn:
+              if (
+                this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
+              ) {
+                ++this.state.pos;
+              }
+
+            case charCodes.lineSeparator:
+            case charCodes.paragraphSeparator:
+              this.unexpected(this.state.pos, "Only '\\n' and '\\r\\n' are legal newlines " +
+              "in significant-whitespace mode.")
+
+            case charCodes.lineFeed:
+              ++this.state.pos;
+              ++this.state.curLine;
+              this.state.lineStart = this.state.pos;
+              // LightScript: Reset indent level upon encountering newline.
+              now isNewLine = true
+              this.state.indentLevel = 0
+              break;
+
+            case charCodes.slash:
+              switch (this.input.charCodeAt(this.state.pos + 1)) {
+                case charCodes.asterisk:
+                  this.skipBlockComment();
+                  break;
+
+                case charCodes.slash:
+                  this.skipLineComment(2);
+                  break;
+
+                default:
+                  break loop;
+              }
+              break;
+
+            default:
+              if (
+                (ch > charCodes.backSpace && ch < charCodes.shiftOut) ||
+                (ch >= charCodes.oghamSpaceMark &&
+                  nonASCIIwhitespace.test(String.fromCharCode(ch)))
+              ) {
+                this.unexpected(this.state.pos, "Only normal whitespace (ascii-32) is allowed.");
+              } else {
+                break loop;
+              }
+          }
+        }
+      } // skipSpace
+
+      // Get indent level at the given input position.
+      indentLevelAt(pos) -> {
+        let indents = 0;
+        while (pos > 0 && this.state.input[pos] !== "\n") {
+          if (this.state.input[pos--] === " ") {
+            if (this.state.input[pos] === " ") {
+              --pos;
+              ++indents;
+            }
+          } else {
+            now indents = 0;
+          }
+        }
+        return indents;
+      } // indentLevelAt
+
+      // detect whether we're on a (non-indented) newline
+      // relative to another position, eg;
+      // x y -> false
+      // x\ny -> true
+      // x\n  y -> false
+      isNonIndentedBreakFrom(pos) -> {
+        const indentLevel = this.indentLevelAt(pos);
+        return this.isLineBreak() && this.state.indentLevel <= indentLevel;
+      }
+
+      // Check for line break after current token.
+      isFollowedByLineBreak() -> {
+        const end = this.state.input.length;
+
+        let pos = this.state.pos;
+        while (pos < end) {
+          const code = this.state.input.charCodeAt(pos);
+          if (code === 10) {
+            return true;
+          } else if (code === 32 || code === 13) {
+            ++pos;
+            continue;
+          } else {
+            return false;
+          }
+        }
+      }
+
+      isWhitespaceAt(pos) -> {
+        const ch = this.state.input.charCodeAt(pos);
+        return (ch === 32 || ch === 13 || ch === 10);
+      }
+
+      isNextCharWhitespace() -> {
+        return this.isWhitespaceAt(this.state.end);
+      }
+
+    return clazz
+  } // mixin
+})
+
+export default significantWhitespace

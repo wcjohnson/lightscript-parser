@@ -1,0 +1,4 @@
+{
+  "banPlugins": ["significantWhitespace"],
+  "throws": "Unexpected token (2:0)"
+}
