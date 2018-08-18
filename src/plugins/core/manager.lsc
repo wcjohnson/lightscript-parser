@@ -74,7 +74,10 @@ export class PluginManager:
     for elem p in this.actualPlugins: p.validate(this, this.namedPluginOptions[p.getName()])
 
   load(): void ->
-    for elem p in this.actualPlugins: p.load(this.namedPluginOptions[p.getName()])
+    for elem p in this.actualPlugins:
+      if not p._wasLoaded:
+        p.load(this.namedPluginOptions[p.getName()])
+        p._wasLoaded = true
 
   getParserClass(Parser) ->
     mixinPlugins = this.actualPlugins.filter(p -> p.hasMixin())
