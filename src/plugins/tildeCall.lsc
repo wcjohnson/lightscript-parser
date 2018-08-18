@@ -4,26 +4,26 @@ import * as charCodes from "charcodes"
 
 tildeCall = new Plugin({
   name: 'tildeCall'
-  mixin(ParserBase) -> {
+  mixin(ParserBase, opts) -> {
     // Create token type
-    tt.tilde = new TokenType("~")
+    tt.tildeCall = new TokenType("~>")
 
-    return class extends ParserBase:
+    clazz = class extends ParserBase {
       // Modify tokenizer to intercept `~`
       getTokenFromCode(code) ->
         if code == charCodes.tilde:
           if this.input.charCodeAt(this.state.pos + 1) == charCodes.greaterThan:
             this.state.pos += 2
-            return this.finishToken(tt.tilde, "~>")
+            return this.finishToken(tt.tildeCall, "~>")
 
           ++this.state.pos
-          return this.finishToken(tt.tilde)
+          return this.finishToken(tt.tildeCall, "~")
 
         super.getTokenFromCode(code)
 
       // Hook subscript parsing chain to catch `~` token
       parseSubscript(base, startPos, startLoc, noCalls, state) ->
-        if (not noCalls) and this.match(tt.tilde):
+        if (not noCalls) and this.match(tt.tildeCall):
           node = this.startNodeAt(startPos, startLoc)
           next = this.tildeCallParse(node, base)
           if next:
@@ -79,6 +79,8 @@ tildeCall = new Plugin({
           node.tilde = true;
           return this.finishNode(node, "CallExpression");
         }
+    } // class
+    return clazz
   } // mixin
 })
 
