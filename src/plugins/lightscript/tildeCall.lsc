@@ -1,5 +1,5 @@
-import { Plugin } from './core/plugin'
-import { types as tt, TokenType } from "../tokenizer/types"
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType } from "../../tokenizer/types"
 import * as charCodes from "charcodes"
 
 tildeCall = new Plugin({
