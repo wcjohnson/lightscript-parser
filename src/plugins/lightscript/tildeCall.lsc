@@ -16,8 +16,9 @@ tildeCall = new Plugin({
             this.state.pos += 2
             return this.finishToken(tt.tildeCall, "~>")
 
-          ++this.state.pos
-          return this.finishToken(tt.tildeCall, "~")
+          if this.hasPlugin("disableBitwiseOperators"):
+            ++this.state.pos
+            return this.finishToken(tt.tildeCall, "~")
 
         super.getTokenFromCode(code)
 

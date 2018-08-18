@@ -1,0 +1,29 @@
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType } from "../../tokenizer/types"
+import * as charCodes from "charcodes"
+
+disableBitwiseOperators = new Plugin({
+  name: 'disableBitwiseOperators'
+  mixin(ParserBase, opts) -> {
+    clazz = class extends ParserBase:
+      disableBitwiseOperators_isBitwiseOp() ->
+        this.match(tt.bitwiseOR) or
+        this.match(tt.bitwiseAND) or
+        this.match(tt.bitwiseXOR) or
+        this.match(tt.bitShift)
+
+      parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn) ->
+        if this.disableBitwiseOperators_isBitwiseOp():
+          this.unexpected(
+            null
+            "Bitwise operators have been disabled in LightScript. " +
+            "Use the stdlib functions instead (eg; `bitwiseAnd(a, b)`)."
+          )
+
+        super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn)
+
+    return clazz
+  } // mixin
+})
+
+export default disableBitwiseOperators

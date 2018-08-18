@@ -97,5 +97,8 @@ export registerPlugins(registerPlugin, Plugin) ->
 
 // Registration for plugins added by LightScript
 import tildeCall from './lightscript/tildeCall'
+import disableBitwiseOperators from './lightscript/disableBitwiseOperators'
+
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tildeCall)
+  registerPlugin(disableBitwiseOperators)
