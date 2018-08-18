@@ -1,0 +1,19 @@
+import { keywords as keywordTypes, types as nonKeywordTypes } from '../tokenizer/types'
+
+keywords = [
+  'break', 'case', 'catch', 'continue', 'debugger', 'default', 'do', 'else'
+  'finally', 'for', 'function', 'if', 'return', 'switch', 'throw', 'try'
+  'var', 'while', 'with', 'null', 'true', 'false', 'instanceof', 'typeof'
+  'void', 'delete', 'new', 'in', 'this', 'let', 'const', 'class', 'extends'
+  'export', 'import', 'yield', 'super'
+]
+
+export isKeyword(str: string): boolean ->
+  keywords.indexOf(str) >= 0
+
+export addKeyword(word: string, tt): void ->
+  if isKeyword(word):
+    throw new Error(`Duplicate keyword registration for '${word}'`)
+  keywords.push(word)
+  keywordTypes[word] = tt
+  nonKeywordTypes["_" + word] = tt
