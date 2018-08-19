@@ -10,6 +10,28 @@ const additionalExtensionPoints = new Plugin({
 
   mixin(ParserBase, opts) {
     return class extends ParserBase {
+      parseSequenceExpression(expr, startPos, startLoc, noIn, refShorthandDefaultPos) {
+        const node = this.startNodeAt(startPos, startLoc);
+        node.expressions = [expr];
+        while (this.eat(tt.comma)) {
+          node.expressions.push(
+            this.parseMaybeAssign(noIn, refShorthandDefaultPos),
+          );
+        }
+        this.toReferencedList(node.expressions);
+        return this.finishNode(node, "SequenceExpression");
+      }
+
+      parseExpression(noIn?: boolean, refShorthandDefaultPos) {
+        const startPos = this.state.start;
+        const startLoc = this.state.startLoc;
+        const expr = this.parseMaybeAssign(noIn, refShorthandDefaultPos);
+        if (this.match(tt.comma)) {
+          return this.parseSequenceExpression(expr, startPos, startLoc, noIn, refShorthandDefaultPos);
+        }
+        return expr;
+      }
+
       parseBinaryOperator(node): void {
         node.operator = this.state.value
       }
