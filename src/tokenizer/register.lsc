@@ -4,9 +4,11 @@ export registerToken(name, tt) ->
   if types[name]:
     throw new Error(`Duplicate registration of tokenType named '${name}'`)
   types[name] = tt
+  tt
 
 export registerKeywordToken(word, tt) ->
   keywords[word] = tt
   types["_" + word] = tt
+  tt
 
 export { types, TokenType }
