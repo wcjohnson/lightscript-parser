@@ -364,7 +364,7 @@ export default class StatementParser extends ExpressionParser {
   parseDoStatement(node: N.DoWhileStatement): N.DoWhileStatement {
     this.next();
 
-    // XXX: pluginize?
+    // XXX: LSC
     let isWhiteBlock, indentLevel, oldExtraWhiteblockTerminator;
     if (this.hasPlugin("lscCoreSyntax") && this.match(tt.colon)) {
       isWhiteBlock = true;
@@ -393,6 +393,9 @@ export default class StatementParser extends ExpressionParser {
       if (node.test.extra && node.test.extra.parenthesized) {
         delete node.test.extra.parenthesized;
         delete node.test.extra.parenStart;
+        if (Object.keys(node.test.extra).length === 0) {
+          delete node.test.extra;
+        }
         this.addExtra(node, "hasParens", true);
       }
       this.semicolon();
