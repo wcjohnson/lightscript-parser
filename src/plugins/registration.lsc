@@ -101,6 +101,7 @@ import tildeCall from './lightscript/tildeCall'
 import disableBitwiseOperators from './lightscript/disableBitwiseOperators'
 import significantWhitespace from './lightscript/significantWhitespace'
 import modifiedLogicalOperators from './lightscript/modifiedLogicalOperators'
+import seqExprRequiresParen from './lightscript/seqExprRequiresParen'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(additionalExtensionPoints)
@@ -108,3 +109,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(disableBitwiseOperators)
   registerPlugin(significantWhitespace)
   registerPlugin(modifiedLogicalOperators)
+  registerPlugin(seqExprRequiresParen)

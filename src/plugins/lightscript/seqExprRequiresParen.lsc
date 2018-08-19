@@ -1,0 +1,24 @@
+// Force SequenceExpressions to be put in parenthesis.
+
+import { Plugin } from '../core/plugin'
+import { types as tt } from "../../tokenizer/types"
+
+seqExprRequiresParen = new Plugin({
+  name: 'seqExprRequiresParen'
+
+  mixin(ParserBase, opts) -> {
+    clazz = class extends ParserBase:
+      canInsertSemicolon(): boolean ->
+        if this.match(tt.comma):
+          true
+        else:
+          super.canInsertSemicolon()
+
+      parseSequenceExpression(expr, startPos, startLoc, noIn, refShorthandDefaultPos) ->
+        expr
+
+    return clazz
+  } // mixin
+})
+
+export default seqExprRequiresParen
