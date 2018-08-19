@@ -16,7 +16,7 @@ class ParserTestOptions extends TestOptions:
     if not other: return
     for key k, val v in other:
       match k:
-        | 'includePlugins', 'banPlugins':
+        | 'includePlugins':
           this[k] = (this[k] or []).concat(v)
         | else:
           this[k] = v
@@ -48,8 +48,8 @@ class ParserTestable extends Testable:
     this.expected = this.readLocalArtifact("output.json", false)
 
     // Use parent input if no child input.
-    if (not this.expected) and (not this.actual) and (this.parent) and (this.parent.actual):
-      this.expected = this.parent.expected
+    if (not this.actual) and (this.parent) and (this.parent.actual):
+      if not this.expected: this.expected = this.parent.expected
       this.actual = this.parent.actual
 
   enqueueTest(): void ->

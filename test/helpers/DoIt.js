@@ -31,7 +31,7 @@ let ParserTestOptions = class ParserTestOptions extends _TestRunner.TestOptions 
     if (!other) return;
     for (let _i2 = 0, _keys2 = Object.keys(other), _len2 = _keys2.length; _i2 < _len2; _i2++) {
       const k = _keys2[_i2];const v = other[k];
-      if (k === 'includePlugins' || k === 'banPlugins') {
+      if (k === 'includePlugins') {
         this[k] = (this[k] || []).concat(v);
       } else {
         this[k] = v;
@@ -63,8 +63,8 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
     this.expected = this.readLocalArtifact("output.json", false);
 
     // Use parent input if no child input.
-    if (!this.expected && !this.actual && this.parent && this.parent.actual) {
-      this.expected = this.parent.expected;
+    if (!this.actual && this.parent && this.parent.actual) {
+      if (!this.expected) this.expected = this.parent.expected;
       this.actual = this.parent.actual;
     }
   }enqueueTest() {
