@@ -1,0 +1,241 @@
+// Parsing tools for Whiteblock and Paren-Free syntax.
+
+import { Plugin } from '../core/plugin'
+import { types as tt } from "../../tokenizer/types"
+
+lscCoreSyntax = new Plugin({
+  name: 'lscCoreSyntax'
+  dependencies: ['significantWhitespace', 'seqExprRequiresParen']
+
+  load() ->
+    tt._class.startsExpr = true
+
+  mixin(ParserBase, opts) -> {
+    clazz = class extends ParserBase:
+      // Determine if the token under the cursor starts an expression.
+      tokenStartsExpression(): boolean ->
+        this.state.type.startsExpr
+
+      // Determine if the cursor has crossed the boundary of an ongoing
+      // multiline whiteblock.
+      crossesWhiteBlockBoundary(): boolean ->
+        this.state.inWhiteBlock and
+        this.state.indentLevel <= this.state.whiteBlockIndentLevel
+
+      // Determine if the token under the cursor is a whiteblock ASI candidate
+      matchesWhiteBlockASIToken(): boolean ->
+        this.match(tt.comma) ||
+        this.match(tt.parenR) ||
+        this.match(tt.bracketR) ||
+        this.match(tt.braceR) ||
+        this.match(tt.colon) ||
+        this.match(tt._else) ||
+        this.match(tt._catch) ||
+        this.match(tt._finally) ||
+        (this.state.extraWhiteblockTerminator && this.match(this.state.extraWhiteblockTerminator)) ||
+        this.match(tt.eof)
+
+      // Throw if, after parsing a paren-free test expression, we don't land
+      // on something that looks like a consequent block.
+      expectParenFreeBlockStart(node): void ->
+        // if true: blah
+        // if true { blah }
+        // if (true) blah
+        // match (foo) as bar:
+        if (node && node.extra && node.extra.hasParens) {
+          this.expect(tt.parenR);
+        } else if (!(this.match(tt.colon) || this.match(tt.braceL) || this.isContextual("as"))) {
+          this.unexpected(null, "Paren-free test expressions must be followed by braces or a colon.");
+        }
+
+      // Parse multiline whiteblock body.
+      // c/p statement.js parseBlockOrModuleBlockBody
+      parseWhiteBlockBody(body, directives, topLevel, whiteBlockIndentLevel): void -> {
+        let parsedNonDirective = false;
+        let oldStrict;
+        let octalPosition;
+
+        oldInWhiteBlock = this.state.inWhiteBlock;
+        oldWhiteBlockIndentLevel = this.state.whiteBlockIndentLevel;
+        this.state.inWhiteBlock = true;
+        this.state.whiteBlockIndentLevel = whiteBlockIndentLevel;
+
+        isEnd() =>
+          this.state.indentLevel <= whiteBlockIndentLevel || this.matchesWhiteBlockASIToken()
+
+        while (!isEnd()) {
+          if (!parsedNonDirective && this.state.containsOctal && !octalPosition):
+            now octalPosition = this.state.octalPosition
+
+          const stmt = this.parseStatement(true, topLevel);
+
+          if (directives && !parsedNonDirective && this.isValidDirective(stmt)) {
+            const directive = this.stmtToDirective(stmt);
+            directives.push(directive);
+
+            if (oldStrict === undefined && directive.value.value === "use strict") {
+              now oldStrict = this.state.strict;
+              this.setStrict(true);
+
+              if (octalPosition) {
+                this.raise(octalPosition, "Octal literal in strict mode");
+              }
+            }
+
+            continue;
+          }
+
+          now parsedNonDirective = true;
+          body.push(stmt);
+        } // while (!isEnd())
+
+        this.state.inWhiteBlock = oldInWhiteBlock;
+        this.state.whiteBlockIndentLevel = oldWhiteBlockIndentLevel;
+        if (oldStrict === false) {
+          this.setStrict(false);
+        }
+      } // parseWhiteBlockBody
+
+      parseInlineWhiteBlock(node) ->
+        if (this.tokenStartsExpression()) return this.parseMaybeAssign();
+        // oneline statement case
+        node.body = [this.parseStatement(true)];
+        node.directives = [];
+        this.addExtra(node, "curly", false);
+        return this.finishNode(node, "BlockStatement");
+
+      parseMultilineWhiteBlock(node, indentLevel) ->
+        body = []
+        this.parseWhiteBlockBody(body, null, false, indentLevel)
+        if body.length == 0:
+          this.unexpected(node.start, "Expected an Indent or Statement")
+        node.body = body
+        this.addExtra(node, "curly", false)
+        this.finishNode(node, "BlockStatement")
+
+      parseWhiteBlock(isExpression) ->
+        if not this.eat(tt.colon): this.unexpected(this.state.lastTokEnd, tt.colon)
+        node = this.startNode()
+        indentLevel = this.state.indentLevel
+        if not this.isLineBreak(): // Oneline whiteblock
+          if isExpression:
+            this.parseInlineWhiteBlock(node)
+          else:
+            this.parseStatement(false)
+        else: // Multiline whiteblock
+          this.parseMultilineWhiteBlock(node, indentLevel)
+
+      parseObjectBlockAmbiguity(isBlock, allowDirectives) -> {
+        if isBlock:
+          // We've received a hint from elsewhere in the parser that lets
+          // us know we have a block...
+          this.parseBlock(allowDirectives)
+        else:
+          node = this.startNode()
+
+          // Try to parse as if it were an object or assignment pattern.
+          state = this.state.clone()
+          let objParseError
+          try:
+            return this.parseExpressionStatement(node, this.parseExpression())
+          catch err:
+            this.state = state
+            now objParseError = err
+
+          // Try to parse as a block
+          try:
+            return this.parseBlock(allowDirectives)
+          catch err:
+            if objParseError.pos > err.pos:
+              throw objParseError
+            elif objParseError.pos < err.pos:
+              throw err
+            else:
+              objParseError.message = "Cannot parse brace-delimited construct as an object or as a block. When parsed as an object, the error is: " + objParseError.message
+              throw objParseError
+      } // parseObjectBlockAmbiguity
+
+      // Hooking parseBlock and parseStatement enables whiteblocks just about everywhere
+      parseBlock(allowDirectives) ->
+        if this.match(tt.colon):
+          this.parseWhiteBlock()
+        else:
+          block = super.parseBlock(allowDirectives)
+          this.addExtra(block, "curly", true)
+          block
+
+      parseStatement(declaration, topLevel) ->
+        // Retrieve state hints associated with object-block ambiguity
+        isBlock = this.state.nextBraceIsBlock
+        allowDirectives = this.state.nextBraceAllowDirectives
+        this.state.nextBraceIsBlock = null
+        this.state.nextBraceAllowDirectives = null
+
+        if this.match(tt.colon):
+          this.parseWhiteBlock()
+        elif this.match(tt.braceL):
+          this.parseObjectBlockAmbiguity(isBlock, allowDirectives)
+        else:
+          super.parseStatement(declaration, topLevel)
+
+      canInsertSemicolon(): boolean ->
+        this.matchesWhiteBlockASIToken() or super.canInsertSemicolon()
+
+      // Hooking parseParenExpression enables paren-free for if,switch,while,with
+      parseParenExpression() -> {
+        if this.isLineBreak():
+          this.unexpected(this.state.lastTokEnd, "Illegal newline.")
+
+        // There might actually be a paren in a "paren-free" test expression
+        // We have to disambiguate:
+        // e.g. `if (x) -1` or `if (x < 1) and y: -1`
+        if (this.match(tt.parenL)) {
+          const state = this.state.clone();
+
+          // first, try paren-free style
+          try {
+            const val = this.parseExpression();
+            this.expectParenFreeBlockStart();
+            if (val.extra && val.extra.parenthesized) {
+              // Remove accidentally added paren extra data. If this
+              // leaves the extra object empty, quash that as well.
+              delete val.extra.parenthesized;
+              delete val.extra.parenStart;
+              if (Object.keys(val.extra).length == 0) { delete val.extra; }
+            }
+            return val;
+          } catch (_err) {
+            // fall-through
+          }
+
+          // Could have been an un-parenthesized SeqExpr
+          if (this.hasPlugin("seqExprRequiresParen") && this.match(tt.comma)) {
+            this.unexpected();
+          }
+
+          // otherwise, try traditional parseParenExpression
+          this.state = state;
+          return super.parseParenExpression();
+        } // if this.match(tt.parenL)
+
+        // No paren, so the expression is a plain paren-free test
+        expr = this.parseExpression()
+        this.expectParenFreeBlockStart()
+        expr
+      } // parseParenExpression
+
+      // We hook parseSubscript to prevent subscripts from crossing
+      // whiteblock boundaries.
+      parseSubscript(base, startPos, startLoc, noCalls, state) ->
+        if this.crossesWhiteBlockBoundary():
+          state.stop = true
+          base
+        else:
+          super.parseSubscript(base, startPos, startLoc, noCalls, state)
+
+
+    return clazz
+  } // mixin
+})
+
+export default lscCoreSyntax

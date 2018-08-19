@@ -363,12 +363,44 @@ export default class StatementParser extends ExpressionParser {
 
   parseDoStatement(node: N.DoWhileStatement): N.DoWhileStatement {
     this.next();
+
+    // XXX: pluginize?
+    let isWhiteBlock, indentLevel, oldExtraWhiteblockTerminator;
+    if (this.hasPlugin("lscCoreSyntax") && this.match(tt.colon)) {
+      isWhiteBlock = true;
+      indentLevel = this.state.indentLevel;
+      this.state.nextBraceIsBlock = true;
+      oldExtraWhiteblockTerminator = this.state.extraWhiteblockTerminator
+      this.state.extraWhiteblockTerminator = tt._while
+    }
+
     this.state.labels.push(loopLabel);
     node.body = this.parseStatement(false);
     this.state.labels.pop();
+
+    if (this.hasPlugin("lscCoreSyntax")) {
+      this.state.extraWhiteblockTerminator = oldExtraWhiteblockTerminator;
+      if (isWhiteBlock && this.state.indentLevel !== indentLevel) {
+        this.unexpected(null, "Mismatched indent.")
+      }
+    }
+
     this.expect(tt._while);
-    node.test = this.parseParenExpression();
-    this.eat(tt.semi);
+
+    if (this.hasPlugin("lscCoreSyntax")) {
+      // allow parens; enforce semicolon or newline whether they're used or not.
+      node.test = this.parseExpression();
+      if (node.test.extra && node.test.extra.parenthesized) {
+        delete node.test.extra.parenthesized;
+        delete node.test.extra.parenStart;
+        this.addExtra(node, "hasParens", true);
+      }
+      this.semicolon();
+    } else {
+      node.test = this.parseParenExpression();
+      this.eat(tt.semi);
+    }
+
     return this.finishNode(node, "DoWhileStatement");
   }
 
@@ -390,7 +422,15 @@ export default class StatementParser extends ExpressionParser {
       forAwait = true;
       this.next();
     }
-    this.expect(tt.parenL);
+
+    // XXX: LSC
+    if (this.hasPlugin("lscCoreSyntax")) {
+      if (this.eat(tt.parenL)) {
+        this.addExtra(node, "hasParens", true);
+      }
+    } else {
+      this.expect(tt.parenL);
+    }
 
     if (this.match(tt.semi)) {
       if (forAwait) {
@@ -582,6 +622,7 @@ export default class StatementParser extends ExpressionParser {
     this.next();
     node.test = this.parseParenExpression();
     this.state.labels.push(loopLabel);
+    this.state.nextBraceIsBlock = true; // XXX: LSC
     node.body = this.parseStatement(false);
     this.state.labels.pop();
     return this.finishNode(node, "WhileStatement");
@@ -749,7 +790,15 @@ export default class StatementParser extends ExpressionParser {
     node.test = this.match(tt.semi) ? null : this.parseExpression();
     this.expect(tt.semi);
     node.update = this.match(tt.parenR) ? null : this.parseExpression();
-    this.expect(tt.parenR);
+
+    // XXX: pluginize?
+    if (this.hasPlugin("lscCoreSyntax")) {
+      this.expectParenFreeBlockStart(node);
+      this.state.nextBraceIsBlock = true;
+    } else {
+      this.expect(tt.parenR);
+    }
+
     node.body = this.parseStatement(false);
     this.state.labels.pop();
     return this.finishNode(node, "ForStatement");
@@ -774,7 +823,15 @@ export default class StatementParser extends ExpressionParser {
     }
     node.left = init;
     node.right = this.parseExpression();
-    this.expect(tt.parenR);
+
+    // XXX: LSC
+    if (this.hasPlugin("lscCoreSyntax")) {
+      this.expectParenFreeBlockStart(node);
+      this.state.nextBraceIsBlock = true;
+    } else {
+      this.expect(tt.parenR);
+    }
+
     node.body = this.parseStatement(false);
     this.state.labels.pop();
     return this.finishNode(node, type);

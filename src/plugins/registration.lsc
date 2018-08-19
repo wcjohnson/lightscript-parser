@@ -102,6 +102,7 @@ import disableBitwiseOperators from './lightscript/disableBitwiseOperators'
 import significantWhitespace from './lightscript/significantWhitespace'
 import modifiedLogicalOperators from './lightscript/modifiedLogicalOperators'
 import seqExprRequiresParen from './lightscript/seqExprRequiresParen'
+import lscCoreSyntax from './lightscript/lscCoreSyntax'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(additionalExtensionPoints)
@@ -110,3 +111,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(significantWhitespace)
   registerPlugin(modifiedLogicalOperators)
   registerPlugin(seqExprRequiresParen)
+  registerPlugin(lscCoreSyntax)
