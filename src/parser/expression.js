@@ -268,6 +268,7 @@ export default class ExpressionParser extends LValParser {
   // `minPrec` provides context that allows the function to stop and
   // defer further parser to one of its callers when it encounters an
   // operator that has a lower precedence than the set it is parsing.
+  // DUPLICATED in plugins/additionalExtensionPoints
 
   parseExprOp(
     left: N.Expression,
@@ -349,6 +350,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Parse unary operators, both prefix and postfix.
+  // DUPLICATED in plugins/additionalExtensionPoints
 
   parseMaybeUnary(refShorthandDefaultPos: ?Pos): N.Expression {
     if (this.state.type.prefix) {
