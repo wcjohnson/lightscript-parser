@@ -100,9 +100,11 @@ import additionalExtensionPoints from './additionalExtensionPoints'
 import tildeCall from './lightscript/tildeCall'
 import disableBitwiseOperators from './lightscript/disableBitwiseOperators'
 import significantWhitespace from './lightscript/significantWhitespace'
+import modifiedLogicalOperators from './lightscript/modifiedLogicalOperators'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(additionalExtensionPoints)
   registerPlugin(tildeCall)
   registerPlugin(disableBitwiseOperators)
   registerPlugin(significantWhitespace)
+  registerPlugin(modifiedLogicalOperators)

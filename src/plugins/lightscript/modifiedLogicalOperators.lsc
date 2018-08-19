@@ -1,0 +1,44 @@
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType, registerToken, registerKeywordToken } from "../../tokenizer/register"
+import * as charCodes from "charcodes"
+
+OPERATOR_KEYWORDS = ['and', 'or', 'not']
+
+modifiedLogicalOperators = new Plugin({
+  name: 'modifiedLogicalOperators'
+  dependencies: ['additionalExtensionPoints']
+  load(): void ->
+    registerKeywordToken('and', tt.logicalAND)
+    registerKeywordToken('or', tt.logicalOR)
+    registerKeywordToken('not', { keyword: true, beforeExpr: true, prefix: true, startsExpr: true })
+
+  mixin(ParserBase, opts) -> {
+    clazz = class extends ParserBase:
+      isKeyword(word: string): boolean ->
+        if OPERATOR_KEYWORDS.indexOf(word) >= 0: return true
+        super.isKeyword(word)
+
+      parseBinaryOperator(node): void ->
+        ty = this.state.type
+        if ty == tt._and:
+          node.operator = '&&'
+        elif ty == tt._or:
+          node.operator = '||'
+        elif this.state.value == '==':
+          node.operator = '==='
+        elif this.state.value == '!=':
+          node.operator = '!=='
+        else:
+          super.parseBinaryOperator(node)
+
+      parseUnaryOperator(node, isPrefix): void ->
+        if isPrefix and (this.state.type == tt._not):
+          node.operator = '!'
+        else:
+          super.parseUnaryOperator(node, isPrefix)
+
+    return clazz
+  } // mixin
+})
+
+export default modifiedLogicalOperators

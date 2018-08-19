@@ -1,3 +1,3 @@
 {
-  "banPlugins": ["disableBitwiseOperators"]
+  "banPlugins": ["disableBitwiseOperators", "modifiedLogicalOperators"]
 }
