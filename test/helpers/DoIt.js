@@ -108,7 +108,7 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
     } // Don't store comments in expected output
     if (ast.comments && !ast.comments.length) delete ast.comments;
 
-    if (!this.expected && !this.options.throws && process.env.SAVE_EXPECTED) {
+    if ((!this.expected || process.env.FORCE_SAVE) && !this.options.throws && process.env.SAVE_EXPECTED) {
       this.saveExpected(ast, "output.json");
       return;
     }if (this.options.throws) {

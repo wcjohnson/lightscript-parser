@@ -94,7 +94,7 @@ class ParserTestable extends Testable:
     // Don't store comments in expected output
     if (ast.comments && !ast.comments.length) delete ast.comments
 
-    if (not this.expected) and (not this.options.throws) and (process.env.SAVE_EXPECTED):
+    if ((not this.expected) or (process.env.FORCE_SAVE)) and (not this.options.throws) and (process.env.SAVE_EXPECTED):
       this.saveExpected(ast, "output.json")
       return
 
