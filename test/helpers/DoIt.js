@@ -109,25 +109,31 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
     if (ast.comments && !ast.comments.length) delete ast.comments;
 
     if (!this.expected && !this.options.throws && process.env.SAVE_EXPECTED) {
-      this.saveExpected(ast);
+      this.saveExpected(ast, "output.json");
       return;
     }if (this.options.throws) {
       this.throwAnnotatedError(new Error("Expected error message: " + this.options.throws + ". But parsing succeeded."));
     } else {
       if (this.expected) {
         const mis = (0, _misMatch2.default)(JSON.parse(this.expected), ast);
-        if (mis) this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis));
+        if (mis) {
+          if (process.env.SAVE_OVERRIDE) {
+            this.saveExpected(ast, "output.override.json");
+          } else {
+            this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis));
+          }
+        }
       } else {
         this.throwAnnotatedError(new Error("Empty expected output -- use SAVE_EXPECTED=1 to create expected output."));
       }
     }
-  }saveExpected(ast) {
+  }saveExpected(ast, filename) {
     const toJSON = RegExp.prototype.toJSON;
     RegExp.prototype.toJSON = RegExp.prototype.toString;
     const jsonAst = JSON.stringify(ast, null, "  ");
     RegExp.prototype.toJSON = toJSON;
 
-    this.saveLocalArtifact("output.json", jsonAst);
+    this.saveLocalArtifact(filename, jsonAst);
   }saveThrows(err) {
     const opts = this.readTestOptions() || {};
     opts.throws = err.message;
