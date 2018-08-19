@@ -1,4 +1,4 @@
 {
-  "banPlugins": ["seqExprRequiresParen"],
-  "throws": "Unexpected token (1:6)"
+  "banPlugins": ["lscCoreSyntax"],
+  "throws": "Unexpected token, expected \")\" (1:5)"
 }
