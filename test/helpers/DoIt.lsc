@@ -108,6 +108,8 @@ class ParserTestable extends Testable:
         if mis:
           if process.env.SAVE_OVERRIDE:
             this.saveExpected(ast, "output.override.json")
+          elif process.env.UPDATE_EXPECTED:
+            this.saveExpected(ast, "output.json")
           else:
             this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis))
       else:

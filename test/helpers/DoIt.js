@@ -119,6 +119,8 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
         if (mis) {
           if (process.env.SAVE_OVERRIDE) {
             this.saveExpected(ast, "output.override.json");
+          } else if (process.env.UPDATE_EXPECTED) {
+            this.saveExpected(ast, "output.json");
           } else {
             this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis));
           }
