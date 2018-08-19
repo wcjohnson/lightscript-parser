@@ -60,7 +60,7 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
     //console.log("Test options:", this.title, this.options)
 
     this.actual = this.readLocalArtifact("input", true);
-    this.expected = this.readLocalArtifact("output.json", false);
+    this.expected = this.readLocalArtifact("output", ['.override.json', '.json']);
 
     // Use parent input if no child input.
     if (!this.actual && this.parent && this.parent.actual) {

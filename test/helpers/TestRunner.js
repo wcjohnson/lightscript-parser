@@ -97,10 +97,10 @@ let Testable = exports.Testable = class Testable {
     return;
   }saveLocalArtifact(fileName, data) {
     _fs2.default.writeFileSync(_path2.default.join(this.path, fileName), data);
-  }resolveLocalArtifact(baseName, resolveExtension) {
-    const extensions = resolveExtension ? this.run.extensions || [''] : [''];
-
-    const matches = (() => {
+  }resolveLocalArtifact(baseName, extensions) {
+    if (!Array.isArray(extensions)) {
+      extensions = extensions ? this.run.extensions || [''] : [''];
+    }const matches = (() => {
       const _arr = [];for (let _i3 = 0, _len3 = extensions.length; _i3 < _len3; _i3++) {
         const ext = extensions[_i3];
         const resolvedName = baseName + ext;

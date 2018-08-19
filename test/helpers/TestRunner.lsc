@@ -79,11 +79,12 @@ export class Testable:
   saveLocalArtifact(fileName, data): void ->
     fs.writeFileSync(path.join(this.path, fileName), data)
 
-  resolveLocalArtifact(baseName, resolveExtension) ->
-    extensions = if resolveExtension:
-      this.run.extensions or ['']
-    else:
-      ['']
+  resolveLocalArtifact(baseName, extensions) ->
+    if not Array.isArray(extensions):
+      now extensions = if extensions:
+        this.run.extensions or ['']
+      else:
+        ['']
 
     matches = [...for elem ext in extensions:
       resolvedName = baseName + ext
