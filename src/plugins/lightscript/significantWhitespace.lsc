@@ -135,6 +135,13 @@ significantWhitespace = new Plugin({
         }
       }
 
+      isLineBreak(): boolean ->
+        // Treat start-of-file as line break
+        if not this.state.lastTokEnd:
+          true
+        else:
+          this.hasPrecedingLineBreak()
+
       isWhitespaceAt(pos): boolean -> {
         const ch = this.state.input.charCodeAt(pos);
         return (ch === 32 || ch === 13 || ch === 10);

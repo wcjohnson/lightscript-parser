@@ -15,6 +15,9 @@ seqExprRequiresParen = new Plugin({
           super.canInsertSemicolon()
 
       parseSequenceExpression(expr, startPos, startLoc, noIn, refShorthandDefaultPos) ->
+        // Just return the leftmost expr here.
+        // That will leave a dangling comma, which the parser will then
+        // treat as an invalid token.
         expr
 
     return clazz
