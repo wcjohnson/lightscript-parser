@@ -114,9 +114,11 @@ lscCoreSyntax = new Plugin({
         this.finishNode(node, "BlockStatement")
 
       parseWhiteBlock(isExpression) ->
+        // Capture indent level of line prior to whiteblock body
+        indentLevel = this.state.indentLevel
+
         if not this.eat(tt.colon): this.unexpected(this.state.lastTokEnd, tt.colon)
         node = this.startNode()
-        indentLevel = this.state.indentLevel
         if not this.isLineBreak(): // Oneline whiteblock
           if isExpression:
             this.parseInlineWhiteBlock(node)
