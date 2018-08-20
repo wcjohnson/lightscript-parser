@@ -91,7 +91,6 @@ export default class ExpressionParser extends LValParser {
   // property assignment in contexts where both object expression
   // and object pattern might appear (so it's possible to raise
   // delayed syntax error at correct position).
-  // DUPED in plugins/additionalExtensionPoints
 
   parseExpression(noIn?: boolean, refShorthandDefaultPos?: Pos): N.Expression {
     const startPos = this.state.start;
