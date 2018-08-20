@@ -1,0 +1,4 @@
+{
+  "plugins": ["optionalChaining"],
+  "banPlugins": ["lscCoreSyntax"]
+}

@@ -1,0 +1,195 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 33,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 33,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 33,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            },
+            "identifierName": "Foo"
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 10,
+          "end": 33,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 4,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 14,
+              "end": 19,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 7
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 14,
+                "end": 15,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 3
+                  },
+                  "identifierName": "p"
+                },
+                "name": "p"
+              },
+              "computed": false,
+              "value": {
+                "type": "Identifier",
+                "start": 18,
+                "end": 19,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 7
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 22,
+              "end": 31,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 3,
+                  "column": 11
+                }
+              },
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "Identifier",
+                "start": 23,
+                "end": 24,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 4
+                  },
+                  "identifierName": "m"
+                },
+                "name": "m"
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 29,
+                "end": 31,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 11
+                  }
+                },
+                "body": [],
+                "directives": [],
+                "extra": {
+                  "curly": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
