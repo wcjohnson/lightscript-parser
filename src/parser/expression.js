@@ -97,17 +97,24 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     const expr = this.parseMaybeAssign(noIn, refShorthandDefaultPos);
     if (this.match(tt.comma)) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.expressions = [expr];
-      while (this.eat(tt.comma)) {
-        node.expressions.push(
-          this.parseMaybeAssign(noIn, refShorthandDefaultPos),
-        );
-      }
-      this.toReferencedList(node.expressions);
-      return this.finishNode(node, "SequenceExpression");
+      // XXX: LSC
+      return this.parseSequenceExpression(expr, startPos, startLoc, noIn, refShorthandDefaultPos);
     }
     return expr;
+  }
+
+  // XXX: LSC
+  // Additional extension point for parsing SeqExprs
+  parseSequenceExpression(expr, startPos, startLoc, noIn, refShorthandDefaultPos) {
+    const node = this.startNodeAt(startPos, startLoc);
+    node.expressions = [expr];
+    while (this.eat(tt.comma)) {
+      node.expressions.push(
+        this.parseMaybeAssign(noIn, refShorthandDefaultPos),
+      );
+    }
+    this.toReferencedList(node.expressions);
+    return this.finishNode(node, "SequenceExpression");
   }
 
   // Parse an assignment expression. This includes applications of
@@ -280,9 +287,10 @@ export default class ExpressionParser extends LValParser {
     if (prec != null && (!noIn || !this.match(tt._in))) {
       if (prec > minPrec) {
         const node = this.startNodeAt(leftStartPos, leftStartLoc);
-        const operator = this.state.value;
         node.left = left;
-        node.operator = operator;
+        // XXX: LSC - Operator type extension point
+        this.parseBinaryOperator(node);
+        const operator = node.operator;
 
         if (
           operator === "**" &&
@@ -328,14 +336,8 @@ export default class ExpressionParser extends LValParser {
           noIn,
         );
 
-        this.finishNode(
-          node,
-          op === tt.logicalOR ||
-          op === tt.logicalAND ||
-          op === tt.nullishCoalescing
-            ? "LogicalExpression"
-            : "BinaryExpression",
-        );
+        // XXX: LSC - Node type extension point
+        this.finishNode(node, this.getBinopNodeType(op, operator));
         return this.parseExprOp(
           node,
           leftStartPos,
@@ -348,45 +350,26 @@ export default class ExpressionParser extends LValParser {
     return left;
   }
 
+  // XXX: LSC
+  // Additional extension points for determining binop type
+  parseBinaryOperator(node): void {
+    node.operator = this.state.value
+  }
+
+  getBinopNodeType(tokenType, operator) {
+    return (tokenType === tt.logicalOR ||
+      tokenType === tt.logicalAND ||
+      tokenType === tt.nullishCoalescing
+        ? "LogicalExpression"
+        : "BinaryExpression");
+  }
+
   // Parse unary operators, both prefix and postfix.
 
   parseMaybeUnary(refShorthandDefaultPos: ?Pos): N.Expression {
     if (this.state.type.prefix) {
-      const node = this.startNode();
-      const update = this.match(tt.incDec);
-      node.operator = this.state.value;
-      node.prefix = true;
-
-      if (node.operator === "throw") {
-        this.expectPlugin("throwExpressions");
-      }
-      this.next();
-
-      node.argument = this.parseMaybeUnary();
-
-      if (refShorthandDefaultPos && refShorthandDefaultPos.start) {
-        this.unexpected(refShorthandDefaultPos.start);
-      }
-
-      if (update) {
-        this.checkLVal(node.argument, undefined, undefined, "prefix operation");
-      } else if (this.state.strict && node.operator === "delete") {
-        const arg = node.argument;
-
-        if (arg.type === "Identifier") {
-          this.raise(node.start, "Deleting local variable in strict mode");
-        } else if (
-          arg.type === "MemberExpression" &&
-          arg.property.type === "PrivateName"
-        ) {
-          this.raise(node.start, "Deleting a private field is not allowed");
-        }
-      }
-
-      return this.finishNode(
-        node,
-        update ? "UpdateExpression" : "UnaryExpression",
-      );
+      // XXX: LSC - Refactor to call extension point
+      return this.parseUnaryPrefix(refShorthandDefaultPos);
     }
 
     const startPos = this.state.start;
@@ -394,15 +377,68 @@ export default class ExpressionParser extends LValParser {
     let expr = this.parseExprSubscripts(refShorthandDefaultPos);
     if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
     while (this.state.type.postfix && !this.canInsertSemicolon()) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.operator = this.state.value;
-      node.prefix = false;
-      node.argument = expr;
-      this.checkLVal(expr, undefined, undefined, "postfix operation");
-      this.next();
-      expr = this.finishNode(node, "UpdateExpression");
+      // XXX: LSC - Refactor to call extension point
+      expr = this.parseUnaryPostfix(startPos, startLoc, expr);
     }
     return expr;
+  }
+
+  // XXX: LSC
+  // Prefix unary operator parsing extension point/refactor
+  parseUnaryPrefix(refShorthandDefaultPos) {
+    const node = this.startNode();
+    const update = this.match(tt.incDec);
+    this.parseUnaryOperator(node, true);
+    node.prefix = true;
+
+    if (node.operator === "throw") {
+      this.expectPlugin("throwExpressions");
+    }
+    this.next();
+
+    node.argument = this.parseMaybeUnary();
+
+    if (refShorthandDefaultPos && refShorthandDefaultPos.start) {
+      this.unexpected(refShorthandDefaultPos.start);
+    }
+
+    if (update) {
+      this.checkLVal(node.argument, undefined, undefined, "prefix operation");
+    } else if (this.state.strict && node.operator === "delete") {
+      const arg = node.argument;
+
+      if (arg.type === "Identifier") {
+        this.raise(node.start, "Deleting local variable in strict mode");
+      } else if (
+        arg.type === "MemberExpression" &&
+        arg.property.type === "PrivateName"
+      ) {
+        this.raise(node.start, "Deleting a private field is not allowed");
+      }
+    }
+
+    return this.finishNode(
+      node,
+      update ? "UpdateExpression" : "UnaryExpression",
+    );
+  }
+
+  // XXX: LSC
+  // Postfix unop extension point
+  parseUnaryPostfix(startPos, startLoc, expr) {
+    const node = this.startNodeAt(startPos, startLoc);
+    this.parseUnaryOperator(node, false);
+    node.prefix = false;
+    node.argument = expr;
+    this.checkLVal(expr, undefined, undefined, "postfix operation");
+    this.next();
+    return this.finishNode(node, "UpdateExpression");
+  }
+
+  // XXX: LSC
+  // Unop operator type extension point
+  parseUnaryOperator(node, isPrefix): void {
+    node.operator = this.state.value;
   }
 
   // Parse call, dot, and `[]`-subscript expressions.

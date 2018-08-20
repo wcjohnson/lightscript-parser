@@ -6,7 +6,7 @@ OPERATOR_KEYWORDS = ['and', 'or', 'not']
 
 modifiedLogicalOperators = new Plugin({
   name: 'modifiedLogicalOperators'
-  dependencies: ['additionalExtensionPoints']
+
   load(): void ->
     registerKeywordToken('and', tt.logicalAND)
     registerKeywordToken('or', tt.logicalOR)
