@@ -8,9 +8,16 @@ modifiedLogicalOperators = new Plugin({
   name: 'modifiedLogicalOperators'
 
   load(): void ->
+    // TODO: Make these their own binop tokens with same precedence, etc
+    // as logical AND.
     registerKeywordToken('and', tt.logicalAND)
     registerKeywordToken('or', tt.logicalOR)
-    registerKeywordToken('not', { keyword: true, beforeExpr: true, prefix: true, startsExpr: true })
+    registerKeywordToken('not', new TokenType("not", {
+      keyword: true
+      beforeExpr: true
+      prefix: true
+      startsExpr: true
+    }))
 
   mixin(ParserBase, opts) -> {
     clazz = class extends ParserBase:
