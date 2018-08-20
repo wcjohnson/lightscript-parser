@@ -1,0 +1,1 @@
+LightScript should probably throw the octal-parsing error rather than the float-parsing error.

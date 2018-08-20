@@ -78,10 +78,7 @@
             }
           },
           "body": [],
-          "directives": [],
-          "extra": {
-            "curly": true
-          }
+          "directives": []
         }
       },
       {

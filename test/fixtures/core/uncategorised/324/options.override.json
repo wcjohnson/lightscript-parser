@@ -1,0 +1,3 @@
+{
+  "throws": "Regex literals cannot start with a space in lightscript; try '\\s' or '\\ ' instead. (1:6)"
+}
