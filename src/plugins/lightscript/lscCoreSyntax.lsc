@@ -1,11 +1,19 @@
-// Parsing tools for Whiteblock and Paren-Free syntax.
+// Parsing for:
+// - Whiteblock syntax
+// - Paren-free test expressions
+// - Full decimals only (1.0 instead of 1., 0.5 instead of .5)
+// - LightScript ASI rules
 
 import { Plugin } from '../core/plugin'
 import { types as tt } from "../../tokenizer/types"
+import { types as ct } from "../../tokenizer/context"
+import { isIdentifierStart } from "../../util/identifier"
+import * as charCodes from "charcodes"
+
 
 lscCoreSyntax = new Plugin({
   name: 'lscCoreSyntax'
-  dependencies: ['significantWhitespace', 'seqExprRequiresParen']
+  dependencies: ['significantWhitespace', 'seqExprRequiresParen', 'additionalExtensionPoints']
 
   load() ->
     tt._class.startsExpr = true
@@ -201,6 +209,7 @@ lscCoreSyntax = new Plugin({
             if (val.extra && val.extra.parenthesized) {
               // Remove accidentally added paren extra data. If this
               // leaves the extra object empty, quash that as well.
+              // TODO: Factor this out. Also used in statement.js/parseDoWhile
               delete val.extra.parenthesized;
               delete val.extra.parenStart;
               if (Object.keys(val.extra).length == 0) { delete val.extra; }
@@ -226,14 +235,110 @@ lscCoreSyntax = new Plugin({
         expr
       } // parseParenExpression
 
-      // We hook parseSubscript to prevent subscripts from crossing
-      // whiteblock boundaries.
+      // Hook subscript parsing
       parseSubscript(base, startPos, startLoc, noCalls, state) ->
         if this.crossesWhiteBlockBoundary():
+          // Don't let subscripts cross whiteblock boundaries
           state.stop = true
-          base
+          return base
+        elif this.match(tt.dot) and (base.type === 'NumericLiteral'):
+          // catch malformed decimals (but allow `0.0.toString()`, which is actually valid)
+          if (!(base.extra && base.extra.raw && base.extra.raw.match(/\./))) {
+            this.unexpected(null, "Numbers with a decimal must end in a number (eg; `1.0`) in LightScript.");
+          }
+        elif this.match(tt.backQuote) and this.isLineBreak():
+          // Prevent parsing backquotes across newlines
+          state.stop = true
+          return base
+        elif this.match(tt.bracketL):
+          // Bracket must either be on the same line, or on a different
+          // but indented line.
+          if this.isNonIndentedBreakFrom(startPos):
+            state.stop = true
+            return base
+        elif (not noCalls) and this.match(tt.parenL):
+          // Opening paren of a call expr must be on the same line as the callee
+          if this.isLineBreak():
+            state.stop = true
+            return base
+
+        super.parseSubscript(base, startPos, startLoc, noCalls, state)
+
+      parseNumericPropertyAccess(node): void ->
+        node.property = this.parseExprAtom();
+        node.computed = true;
+        this.addExtra(node, "dotNumeric", true);
+
+      // ASI: newline followed by +/- followed by a non-space is
+      // a unary +/-
+      parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn) ->
+        if this.isLineBreak():
+          if this.match(tt.plusMin) and (not this.isNextCharWhitespace()):
+            return left
+
+        super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn)
+
+      // ASI: unary +/- can't have a space between operator and operand
+      parseUnaryPrefix(refShorthandDefaultPos) ->
+        if this.match(tt.plusMin) and this.isNextCharWhitespace():
+          this.unexpected(null, "Unary +/- cannot be followed by a space in lightscript.")
+
+        super.parseUnaryPrefix(refShorthandDefaultPos)
+
+      // Prevent arrows from spanning lines
+      shouldParseAsyncArrow(): boolean ->
+        if this.isLineBreak(): return false
+        super.shouldParseAsyncArrow()
+
+      // Enforce full decimal syntax (0.0 rather than .0)
+      parseExprAtom(refShorthandDefaultPos) ->
+        if this.match(tt.dot) and this.lookahead().type === tt.num:
+          this.unexpected(null, "Decimal numbers must be prefixed with a `0` in LightScript (eg; `0.1`).")
+        super.parseExprAtom(refShorthandDefaultPos)
+
+      shouldParseFloat() ->
+        // Don't parse a float if we just parsed a dot.
+        this.state.lastTokType != tt.dot
+
+      // ASI, args to new can't begin on a different line
+      parseNewArguments(node): void ->
+        if this.isLineBreak():
+          node.arguments = []
         else:
-          super.parseSubscript(base, startPos, startLoc, noCalls, state)
+          super.parseNewArguments(node)
+
+      // ASI, method name must be on same line as get/set
+      isGetterOrSetterMethod(prop, isPattern: boolean): boolean ->
+        if this.isLineBreak(): false else: super.isGetterOrSetterMethod(prop, isPattern)
+
+      // ASI, regex parsing hooks
+      isOutsideJSXTag(): boolean ->
+        if this.hasPlugin("jsx"):
+          ctx = this.curContext()
+          (ctx != ct.j_oTag) and (ctx != ct.j_cTag)
+        else:
+          true
+
+      looksLikeRegex(): boolean ->
+        this.isLineBreak() and
+        (not this.isWhitespaceAt(this.state.pos + 1)) and
+        this.isOutsideJSXTag()
+
+      readRegexp(): void ->
+        if this.input.charCodeAt(this.state.pos) == 32:
+          this.raise(this.state.pos, "Regex literals cannot start with a space in lightscript; try '\\s' or '\\ ' instead.")
+        super.readRegexp()
+
+      // ASI, JSX opening tags vs <
+      readToken(code): void ->
+        if (code == charCodes.lessThan) and (this.hasPlugin("jsx")):
+          next = this.state.input.charCodeAt(this.state.pos + 1)
+          if this.isLineBreak() and isIdentifierStart(next):
+            ++this.state.pos
+            return this.finishToken(tt.jsxTagStart)
+        super.readToken(code)
+
+
 
 
     return clazz

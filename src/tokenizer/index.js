@@ -143,6 +143,7 @@ export default class Tokenizer extends LocationParser {
       this.state.tokens.push(new Token(this.state));
     }
 
+    this.state.lastTokType = this.state.type; // XXX: LSC
     this.state.lastTokEnd = this.state.end;
     this.state.lastTokStart = this.state.start;
     this.state.lastTokEndLoc = this.state.endLoc;
@@ -406,9 +407,13 @@ export default class Tokenizer extends LocationParser {
   //
   readToken_dot(): void {
     const next = this.input.charCodeAt(this.state.pos + 1);
-    if (next >= charCodes.digit0 && next <= charCodes.digit9) {
-      this.readNumber(true);
-      return;
+
+    // XXX: LSC - no dotted numbers
+    if (!this.hasPlugin("lscCoreSyntax")) {
+      if (next >= charCodes.digit0 && next <= charCodes.digit9) {
+        this.readNumber(true);
+        return;
+      }
     }
 
     const next2 = this.input.charCodeAt(this.state.pos + 2);
@@ -422,8 +427,14 @@ export default class Tokenizer extends LocationParser {
   }
 
   readToken_slash(): void {
+    // XXX: LSC
+    let looksLikeRegex = false;
+    if (this.hasPlugin("lscCoreSyntax")) {
+      looksLikeRegex = this.looksLikeRegex()
+    }
+
     // '/'
-    if (this.state.exprAllowed && !this.state.inType) {
+    if ((looksLikeRegex || this.state.exprAllowed) && !this.state.inType) {
       ++this.state.pos;
       this.readRegexp();
       return;
@@ -1004,13 +1015,19 @@ export default class Tokenizer extends LocationParser {
     let isFloat = false;
     let isBigInt = false;
 
+    // XXX: LSC - Extension point to disallow floats.
+    let floatsAllowed = true;
+    if (this.hasPlugin("lscCoreSyntax")) {
+      floatsAllowed = this.shouldParseFloat();
+    }
+
     if (!startsWithDot && this.readInt(10) === null) {
       this.raise(start, "Invalid number");
     }
     if (octal && this.state.pos == start + 1) octal = false; // number === 0
 
     let next = this.input.charCodeAt(this.state.pos);
-    if (next === charCodes.dot && !octal) {
+    if (next === charCodes.dot && !octal && floatsAllowed) { // XXX: LSC
       ++this.state.pos;
       this.readInt(10);
       isFloat = true;
@@ -1019,7 +1036,8 @@ export default class Tokenizer extends LocationParser {
 
     if (
       (next === charCodes.uppercaseE || next === charCodes.lowercaseE) &&
-      !octal
+      !octal &&
+      floatsAllowed // XXX: LSC
     ) {
       next = this.input.charCodeAt(++this.state.pos);
       if (next === charCodes.plusSign || next === charCodes.dash) {
@@ -1030,12 +1048,21 @@ export default class Tokenizer extends LocationParser {
       next = this.input.charCodeAt(this.state.pos);
     }
 
-    if (this.hasPlugin("bigInt")) {
+    if (this.hasPlugin("bigInt") && floatsAllowed) { // XXX: LSC - disallow bigints
       if (next === charCodes.lowercaseN) {
         // disallow floats and legacy octal syntax, new style octal ("0o") is handled in this.readRadixNumber
         if (isFloat || octal) this.raise(start, "Invalid BigIntLiteral");
         ++this.state.pos;
         isBigInt = true;
+      }
+    }
+
+    // XXX: LSC
+    // Rewind to the "dot" token in the event of an incomplete float so that
+    // the dot can be parsed as a subscript.
+    if (this.hasPlugin("lscCoreSyntax")) {
+      if (this.input.charCodeAt(this.state.pos - 1) === charCodes.dot) {
+        --this.state.pos;
       }
     }
 

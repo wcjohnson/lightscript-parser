@@ -113,8 +113,9 @@ significantWhitespace = new Plugin({
       // x\ny -> true
       // x\n  y -> false
       isNonIndentedBreakFrom(pos) -> {
+        if not this.isLineBreak(): return false
         const indentLevel = this.indentLevelAt(pos);
-        return this.isLineBreak() && this.state.indentLevel <= indentLevel;
+        return this.state.indentLevel <= indentLevel;
       }
 
       // Check for line break after current token.

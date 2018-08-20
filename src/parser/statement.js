@@ -513,7 +513,10 @@ export default class StatementParser extends ExpressionParser {
     // optional arguments, we eagerly look for a semicolon or the
     // possibility to insert one.
 
-    if (this.isLineTerminator()) {
+    if (
+      this.isLineTerminator() ||
+      (this.hasPlugin("lscCoreSyntax") && !this.tokenStartsExpression()) // XXX: LSC
+    ) {
       node.argument = null;
     } else {
       node.argument = this.parseExpression();
@@ -1015,9 +1018,19 @@ export default class StatementParser extends ExpressionParser {
 
     classBody.body = [];
 
-    this.expect(tt.braceL);
+    // XXX: LSC
+    let isEnd;
+    if (this.hasPlugin("lscCoreSyntax") && this.match(tt.colon)) {
+      // Whiteblock class body
+      const indentLevel = this.state.indentLevel;
+      this.next();
+      isEnd = () => this.state.indentLevel <= indentLevel || this.match(tt.eof);
+    } else {
+      this.expect(tt.braceL)
+      isEnd = () => this.eat(tt.braceR);
+    }
 
-    while (!this.eat(tt.braceR)) {
+    while (!isEnd()) {
       if (this.eat(tt.semi)) {
         if (decorators.length > 0) {
           this.raise(

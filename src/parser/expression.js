@@ -506,8 +506,13 @@ export default class ExpressionParser extends LValParser {
     } else if (this.eat(tt.dot)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
-      node.property = this.parseMaybePrivateName();
-      node.computed = false;
+      // XXX: LSC - Parse numeric property access
+      if (this.hasPlugin("lscCoreSyntax") && this.match(tt.num)) {
+        this.parseNumericPropertyAccess(node);
+      } else {
+        node.property = this.parseMaybePrivateName();
+        node.computed = false;
+      }
       if (state.optionalChainMember) {
         node.optional = false;
         return this.finishNode(node, "OptionalMemberExpression");
