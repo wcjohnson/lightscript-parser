@@ -6,3 +6,6 @@ TODO:
   - [ ] try/catch
   - [x] class body
   - [ ] Flow and JSX `readToken` extensions
+
+BREAKING CHANGES:
+  - Removed scientific notation from dot property access (x.1e3 is no longer valid)
