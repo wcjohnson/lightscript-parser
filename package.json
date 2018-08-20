@@ -52,7 +52,9 @@
     "build:rollup": "rollup -c",
     "build:runner": "babel -x \".lsc\" test/helpers --out-dir test/helpers",
     "test": "run-s clean build test:only",
-    "test:only": "jest"
+    "test:only": "jest",
+    "test:parseFixture": "node bin/lightscript-parser.js fixture",
+    "test:debugFixture": "node --inspect-brk bin/lightscript-parser.js fixture"
   },
   "config": {
     "commitizen": {
