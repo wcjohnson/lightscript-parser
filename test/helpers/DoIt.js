@@ -8,6 +8,10 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 var _lib = require('../../lib');
 
 var _misMatch = require('./misMatch');
@@ -16,7 +20,21 @@ var _misMatch2 = _interopRequireDefault(_misMatch);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-let ParserTestOptions = class ParserTestOptions extends _TestRunner.TestOptions {
+function mkdirSync(dirPath) {
+  try {
+    return _fs2.default.mkdirSync(dirPath);
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err;
+  }
+}
+
+function stringifyAst(ast) {
+  const toJSON = RegExp.prototype.toJSON;
+  RegExp.prototype.toJSON = RegExp.prototype.toString;
+  const jsonAst = JSON.stringify(ast, null, "  ");
+  RegExp.prototype.toJSON = toJSON;
+  return jsonAst;
+}let ParserTestOptions = class ParserTestOptions extends _TestRunner.TestOptions {
   inherits(other) {
     if (!other) return;
     for (let _i = 0, _keys = Object.keys(other), _len = _keys.length; _i < _len; _i++) {
@@ -115,27 +133,38 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
       this.throwAnnotatedError(new Error("Expected error message: " + this.options.throws + ". But parsing succeeded."));
     } else {
       if (this.expected) {
-        const mis = (0, _misMatch2.default)(JSON.parse(this.expected), ast);
+        const parsedExpected = JSON.parse(this.expected);
+        const mis = (0, _misMatch2.default)(parsedExpected, ast);
         if (mis) {
-          if (process.env.SAVE_OVERRIDE) {
-            this.saveExpected(ast, "output.override.json");
-          } else if (process.env.UPDATE_EXPECTED) {
-            this.saveExpected(ast, "output.json");
-          } else {
-            this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis));
-          }
+          this.mismatchExpected(parsedExpected, ast, mis);
+        } else {
+          return undefined;
         }
-      } else {
-        this.throwAnnotatedError(new Error("Empty expected output -- use SAVE_EXPECTED=1 to create expected output."));
-      }
+      } // Test succeeded
+      else {
+          this.throwAnnotatedError(new Error("Empty expected output -- use SAVE_EXPECTED=1 to create expected output."));
+        }
+    }
+  }mismatchExpected(expected, received, mismatch) {
+    if (process.env.SAVE_OVERRIDE) {
+      return this.saveExpected(received, "output.override.json");
+    } else if (process.env.UPDATE_EXPECTED) {
+      return this.saveExpected(received, "output.json");
+    } else if (process.env.FIX_BY_BANNING_PLUGIN) {
+      return this.fixByBanningPlugin(expected, received, process.env.FIX_BY_BANNING_PLUGIN);
+    } else {
+      return this.throwAnnotatedError(new Error("Mismatch against expected output: " + mismatch));
     }
   }saveExpected(ast, filename) {
-    const toJSON = RegExp.prototype.toJSON;
-    RegExp.prototype.toJSON = RegExp.prototype.toString;
-    const jsonAst = JSON.stringify(ast, null, "  ");
-    RegExp.prototype.toJSON = toJSON;
-
-    this.saveLocalArtifact(filename, jsonAst);
+    this.saveLocalArtifact(filename, stringifyAst(ast));
+  }fixByBanningPlugin(expected, received, whichPlugin) {
+    const subtestPath = _path2.default.join(this.path, "lightscriptFix");
+    mkdirSync(subtestPath);
+    _fs2.default.writeFileSync(_path2.default.join(subtestPath, "options.json"), JSON.stringify({
+      banPlugins: [whichPlugin]
+    }));
+    _fs2.default.writeFileSync(_path2.default.join(subtestPath, "output.json"), stringifyAst(expected));
+    return this.saveLocalArtifact("output.override.json", stringifyAst(received));
   }saveThrows(err) {
     const opts = this.readTestOptions() || {};
     opts.throws = err.message;

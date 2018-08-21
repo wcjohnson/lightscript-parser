@@ -1,8 +1,24 @@
 import { TestRun, Testable, TestOptions } from './TestRunner'
 import { allTests, TestFilter } from './TestFilter'
 import path from 'path'
+import fs from 'fs'
 import { parse } from '../../lib'
 import misMatch from './misMatch'
+
+function mkdirSync(dirPath) {
+  try {
+    fs.mkdirSync(dirPath)
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
+  }
+}
+
+stringifyAst(ast) ->
+  toJSON = RegExp.prototype.toJSON
+  RegExp.prototype.toJSON = RegExp.prototype.toString
+  jsonAst = JSON.stringify(ast, null, "  ")
+  RegExp.prototype.toJSON = toJSON
+  jsonAst
 
 class ParserTestOptions extends TestOptions:
   inherits(other): void ->
@@ -104,24 +120,36 @@ class ParserTestable extends Testable:
       ))
     else:
       if this.expected:
-        mis = misMatch(JSON.parse(this.expected), ast)
+        parsedExpected = JSON.parse(this.expected)
+        mis = misMatch(parsedExpected, ast)
         if mis:
-          if process.env.SAVE_OVERRIDE:
-            this.saveExpected(ast, "output.override.json")
-          elif process.env.UPDATE_EXPECTED:
-            this.saveExpected(ast, "output.json")
-          else:
-            this.throwAnnotatedError(new Error("Mismatch against expected output: " + mis))
+          this.mismatchExpected(parsedExpected, ast, mis)
+        else:
+          return undefined // Test succeeded
       else:
         this.throwAnnotatedError(new Error("Empty expected output -- use SAVE_EXPECTED=1 to create expected output."))
 
-  saveExpected(ast, filename): void ->
-    toJSON = RegExp.prototype.toJSON
-    RegExp.prototype.toJSON = RegExp.prototype.toString
-    jsonAst = JSON.stringify(ast, null, "  ")
-    RegExp.prototype.toJSON = toJSON
+  mismatchExpected(expected, received, mismatch) ->
+    if process.env.SAVE_OVERRIDE:
+      this.saveExpected(received, "output.override.json")
+    elif process.env.UPDATE_EXPECTED:
+      this.saveExpected(received, "output.json")
+    elif process.env.FIX_BY_BANNING_PLUGIN:
+      this.fixByBanningPlugin(expected, received, process.env.FIX_BY_BANNING_PLUGIN)
+    else:
+      this.throwAnnotatedError(new Error("Mismatch against expected output: " + mismatch))
 
-    this.saveLocalArtifact(filename, jsonAst)
+  saveExpected(ast, filename): void ->
+    this.saveLocalArtifact(filename, stringifyAst(ast))
+
+  fixByBanningPlugin(expected, received, whichPlugin) ->
+    subtestPath = path.join(this.path, "lightscriptFix")
+    mkdirSync(subtestPath)
+    fs.writeFileSync(path.join(subtestPath, "options.json"), JSON.stringify({
+      banPlugins: [whichPlugin]
+    }))
+    fs.writeFileSync(path.join(subtestPath, "output.json"), stringifyAst(expected))
+    this.saveLocalArtifact("output.override.json", stringifyAst(received))
 
   saveThrows(err): void ->
     const opts = this.readTestOptions() or {}
