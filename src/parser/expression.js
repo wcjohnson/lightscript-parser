@@ -160,7 +160,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     // XXX: LSC extension point
-    return this.parseMaybeAssign_finishNonAssign(left, startPos, startLoc, noIn);
+    return this.parseMaybeAssign_parseNonAssign(left, startPos, startLoc, noIn);
   }
 
   // XXX: LSC extension point - parse LHS
@@ -229,7 +229,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // XXX: LSC extension point - parse RHS of an assignment and finish
-  parseMaybeAssign_finishNonAssign(node: N.Node, startPos, startLoc, noIn: ?boolean): N.Expression {
+  parseMaybeAssign_parseNonAssign(node: N.Node, startPos, startLoc, noIn: ?boolean): N.Expression {
     return node;
   }
 
