@@ -25,23 +25,22 @@ lscAssignment = new Plugin({
         this.setTokenMarker("beginsStatement")
         super.parseStatement_parseExpression()
 
-      parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos) ->
+      parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state) ->
         // Determine if we are at the start of a statement
         isStatementStart = (this.getTokenMarker() == "beginsStatement")
-        this.setTransientState("isStatementStart", isStatementStart, true)
+        state.isStatementStart = isStatementStart
         // Determine if the subsequent assignment will be a "now"-qualifier
-        this.setTransientState("isNowAssign", this.eat(tt._now), true)
+        state.isNowAssign = this.eat(tt._now)
 
         // Get LHS
-        left = super.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos)
+        left = super.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state)
 
         // ...then get possible type annotation
-        this.setTransientState("assignmentTypeAnnotation", undefined, true)
-        this.lscAssignment_maybeParseTypeAnnotation(isStatementStart)
+        this.lscAssignment_maybeParseTypeAnnotation(isStatementStart, state)
 
         left
 
-      lscAssignment_maybeParseTypeAnnotation(isStatementStart) -> {
+      lscAssignment_maybeParseTypeAnnotation(isStatementStart, funcState) -> {
         // If there's a colon, and we could conceivably be parsing a statement,
         // and there's no linebreak after the colon (as in a whiteblock)
         // it might be a type annotation...
@@ -63,7 +62,7 @@ lscAssignment = new Plugin({
           if not this.lscAssignment_validateTypeAnnotation(typeAnnotation):
             this.state = state
           else:
-            this.setTransientState("assignmentTypeAnnotation", typeAnnotation, true)
+            funcState.typeAnnotation = typeAnnotation
         } // if
       } // maybeParseTypeAnnotation
 
@@ -75,12 +74,10 @@ lscAssignment = new Plugin({
         this.next()
         node.right = this.parseMaybeAssign(noIn)
 
-      parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn) ->
-        isStatementStart = this.claimTransientState("isStatementStart")
-        isNowAssign = this.claimTransientState("isNowAssign")
-        typeAnnotation = this.claimTransientState("assignmentTypeAnnotation")
+      parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn, state) ->
+        { isStatementStart, isNowAssign, typeAnnotation } = state
 
-        this.lscAssignment_parseRight(node, startPos, startLoc, noIn)
+        this.lscAssignment_parseRight(node, startPos, startLoc, noIn, state)
 
         if not isNowAssign:
           if isStatementStart:
@@ -98,9 +95,8 @@ lscAssignment = new Plugin({
           node.isNowAssign = true
           this.finishNode(node, "AssignmentExpression")
 
-      parseMaybeAssign_parseNonAssign(node, startPos, startLoc, noIn) ->
-        isStatementStart = this.claimTransientState("isStatementStart")
-        isNowAssign = this.claimTransientState("isNowAssign")
+      parseMaybeAssign_parseNonAssign(node, startPos, startLoc, noIn, state) ->
+        { isStatementStart, isNowAssign } = state
 
         if isNowAssign:
           if (node.type == "UpdateExpression") or noIn:
@@ -113,14 +109,16 @@ lscAssignment = new Plugin({
       parseExpressionStatement(node, expr) ->
         // Convert implicit Const nodes to VarDecls
         if expr.type == IMPLICIT_CONST_NODE_TYPE:
-          decl = this.lscAssignment_rewriteDeclaration(expr)
+          decl = this.lscAssignment_rewriteAsDeclarator(expr)
           node.kind = "const"
           this.addExtra(node, "implicit", true)
           node.declarations = [decl]
           this.semicolon()
           this.finishNode(node, "VariableDeclaration")
+        else:
+          super.parseExpressionStatement(node, expr)
 
-      lscAssignment_rewriteDeclaration(node) ->
+      lscAssignment_rewriteAsDeclarator(node) ->
         node.type = "VariableDeclarator"
         node.id = node.left
         node.init = node.right
