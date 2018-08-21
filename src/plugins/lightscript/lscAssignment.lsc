@@ -104,7 +104,7 @@ lscAssignment = new Plugin({
           if (node.type == "UpdateExpression") or noIn:
             node.isNowAssign = true
           else:
-            this.raise(left.start, "`now` can only be used with assignments and updates.", { code: "LSC_NOW_NONASSIGN" })
+            this.raise(startPos, "`now` can only be used with assignments and updates.", { code: "LSC_NOW_NONASSIGN" })
 
         node
 
