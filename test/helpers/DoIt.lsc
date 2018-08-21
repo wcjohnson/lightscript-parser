@@ -100,6 +100,9 @@ class ParserTestable extends Testable:
           this.throwAnnotatedError(err)
       elif (not this.expected) and (process.env.SAVE_THROWS):
         this.saveThrows(err)
+      elif this.expected and process.env.FIX_BY_BANNING_PLUGIN:
+        this.fixErrorByBanningPlugin(this.expected, err.message, process.env.FIX_BY_BANNING_PLUGIN)
+        return undefined // "successful" test
 
       this.throwAnnotatedError(err)
     }
@@ -150,6 +153,15 @@ class ParserTestable extends Testable:
     }))
     fs.writeFileSync(path.join(subtestPath, "output.json"), stringifyAst(expected))
     this.saveLocalArtifact("output.override.json", stringifyAst(received))
+
+  fixErrorByBanningPlugin(expectedString, throws, whichPlugin) ->
+    subtestPath = path.join(this.path, "lightscriptFix")
+    mkdirSync(subtestPath)
+    fs.writeFileSync(path.join(subtestPath, "options.json"), JSON.stringify({
+      banPlugins: [whichPlugin]
+    }))
+    fs.writeFileSync(path.join(subtestPath, "output.json"), expectedString)
+    this.saveLocalArtifact("options.override.json", JSON.stringify({throws}))
 
   saveThrows(err): void ->
     const opts = this.readTestOptions() or {}

@@ -118,7 +118,12 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
         }
       } else if (!this.expected && process.env.SAVE_THROWS) {
         this.saveThrows(err);
-      }this.throwAnnotatedError(err);
+      } else if (this.expected && process.env.FIX_BY_BANNING_PLUGIN) {
+        this.fixErrorByBanningPlugin(this.expected, err.message, process.env.FIX_BY_BANNING_PLUGIN);
+        return undefined;
+      } // "successful" test
+
+      this.throwAnnotatedError(err);
     }
 
     if (this.options.throws) {
@@ -165,6 +170,14 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
     }));
     _fs2.default.writeFileSync(_path2.default.join(subtestPath, "output.json"), stringifyAst(expected));
     return this.saveLocalArtifact("output.override.json", stringifyAst(received));
+  }fixErrorByBanningPlugin(expectedString, throws, whichPlugin) {
+    const subtestPath = _path2.default.join(this.path, "lightscriptFix");
+    mkdirSync(subtestPath);
+    _fs2.default.writeFileSync(_path2.default.join(subtestPath, "options.json"), JSON.stringify({
+      banPlugins: [whichPlugin]
+    }));
+    _fs2.default.writeFileSync(_path2.default.join(subtestPath, "output.json"), expectedString);
+    return this.saveLocalArtifact("options.override.json", JSON.stringify({ throws }));
   }saveThrows(err) {
     const opts = this.readTestOptions() || {};
     opts.throws = err.message;
