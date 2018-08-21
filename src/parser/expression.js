@@ -186,12 +186,13 @@ export default class ExpressionParser extends LValParser {
       }
 
       // XXX: LSC extension point
-      return this.parseMaybeAssign_finishNode(node, startPos, startLoc, noIn);
+      return this.parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn);
     } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
     }
 
-    return left;
+    // XXX: LSC extension point
+    return this.parseMaybeAssign_finishNonAssign(left, startPos, startLoc, noIn);
   }
 
   // XXX: LSC extension point - parse LHS
@@ -216,10 +217,15 @@ export default class ExpressionParser extends LValParser {
   }
 
   // XXX: LSC extension point - parse RHS of an assignment and finish
-  parseMaybeAssign_finishNode(node: N.Node, startPos, startLoc, noIn: ?boolean): N.Expression {
+  parseMaybeAssign_finishAssign(node: N.Node, startPos, startLoc, noIn: ?boolean): N.Expression {
     this.next();
     node.right = this.parseMaybeAssign(noIn);
     return this.finishNode(node, "AssignmentExpression");
+  }
+
+  // XXX: LSC extension point - parse RHS of an assignment and finish
+  parseMaybeAssign_finishNonAssign(node: N.Node, startPos, startLoc, noIn: ?boolean): N.Expression {
+    return node;
   }
 
   // Parse a ternary conditional (`?:`) operator.
