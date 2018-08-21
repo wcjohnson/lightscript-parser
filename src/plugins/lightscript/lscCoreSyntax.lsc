@@ -118,19 +118,24 @@ lscCoreSyntax = new Plugin({
 
       parseMultilineWhiteBlock(node, indentLevel) ->
         body = []
+        directives = []
         this.parseWhiteBlockBody(body, null, false, indentLevel)
         if body.length == 0:
           this.unexpected(node.start, "Expected an Indent or Statement")
         node.body = body
+        node.directives = directives
         this.addExtra(node, "curly", false)
         this.finishNode(node, "BlockStatement")
 
       parseWhiteBlock(isExpression) ->
         // Capture indent level of line prior to whiteblock body
         indentLevel = this.state.indentLevel
+        // Start whiteblock node before eating the colon
+        node = this.startNode()
 
         if not this.eat(tt.colon): this.unexpected(this.state.lastTokEnd, tt.colon)
-        node = this.startNode()
+
+        // Distinguish whiteblock type
         if not this.isLineBreak(): // Oneline whiteblock
           if isExpression:
             this.parseInlineWhiteBlock(node)
