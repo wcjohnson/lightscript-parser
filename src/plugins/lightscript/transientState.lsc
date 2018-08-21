@@ -21,22 +21,6 @@ transientState = new Plugin({
       // Retrieve a previously set token marker
       getTokenMarker(): any ->
         this.state.tokenMarker
-
-      // Set a state value that is NOT preserved with parser state cloning.
-      // Only use this if you are sure you don't need to worry about a parser
-      // state change impacting your stored value.
-      // Most of the time you will just want to add a field to `this.state`
-      setTransientState(key: string, value: any, noThrow: boolean = false): void ->
-        if this.transientState[key] !== undefined:
-          if not noThrow:
-            throw new Error("Transient state key was reset before it was claimed. This is almost certainly a parser bug.")
-        this.transientState[key] = value
-
-      // Claim and clear a transient state value previously set.
-      claimTransientState(key: string): any ->
-        result = this.transientState[key]
-        this.transientState[key] = undefined
-        result
   } // mixin
 })
 
