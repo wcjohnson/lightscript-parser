@@ -89,7 +89,7 @@ lscAssignment = new Plugin({
             // into a VariableDeclaration
             this.finishNode(node, IMPLICIT_CONST_NODE_TYPE)
           else:
-            this.raise(startPos, "Incorrect assignment. To reassign, use `now`.", { code: "LSC_NOW_MISSING" })
+            this.raise(startPos, "Incorrect assignment. To reassign, use `now`. To declare, use `let`, `var`, or `const`.", { code: "LSC_UNQUALIFIED_ASSIGNMENT" })
         else:
           // Valid normal assignment
           node.isNowAssign = true
