@@ -20,6 +20,10 @@ lscCoreSyntax = new Plugin({
 
   mixin(ParserBase, opts) -> {
     clazz = class extends ParserBase:
+      // Expect a token but don't consume it
+      check(type, pos): boolean ->
+        this.match(type) or this.unexpected(pos, type)
+
       // Determine if the token under the cursor starts an expression.
       tokenStartsExpression(): boolean ->
         this.state.type.startsExpr
