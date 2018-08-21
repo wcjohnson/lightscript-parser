@@ -154,39 +154,7 @@ export default class ExpressionParser extends LValParser {
       left = afterLeftParse.call(this, left, startPos, startLoc);
     }
     if (this.state.type.isAssign) {
-      const node = this.startNodeAt(startPos, startLoc);
-      this.parseMaybeAssign_parseOp(node); // XXX: LSC extension point
-      const operator = node.operator;
-
-      if (operator === "??=") {
-        this.expectPlugin("nullishCoalescingOperator");
-        this.expectPlugin("logicalAssignment");
-      }
-      if (operator === "||=" || operator === "&&=") {
-        this.expectPlugin("logicalAssignment");
-      }
-      this.parseMaybeAssign_setLeft(node, left); // XXX: LSC extension point
-      refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
-
-      this.checkLVal(left, undefined, undefined, "assignment expression");
-
-      if (left.extra && left.extra.parenthesized) {
-        let errorMsg;
-        if (left.type === "ObjectPattern") {
-          errorMsg = "`({a}) = 0` use `({a} = 0)`";
-        } else if (left.type === "ArrayPattern") {
-          errorMsg = "`([a]) = 0` use `([a] = 0)`";
-        }
-        if (errorMsg) {
-          this.raise(
-            left.start,
-            `You're trying to assign to a parenthesized expression, eg. instead of ${errorMsg}`,
-          );
-        }
-      }
-
-      // XXX: LSC extension point
-      return this.parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn);
+      return this.parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos);
     } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
     }
@@ -202,6 +170,43 @@ export default class ExpressionParser extends LValParser {
       refShorthandDefaultPos,
       refNeedsArrowPos,
     );
+  }
+
+  // XXX: LSC extension point - parse something that's definitely an assignment
+  parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos): N.Expression {
+    const node = this.startNodeAt(startPos, startLoc);
+    this.parseMaybeAssign_parseOp(node); // XXX: LSC extension point
+    const operator = node.operator;
+
+    if (operator === "??=") {
+      this.expectPlugin("nullishCoalescingOperator");
+      this.expectPlugin("logicalAssignment");
+    }
+    if (operator === "||=" || operator === "&&=") {
+      this.expectPlugin("logicalAssignment");
+    }
+    this.parseMaybeAssign_setLeft(node, left); // XXX: LSC extension point
+    refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
+
+    this.checkLVal(left, undefined, undefined, "assignment expression");
+
+    if (left.extra && left.extra.parenthesized) {
+      let errorMsg;
+      if (left.type === "ObjectPattern") {
+        errorMsg = "`({a}) = 0` use `({a} = 0)`";
+      } else if (left.type === "ArrayPattern") {
+        errorMsg = "`([a]) = 0` use `([a] = 0)`";
+      }
+      if (errorMsg) {
+        this.raise(
+          left.start,
+          `You're trying to assign to a parenthesized expression, eg. instead of ${errorMsg}`,
+        );
+      }
+    }
+
+    // XXX: LSC extension point
+    return this.parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn);
   }
 
   // XXX: LSC extension point - parse assignment operator of an assignment
