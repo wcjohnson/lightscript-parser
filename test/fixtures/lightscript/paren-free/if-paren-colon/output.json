@@ -1,0 +1,141 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 27,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 27
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        },
+        "test": {
+          "type": "LogicalExpression",
+          "start": 3,
+          "end": 21,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 3
+            },
+            "end": {
+              "line": 1,
+              "column": 21
+            }
+          },
+          "left": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              },
+              "identifierName": "cond1"
+            },
+            "name": "cond1",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 3
+            }
+          },
+          "operator": "||",
+          "right": {
+            "type": "Identifier",
+            "start": 15,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 15
+              },
+              "end": {
+                "line": 1,
+                "column": 20
+              },
+              "identifierName": "cond2"
+            },
+            "name": "cond2",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 14
+            }
+          }
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start": 23,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 23
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "expression": {
+            "type": "Identifier",
+            "start": 23,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 23
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              },
+              "identifierName": "body"
+            },
+            "name": "body"
+          }
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}

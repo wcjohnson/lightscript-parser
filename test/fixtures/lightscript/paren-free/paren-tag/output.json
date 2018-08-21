@@ -1,0 +1,145 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 16,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 16
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 16,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 16
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 16
+          }
+        },
+        "test": {
+          "type": "TaggedTemplateExpression",
+          "start": 3,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 3
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            }
+          },
+          "tag": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 7,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 7
+              },
+              "identifierName": "tag"
+            },
+            "name": "tag",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 3
+            }
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "start": 8,
+            "end": 13,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 13
+              }
+            },
+            "expressions": [],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "start": 9,
+                "end": 12,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12
+                  }
+                },
+                "value": {
+                  "raw": "tpl",
+                  "cooked": "tpl"
+                },
+                "tail": true
+              }
+            ]
+          }
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "start": 14,
+          "end": 16,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 16
+            }
+          },
+          "body": [],
+          "directives": [],
+          "extra": {
+            "curly": true
+          }
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}
