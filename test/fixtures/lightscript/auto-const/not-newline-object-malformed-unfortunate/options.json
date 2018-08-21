@@ -1,0 +1,14 @@
+{
+  "alternatives": {
+    "noSeqExprParens": {
+      "allPlugins": true,
+      "excludePlugins": ["existentialExpression", "safeCallExpression", "splatComprehension", "seqExprRequiresParen", "bangCall", "whiteblockOnly", "whiteblockPreferred"],
+      "throws": "Unexpected token (1:10)"
+    },
+    "whiteblock": {
+      "allPlugins": true,
+      "excludePlugins": ["whiteblockPreferred"],
+      "expected": "expected.whiteblock.json"
+    }
+  }
+}

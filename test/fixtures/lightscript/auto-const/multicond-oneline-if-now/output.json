@@ -1,0 +1,200 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 43,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 18
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 43,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 18
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 43,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 18
+          }
+        },
+        "test": {
+          "type": "LogicalExpression",
+          "start": 3,
+          "end": 32,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 3
+            },
+            "end": {
+              "line": 3,
+              "column": 7
+            }
+          },
+          "left": {
+            "type": "LogicalExpression",
+            "start": 3,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 3
+              },
+              "end": {
+                "line": 2,
+                "column": 7
+              }
+            },
+            "left": {
+              "type": "Identifier",
+              "start": 3,
+              "end": 8,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 3
+                },
+                "end": {
+                  "line": 1,
+                  "column": 8
+                },
+                "identifierName": "cond1"
+              },
+              "name": "cond1"
+            },
+            "operator": "&&",
+            "right": {
+              "type": "Identifier",
+              "start": 15,
+              "end": 20,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 7
+                },
+                "identifierName": "cond2"
+              },
+              "name": "cond2"
+            }
+          },
+          "operator": "&&",
+          "right": {
+            "type": "Identifier",
+            "start": 27,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 2
+              },
+              "end": {
+                "line": 3,
+                "column": 7
+              },
+              "identifierName": "cond3"
+            },
+            "name": "cond3"
+          }
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start": 34,
+          "end": 43,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 9
+            },
+            "end": {
+              "line": 3,
+              "column": 18
+            }
+          },
+          "expression": {
+            "type": "AssignmentExpression",
+            "start": 34,
+            "end": 43,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 9
+              },
+              "end": {
+                "line": 3,
+                "column": 18
+              }
+            },
+            "operator": "=",
+            "left": {
+              "type": "Identifier",
+              "start": 38,
+              "end": 39,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 13
+                },
+                "end": {
+                  "line": 3,
+                  "column": 14
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            },
+            "right": {
+              "type": "Identifier",
+              "start": 42,
+              "end": 43,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 17
+                },
+                "end": {
+                  "line": 3,
+                  "column": 18
+                },
+                "identifierName": "c"
+              },
+              "name": "c"
+            },
+            "isNowAssign": true
+          }
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}
