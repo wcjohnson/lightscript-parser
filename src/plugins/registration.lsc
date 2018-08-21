@@ -102,6 +102,7 @@ import significantWhitespace from './lightscript/significantWhitespace'
 import modifiedLogicalOperators from './lightscript/modifiedLogicalOperators'
 import seqExprRequiresParen from './lightscript/seqExprRequiresParen'
 import lscCoreSyntax from './lightscript/lscCoreSyntax'
+import lscIf from './lightscript/lscIf'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tildeCall)
@@ -110,3 +111,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(modifiedLogicalOperators)
   registerPlugin(seqExprRequiresParen)
   registerPlugin(lscCoreSyntax)
+  registerPlugin(lscIf)
