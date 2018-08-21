@@ -1,0 +1,20 @@
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType } from "../../tokenizer/types"
+
+versatileTypeAnnotations = new Plugin({
+  name: 'versatileTypeAnnotations'
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase:
+      vta_hasTypePlugin(): boolean ->
+        this.hasPlugin("flow") or this.hasPlugin("typescript")
+
+      vta_maybeParseTypeAnnotation() ->
+        // TODO: typescript
+        try:
+          return this.flowParseTypeAnnotation()
+        catch err:
+          return err
+  } // mixin
+})
+
+export default versatileTypeAnnotations
