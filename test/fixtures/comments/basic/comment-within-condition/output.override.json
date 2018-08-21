@@ -79,7 +79,7 @@
           ]
         },
         "consequent": {
-          "type": "ExpressionStatement",
+          "type": "BlockStatement",
           "start": 28,
           "end": 30,
           "loc": {
@@ -92,21 +92,10 @@
               "column": 20
             }
           },
-          "expression": {
-            "type": "ObjectExpression",
-            "start": 28,
-            "end": 30,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 18
-              },
-              "end": {
-                "line": 2,
-                "column": 20
-              }
-            },
-            "properties": []
+          "body": [],
+          "directives": [],
+          "extra": {
+            "curly": true
           }
         },
         "alternate": null,
