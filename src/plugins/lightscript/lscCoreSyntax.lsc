@@ -201,7 +201,7 @@ lscCoreSyntax = new Plugin({
           this.addExtra(block, "curly", true)
           block
 
-      parseStatement(declaration, topLevel) ->
+      parseStatementContent(declaration, topLevel) ->
         // Retrieve state hints associated with object-block ambiguity
         isBlock = this.state.nextBraceIsBlock
         allowDirectives = this.state.nextBraceAllowDirectives
@@ -213,7 +213,7 @@ lscCoreSyntax = new Plugin({
         elif this.match(tt.braceL):
           this.parseObjectBlockAmbiguity(isBlock, allowDirectives)
         else:
-          super.parseStatement(declaration, topLevel)
+          super.parseStatementContent(declaration, topLevel)
 
       canInsertSemicolon(): boolean ->
         this.matchesWhiteBlockASIToken() or super.canInsertSemicolon()
