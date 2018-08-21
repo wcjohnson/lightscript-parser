@@ -148,23 +148,26 @@ export default class ExpressionParser extends LValParser {
       this.state.potentialArrowAt = this.state.start;
     }
 
+    // XXX: LSC state vector for extensions
+    const state = {}
+
     // XXX: LSC extension point
-    let left = this.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos);
+    let left = this.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state);
     if (afterLeftParse) {
       left = afterLeftParse.call(this, left, startPos, startLoc);
     }
     if (this.state.type.isAssign) {
-      return this.parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos);
+      return this.parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos, state);
     } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
     }
 
     // XXX: LSC extension point
-    return this.parseMaybeAssign_parseNonAssign(left, startPos, startLoc, noIn);
+    return this.parseMaybeAssign_parseNonAssign(left, startPos, startLoc, noIn, state);
   }
 
   // XXX: LSC extension point - parse LHS
-  parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos): N.Expression {
+  parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state): N.Expression {
     return this.parseMaybeConditional(
       noIn,
       refShorthandDefaultPos,
@@ -173,9 +176,9 @@ export default class ExpressionParser extends LValParser {
   }
 
   // XXX: LSC extension point - parse something that's definitely an assignment
-  parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos): N.Expression {
+  parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos, state): N.Expression {
     const node = this.startNodeAt(startPos, startLoc);
-    this.parseMaybeAssign_parseOp(node); // XXX: LSC extension point
+    this.parseMaybeAssign_parseOp(node, state); // XXX: LSC extension point
     const operator = node.operator;
 
     if (operator === "??=") {
@@ -185,7 +188,7 @@ export default class ExpressionParser extends LValParser {
     if (operator === "||=" || operator === "&&=") {
       this.expectPlugin("logicalAssignment");
     }
-    this.parseMaybeAssign_setLeft(node, left); // XXX: LSC extension point
+    this.parseMaybeAssign_setLeft(node, left, state); // XXX: LSC extension point
     refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
 
     this.checkLVal(left, undefined, undefined, "assignment expression");
@@ -206,30 +209,30 @@ export default class ExpressionParser extends LValParser {
     }
 
     // XXX: LSC extension point
-    return this.parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn);
+    return this.parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn, state);
   }
 
   // XXX: LSC extension point - parse assignment operator of an assignment
-  parseMaybeAssign_parseOp(node: N.Node): void {
+  parseMaybeAssign_parseOp(node: N.Node, state: any): void {
     node.operator = this.state.value;
   }
 
   // XXX: LSC extension point - transform LHS of assignment into node.left
-  parseMaybeAssign_setLeft(node: N.Node, left: N.Expression): void {
+  parseMaybeAssign_setLeft(node: N.Node, left: N.Expression, state): void {
     node.left = this.match(tt.eq)
     ? this.toAssignable(left, undefined, "assignment expression")
     : left;
   }
 
   // XXX: LSC extension point - parse RHS of an assignment and finish
-  parseMaybeAssign_finishAssign(node: N.Node, startPos, startLoc, noIn: ?boolean): N.Expression {
+  parseMaybeAssign_finishAssign(node: N.Node, startPos, startLoc, noIn: ?boolean, state): N.Expression {
     this.next();
     node.right = this.parseMaybeAssign(noIn);
     return this.finishNode(node, "AssignmentExpression");
   }
 
   // XXX: LSC extension point - parse RHS of an assignment and finish
-  parseMaybeAssign_parseNonAssign(node: N.Node, startPos, startLoc, noIn: ?boolean): N.Expression {
+  parseMaybeAssign_parseNonAssign(node: N.Node, startPos, startLoc, noIn: ?boolean, state): N.Expression {
     return node;
   }
 
