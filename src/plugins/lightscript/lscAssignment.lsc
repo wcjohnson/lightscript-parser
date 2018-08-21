@@ -21,9 +21,9 @@ lscAssignment = new Plugin({
       isKeyword(word: string): boolean ->
         if word == 'now': true else: super.isKeyword(word)
 
-      parseStatement_parseExpression() ->
+      parseStatementContent(declaration, topLevel) ->
         this.setTokenMarker("beginsStatement")
-        super.parseStatement_parseExpression()
+        super.parseStatementContent(declaration, topLevel)
 
       parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state) ->
         // Determine if we are at the start of a statement
@@ -84,12 +84,14 @@ lscAssignment = new Plugin({
             // Valid implicit-const declaration.
             // Apply type annotation
             if typeAnnotation:
-              this.vta_applySubsequentTypeAnnotation(node, typeAnnotation)
+              this.vta_applySubsequentTypeAnnotation(node.left, typeAnnotation)
             // Create a temporary node type that will be converted back
             // into a VariableDeclaration
             this.finishNode(node, IMPLICIT_CONST_NODE_TYPE)
           else:
             this.lscAssignment_checkIncorrectAssignment(node, startPos, state)
+            node.isNowAssign = false
+            this.finishNode(node, "AssignmentExpression")
         else:
           // Valid normal assignment
           node.isNowAssign = true
