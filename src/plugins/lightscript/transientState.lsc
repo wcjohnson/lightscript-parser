@@ -1,0 +1,43 @@
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType } from "../../tokenizer/types"
+
+transientState = new Plugin({
+  name: 'transientState'
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase:
+      constructor(options, input) ->
+        super(options, input)
+        this.state.tokenMarker = null
+        this.transientState = {}
+
+      next(): void ->
+        this.state.tokenMarker = null
+        super.next()
+
+      // Set a transient state value that is cleared when the next token is read.
+      setTokenMarker(marker: any): void ->
+        this.state.tokenMarker = marker
+
+      // Retrieve a previously set token marker
+      getTokenMarker(): any ->
+        this.state.tokenMarker
+
+      // Set a state value that is NOT preserved with parser state cloning.
+      // Only use this if you are sure you don't need to worry about a parser
+      // state change impacting your stored value.
+      // Most of the time you will just want to add a field to `this.state`
+      setTransientState(key: string, value: any, noThrow: boolean = false): void ->
+        if this.transientState[key] !== undefined:
+          if not noThrow:
+            throw new Error("Transient state key was reset before it was claimed. This is almost certainly a parser bug.")
+        this.transientState[key] = value
+
+      // Claim and clear a transient state value previously set.
+      claimTransientState(key: string): any ->
+        result = this.transientState[key]
+        this.transientState[key] = undefined
+        result
+  } // mixin
+})
+
+export default transientState

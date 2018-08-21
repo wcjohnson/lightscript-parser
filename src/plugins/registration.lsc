@@ -96,6 +96,7 @@ export registerPlugins(registerPlugin, Plugin) ->
   registerNewPlugins(registerPlugin, Plugin)
 
 // Registration for plugins added by LightScript
+import transientState from './lightscript/transientState'
 import tildeCall from './lightscript/tildeCall'
 import disableBitwiseOperators from './lightscript/disableBitwiseOperators'
 import significantWhitespace from './lightscript/significantWhitespace'
@@ -106,6 +107,7 @@ import lscIf from './lightscript/lscIf'
 import lscIfExpression from './lightscript/lscIfExpression'
 
 registerNewPlugins(registerPlugin, Plugin) ->
+  registerPlugin(transientState)
   registerPlugin(tildeCall)
   registerPlugin(disableBitwiseOperators)
   registerPlugin(significantWhitespace)
