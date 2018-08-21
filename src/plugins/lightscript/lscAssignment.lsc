@@ -1,0 +1,135 @@
+// Parsing for implicit-const declarations
+// `now` keyword/assignments
+
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType, registerToken, registerKeywordToken } from "../../tokenizer/register"
+
+IMPLICIT_CONST_NODE_TYPE = "TEMP_LscImplicitConst"
+
+lscAssignment = new Plugin({
+  name: 'lscAssignment'
+  dependencies: ['significantWhitespace', 'transientState', 'versatileTypeAnnotations']
+
+  load() ->
+    registerKeywordToken("now", new TokenType("now", {
+      keyword: true
+      beforeExpr: true
+    }))
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase:
+      isKeyword(word: string): boolean ->
+        if word == 'now': true else: super.isKeyword(word)
+
+      parseStatement_parseExpression() ->
+        this.setTokenMarker("beginsStatement")
+        super.parseStatement_parseExpression()
+
+      parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos) ->
+        // Determine if we are at the start of a statement
+        isStatementStart = (this.getTokenMarker() == "beginsStatement")
+        this.setTransientState("isStatementStart", isStatementStart, true)
+        // Determine if the subsequent assignment will be a "now"-qualifier
+        this.setTransientState("isNowAssign", this.eat(tt._now), true)
+
+        // Get LHS
+        left = super.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos)
+
+        // ...then get possible type annotation
+        this.setTransientState("assignmentTypeAnnotation", undefined, true)
+        this.lscAssignment_maybeParseTypeAnnotation(isStatementStart)
+
+        left
+
+      lscAssignment_maybeParseTypeAnnotation(isStatementStart) -> {
+        // If there's a colon, and we could conceivably be parsing a statement,
+        // and there's no linebreak after the colon (as in a whiteblock)
+        // it might be a type annotation...
+        if(
+          this.match(tt.colon) and
+          this.vta_hasTypePlugin() and
+          isStatementStart and
+          (not this.isFollowedByLineBreak())
+        ) {
+          state = this.state.clone()
+          // Grab the annotation
+          typeAnnotation = this.vta_maybeParseTypeAnnotation()
+          if typeAnnotation instanceof error:
+            this.state = state
+            return
+
+          // In case the type annotation is invalid, rewind to before we
+          // parsed it
+          if not this.lscAssignment_validateTypeAnnotation(typeAnnotation):
+            this.state = state
+          else:
+            this.setTransientState("assignmentTypeAnnotation", typeAnnotation, true)
+        } // if
+      } // maybeParseTypeAnnotation
+
+      lscAssignment_validateTypeAnnotation(typeAnnotation): boolean ->
+        // Only valid if followed by equals
+        this.match(tt.eq)
+
+      lscAssignment_parseRight(node, startPos, startLoc, noIn): void ->
+        this.next()
+        node.right = this.parseMaybeAssign(noIn)
+
+      parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn) ->
+        isStatementStart = this.claimTransientState("isStatementStart")
+        isNowAssign = this.claimTransientState("isNowAssign")
+        typeAnnotation = this.claimTransientState("assignmentTypeAnnotation")
+
+        this.lscAssignment_parseRight(node, startPos, startLoc, noIn)
+
+        if not isNowAssign:
+          if isStatementStart:
+            // Valid implicit-const declaration.
+            // Apply type annotation
+            if typeAnnotation:
+              this.vta_applySubsequentTypeAnnotation(node, typeAnnotation)
+            // Create a temporary node type that will be converted back
+            // into a VariableDeclaration
+            this.finishNode(node, IMPLICIT_CONST_NODE_TYPE)
+          else:
+            this.raise(startPos, "Incorrect assignment. To reassign, use `now`.", { code: "LSC_NOW_MISSING" })
+        else:
+          // Valid normal assignment
+          node.isNowAssign = true
+          this.finishNode(node, "AssignmentExpression")
+
+      parseMaybeAssign_parseNonAssign(node, startPos, startLoc, noIn) ->
+        isStatementStart = this.claimTransientState("isStatementStart")
+        isNowAssign = this.claimTransientState("isNowAssign")
+
+        if isNowAssign:
+          if (node.type == "UpdateExpression") or noIn:
+            node.isNowAssign = true
+          else:
+            this.raise(left.start, "`now` can only be used with assignments and updates.", { code: "LSC_NOW_NONASSIGN" })
+
+        node
+
+      parseExpressionStatement(node, expr) ->
+        // Convert implicit Const nodes to VarDecls
+        if expr.type == IMPLICIT_CONST_NODE_TYPE:
+          decl = this.lscAssignment_rewriteDeclaration(expr)
+          node.kind = "const"
+          this.addExtra(node, "implicit", true)
+          node.declarations = [decl]
+          this.semicolon()
+          this.finishNode(node, "VariableDeclaration")
+
+      lscAssignment_rewriteDeclaration(node) ->
+        node.type = "VariableDeclarator"
+        node.id = node.left
+        node.init = node.right
+        delete node.left
+        delete node.operator
+        delete node.right
+        node
+
+  } // mixin
+})
+
+export default lscAssignment

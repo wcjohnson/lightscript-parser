@@ -106,6 +106,7 @@ import seqExprRequiresParen from './lightscript/seqExprRequiresParen'
 import lscCoreSyntax from './lightscript/lscCoreSyntax'
 import lscIf from './lightscript/lscIf'
 import lscIfExpression from './lightscript/lscIfExpression'
+import lscAssignment from './lightscript/lscAssignment'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(transientState)
@@ -118,3 +119,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(lscCoreSyntax)
   registerPlugin(lscIf)
   registerPlugin(lscIfExpression)
+  registerPlugin(lscAssignment)

@@ -21,7 +21,17 @@ if (filename === "fixture") {
 
 var mgr = new parser.PluginManager();
 mgr.addPlugins([
-  "disableBitwiseOperators", "tildeCall", "significantWhitespace", "modifiedLogicalOperators", "seqExprRequiresParen", "lscCoreSyntax", "lscIf", "lscIfExpression", "jsx", "flow"
+  "disableBitwiseOperators",
+  "tildeCall",
+  "significantWhitespace",
+  "modifiedLogicalOperators",
+  "seqExprRequiresParen",
+  "lscCoreSyntax",
+  "lscIf",
+  "lscIfExpression",
+  "lscAssignment",
+  "jsx",
+  "flow",
 ]);
 
 var file = fs.readFileSync(filename, "utf8");
