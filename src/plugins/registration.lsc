@@ -103,6 +103,7 @@ import modifiedLogicalOperators from './lightscript/modifiedLogicalOperators'
 import seqExprRequiresParen from './lightscript/seqExprRequiresParen'
 import lscCoreSyntax from './lightscript/lscCoreSyntax'
 import lscIf from './lightscript/lscIf'
+import lscIfExpression from './lightscript/lscIfExpression'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tildeCall)
@@ -112,3 +113,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(seqExprRequiresParen)
   registerPlugin(lscCoreSyntax)
   registerPlugin(lscIf)
+  registerPlugin(lscIfExpression)

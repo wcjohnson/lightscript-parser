@@ -1,0 +1,32 @@
+// Parse `if` expressions
+
+import { Plugin } from '../core/plugin'
+import { types as tt } from "../../tokenizer/types"
+
+lscIfExpression = new Plugin({
+  name: 'lscIfExpression'
+  dependencies: ['lscIf']
+
+  load() ->
+    // TODO: Change this system.
+    // tokenStartsExpr() should be an extension point.
+    // Anyone who wants to know if a token starts an expr should call
+    // this.tokenStartsExpr().
+    // Changing the global value taints the whole parser and someone
+    // who may run the same parser instance without the lightscript plugin
+    // will still have the tainted version of the if token in memory.
+    tt._if.startsExpr = true
+
+  mixin(ParserBase, opts) -> {
+    clazz = class extends ParserBase:
+      parseExprAtom(refShorthandDefaultPos) ->
+        if this.state.type == tt._if:
+          this.lscParseIf(this.startNode(), true)
+        else:
+          super.parseExprAtom(refShorthandDefaultPos)
+
+    return clazz
+  } // mixin
+})
+
+export default lscIfExpression
