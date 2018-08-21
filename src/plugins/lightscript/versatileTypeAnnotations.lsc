@@ -14,6 +14,13 @@ versatileTypeAnnotations = new Plugin({
           return this.flowParseTypeAnnotation()
         catch err:
           return err
+
+      // Apply a type annotation that follows a node.
+      // Move node's end point up to match.
+      vta_applySubsequentTypeAnnotation(node, typeAnnotation): void ->
+        node.typeAnnotation = typeAnnotation
+        node.end = typeAnnotation.end
+        node.loc.end = typeAnnotation.end
   } // mixin
 })
 
