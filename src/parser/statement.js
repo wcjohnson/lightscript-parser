@@ -202,7 +202,7 @@ export default class StatementParser extends ExpressionParser {
     // next token is a colon and the expression was a simple
     // Identifier node, we switch to interpreting it as a label.
     const maybeName = this.state.value;
-    const expr = this.parseExpression();
+    const expr = this.parseStatement_parseExpression(); // XXX: LSC
 
     if (
       starttype === tt.name &&
@@ -213,6 +213,11 @@ export default class StatementParser extends ExpressionParser {
     } else {
       return this.parseExpressionStatement(node, expr);
     }
+  }
+
+  // XXX: LSC extension point
+  parseStatement_parseExpression(): N.Expression {
+    return this.parseExpression();
   }
 
   assertModuleNodeAllowed(node: N.Node): void {
