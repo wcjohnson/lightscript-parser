@@ -20,7 +20,7 @@ versatileTypeAnnotations = new Plugin({
       vta_applySubsequentTypeAnnotation(node, typeAnnotation): void ->
         node.typeAnnotation = typeAnnotation
         node.end = typeAnnotation.end
-        node.loc.end = typeAnnotation.end
+        node.loc.end = typeAnnotation.loc.end
   } // mixin
 })
 
