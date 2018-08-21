@@ -53,7 +53,7 @@ lscAssignment = new Plugin({
           state = this.state.clone()
           // Grab the annotation
           typeAnnotation = this.vta_maybeParseTypeAnnotation()
-          if typeAnnotation instanceof error:
+          if typeAnnotation instanceof Error:
             this.state = state
             return
 
@@ -120,6 +120,7 @@ lscAssignment = new Plugin({
 
       lscAssignment_checkIncorrectAssignment(node, startPos, state): void ->
         if node.operator == "=":
+          if node.left.type == "MemberExpression": return
           this.raise(startPos, "Incorrect assignment. To reassign, use `now`. To declare, use `let`, `var`, or `const`.", { code: "LSC_UNQUALIFIED_ASSIGNMENT" })
         else:
           this.raise(startPos, "Incorrect update. To update the value of a variable, use `now`.")
