@@ -81,7 +81,8 @@ class ParserTestable extends Testable:
       return
 
   throwAnnotatedError(err): void ->
-    err.message = this.title + ": " + err.message
+    // Unnecessary because jest is good
+    // err.message = this.title + ": " + err.message
     throw err
 
   runTest(): void ->

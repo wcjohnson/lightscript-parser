@@ -99,7 +99,8 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
       return;
     }
   }throwAnnotatedError(err) {
-    err.message = this.title + ": " + err.message;
+    // Unnecessary because jest is good
+    // err.message = this.title + ": " + err.message
     throw err;
   }runTest() {
     let ast;
