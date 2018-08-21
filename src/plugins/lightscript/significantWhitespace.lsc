@@ -7,6 +7,10 @@ significantWhitespace = new Plugin({
   name: 'significantWhitespace'
   mixin(ParserBase, opts) -> {
     clazz = class extends ParserBase:
+      constructor(options, input) ->
+        super(options, input)
+        this.state.indentLevel = 0
+
       skipSpace(): void -> {
         let isNewLine = (this.state.pos == 0)
         loop: while (this.state.pos < this.input.length) {
