@@ -80,7 +80,7 @@ lscAssignment = new Plugin({
         this.lscAssignment_parseRight(node, startPos, startLoc, noIn, state)
 
         if not isNowAssign:
-          if isStatementStart:
+          if isStatementStart and this.lscAssignment_isConvertibleToImplicitConst(node, state):
             // Valid implicit-const declaration.
             // Apply type annotation
             if typeAnnotation:
@@ -89,7 +89,7 @@ lscAssignment = new Plugin({
             // into a VariableDeclaration
             this.finishNode(node, IMPLICIT_CONST_NODE_TYPE)
           else:
-            this.raise(startPos, "Incorrect assignment. To reassign, use `now`. To declare, use `let`, `var`, or `const`.", { code: "LSC_UNQUALIFIED_ASSIGNMENT" })
+            this.lscAssignment_checkIncorrectAssignment(node, startPos, state)
         else:
           // Valid normal assignment
           node.isNowAssign = true
@@ -117,6 +117,16 @@ lscAssignment = new Plugin({
           this.finishNode(node, "VariableDeclaration")
         else:
           super.parseExpressionStatement(node, expr)
+
+      lscAssignment_checkIncorrectAssignment(node, startPos, state): void ->
+        if node.operator == "=":
+          this.raise(startPos, "Incorrect assignment. To reassign, use `now`. To declare, use `let`, `var`, or `const`.", { code: "LSC_UNQUALIFIED_ASSIGNMENT" })
+        else:
+          this.raise(startPos, "Incorrect update. To update the value of a variable, use `now`.")
+
+      lscAssignment_isConvertibleToImplicitConst(node, state): boolean ->
+        node.left.type != "MemberExpression" and
+        node.operator == "="
 
       lscAssignment_rewriteAsDeclarator(node) ->
         node.type = "VariableDeclarator"
