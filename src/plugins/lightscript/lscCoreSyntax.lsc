@@ -60,6 +60,24 @@ lscCoreSyntax = new Plugin({
           this.unexpected(null, "Paren-free test expressions must be followed by braces or a colon.");
         }
 
+      // In whitespace-sensitive parsing, it is often useful to look back to
+      // an opening construct that is at the same indent level as a later
+      // closing construct. The block stack enables this pattern.
+      getWhiteBlockStack() ->
+        if not this.state.blockStack: this.state.blockStack = []
+        this.state.blockStack
+
+      pushWhiteBlockState(blockType, indentLevel): void ->
+        this.getWhiteBlockStack().push({blockType, indentLevel})
+
+      matchWhiteBlockState(blockType, indentLevel): boolean ->
+        this.getWhiteBlockStack().some(
+          (x) -> (x.blockType == blockType) and (x.indentLevel == indentLevel)
+        )
+
+      popWhiteBlockState() ->
+        this.getWhiteBlockStack().pop()
+
       // Parse multiline whiteblock body.
       // c/p statement.js parseBlockOrModuleBlockBody
       parseWhiteBlockBody(body, directives, topLevel, whiteBlockIndentLevel): void -> {
