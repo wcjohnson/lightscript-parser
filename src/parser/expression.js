@@ -216,7 +216,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // XXX: LSC extension point - parse RHS of an assignment and finish
-  parseMaybeAssign_finishNode(node: N.Node, noIn: ?boolean): N.Expression {
+  parseMaybeAssign_finishNode(node: N.Node, startPos, startLoc, noIn: ?boolean): N.Expression {
     this.next();
     node.right = this.parseMaybeAssign(noIn);
     return this.finishNode(node, "AssignmentExpression");
