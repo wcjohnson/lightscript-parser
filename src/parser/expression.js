@@ -148,18 +148,15 @@ export default class ExpressionParser extends LValParser {
       this.state.potentialArrowAt = this.state.start;
     }
 
-    let left = this.parseMaybeConditional(
-      noIn,
-      refShorthandDefaultPos,
-      refNeedsArrowPos,
-    );
+    // XXX: LSC extension point
+    let left = this.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos);
     if (afterLeftParse) {
       left = afterLeftParse.call(this, left, startPos, startLoc);
     }
     if (this.state.type.isAssign) {
       const node = this.startNodeAt(startPos, startLoc);
-      const operator = this.state.value;
-      node.operator = operator;
+      this.parseMaybeAssign_parseOp(node); // XXX: LSC extension point
+      const operator = node.operator;
 
       if (operator === "??=") {
         this.expectPlugin("nullishCoalescingOperator");
@@ -168,9 +165,7 @@ export default class ExpressionParser extends LValParser {
       if (operator === "||=" || operator === "&&=") {
         this.expectPlugin("logicalAssignment");
       }
-      node.left = this.match(tt.eq)
-        ? this.toAssignable(left, undefined, "assignment expression")
-        : left;
+      this.parseMaybeAssign_setLeft(node, left); // XXX: LSC extension point
       refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
 
       this.checkLVal(left, undefined, undefined, "assignment expression");
@@ -190,14 +185,41 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
-      this.next();
-      node.right = this.parseMaybeAssign(noIn);
-      return this.finishNode(node, "AssignmentExpression");
+      // XXX: LSC extension point
+      return this.parseMaybeAssign_finishNode(node, startPos, startLoc, noIn);
     } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
     }
 
     return left;
+  }
+
+  // XXX: LSC extension point - parse LHS
+  parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos): N.Expression {
+    return this.parseMaybeConditional(
+      noIn,
+      refShorthandDefaultPos,
+      refNeedsArrowPos,
+    );
+  }
+
+  // XXX: LSC extension point - parse assignment operator of an assignment
+  parseMaybeAssign_parseOp(node: N.Node): void {
+    node.operator = this.state.value;
+  }
+
+  // XXX: LSC extension point - transform LHS of assignment into node.left
+  parseMaybeAssign_setLeft(node: N.Node, left: N.Expression): void {
+    node.left = this.match(tt.eq)
+    ? this.toAssignable(left, undefined, "assignment expression")
+    : left;
+  }
+
+  // XXX: LSC extension point - parse RHS of an assignment and finish
+  parseMaybeAssign_finishNode(node: N.Node, noIn: ?boolean): N.Expression {
+    this.next();
+    node.right = this.parseMaybeAssign(noIn);
+    return this.finishNode(node, "AssignmentExpression");
   }
 
   // Parse a ternary conditional (`?:`) operator.
