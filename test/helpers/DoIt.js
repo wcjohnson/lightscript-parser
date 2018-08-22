@@ -86,13 +86,17 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
       this.actual = this.parent.actual;
     }
   }enqueueTest() {
-    if (this.actual) {
-      // Get `it` from Jest global
-      const testFn = typeof it !== 'undefined' ? this.disabled ? it == null ? void 0 : it.skip : it : void 0;
-      if (testFn) {
-        testFn(this.title, () => this.runTest());
+    if (this.disabled) {
+      if (typeof it !== 'undefined') {
+        it.skip(this.title, () => this.runTest());
       } else {
-        console.log("enqueuing", this.title);
+        console.log("Skipped test:", this.title);
+      }
+    } else if (this.actual) {
+      if (typeof it !== 'undefined') {
+        it(this.title, () => this.runTest());
+      } else {
+        console.log("Ran test:", this.title);
       }
     } else {
       // console.log("skipping (no input)", this.title)

@@ -69,13 +69,16 @@ class ParserTestable extends Testable:
       this.actual = this.parent.actual
 
   enqueueTest(): void ->
-    if this.actual:
-      // Get `it` from Jest global
-      testFn = if typeof(it) != 'undefined': if this.disabled: it?.skip else: it
-      if testFn:
-        testFn(this.title, => this.runTest())
+    if this.disabled:
+      if typeof(it) != 'undefined':
+        it.skip(this.title, => this.runTest())
       else:
-        console.log("enqueuing", this.title)
+        console.log("Skipped test:", this.title)
+    elif this.actual:
+      if typeof(it) != 'undefined':
+        it(this.title, => this.runTest())
+      else:
+        console.log("Ran test:", this.title)
     else:
       // console.log("skipping (no input)", this.title)
       return
