@@ -140,6 +140,36 @@ lscAssignment = new Plugin({
         delete node.right
         node
 
+      lscAssignment_tryParseImplicitConstDeclaration() ->
+        let state
+        try:
+          now state = this.state.clone()
+          node = this.startNode()
+          decl = this.startNode()
+          this.parseVarHead(decl)
+          this.expect(tt.eq)
+          decl.init = this.parseMaybeAssign()
+          node.declarations = [this.finishNode(decl, "VariableDeclarator")]
+          node.kind = "const"
+          this.semicolon()
+          return this.finishNode(node, "VariableDeclaration")
+        catch err:
+          this.state = state // rewind
+          return err
+
+      // Intercept `export name = value`
+      parseExport(node) ->
+        // export x = 3, export { x, y } = a, export [ a, b ] = c
+        if this.match(tt.name) or this.match(tt.bracketL) or this.match(tt.braceL):
+          decl = this.lscAssignment_tryParseImplicitConstDeclaration()
+          if not (decl instanceof Error):
+            node.specifiers = []
+            node.source = null
+            node.declaration = decl
+            this.checkExport(node, true)
+            return this.finishNode(node, "ExportNamedDeclaration")
+
+        super.parseExport(node)
   } // mixin
 })
 
