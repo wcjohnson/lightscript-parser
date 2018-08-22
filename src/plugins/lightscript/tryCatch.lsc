@@ -21,7 +21,7 @@ tryCatch = new Plugin({
         if (this.hasPlugin("lscCoreSyntax")) {
           now indentLevel = this.state.indentLevel;
           now isBrace = this.match(tt.braceL);
-          if (!isBrace) this.pushBlockState("try", indentLevel);
+          if (!isBrace) this.pushWhiteBlockState("try", indentLevel);
         }
 
         node.handler = null;
@@ -33,7 +33,7 @@ tryCatch = new Plugin({
         this.tryCatch_parseFinallyBlock(node, indentLevel, isBrace, isExpression);
 
         // Restore whiteblock state
-        if (this.hasPlugin("lscCoreSyntax") && !isBrace) this.popBlockState();
+        if (this.hasPlugin("lscCoreSyntax") && !isBrace) this.popWhiteBlockState();
 
         // Validate the node
         return this.tryCatch_finishNode(node, isExpression);
@@ -47,7 +47,7 @@ tryCatch = new Plugin({
         const shouldParseCatch = this.match(tt._catch) && (
           !this.hasPlugin("lscCoreSyntax") ||
           tryIndentLevel <= this.state.indentLevel ||
-          (isBrace && !this.matchBlockState("try", this.state.indentLevel))
+          (isBrace && !this.matchWhiteBlockState("try", this.state.indentLevel))
         );
         if (!shouldParseCatch) return;
 
@@ -95,7 +95,7 @@ tryCatch = new Plugin({
         if (this.hasPlugin("lscCoreSyntax")) {
           const shouldParseFinally = this.match(tt._finally) && (
             tryIndentLevel <= this.state.indentLevel ||
-            (isBrace && !this.matchBlockState("try", this.state.indentLevel))
+            (isBrace && !this.matchWhiteBlockState("try", this.state.indentLevel))
           );
           if (shouldParseFinally) {
             this.next();
