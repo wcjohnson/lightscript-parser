@@ -1,0 +1,291 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 50,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 8,
+      "column": 3
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 50,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 8,
+        "column": 3
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start": 0,
+        "end": 50,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 3
+          }
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 23,
+          "end": 37,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 0
+            },
+            "end": {
+              "line": 6,
+              "column": 3
+            }
+          },
+          "param": {
+            "type": "Identifier",
+            "start": 29,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 6
+              },
+              "end": {
+                "line": 5,
+                "column": 9
+              },
+              "identifierName": "err"
+            },
+            "name": "err"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start": 32,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 9
+              },
+              "end": {
+                "line": 6,
+                "column": 3
+              }
+            },
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 36,
+                "end": 37,
+                "loc": {
+                  "start": {
+                    "line": 6,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 3
+                  }
+                },
+                "expression": {
+                  "type": "NumericLiteral",
+                  "start": 36,
+                  "end": 37,
+                  "loc": {
+                    "start": {
+                      "line": 6,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 6,
+                      "column": 3
+                    }
+                  },
+                  "extra": {
+                    "rawValue": 2,
+                    "raw": "2"
+                  },
+                  "value": 2
+                }
+              }
+            ],
+            "directives": [],
+            "extra": {
+              "curly": false
+            }
+          }
+        },
+        "guardedHandlers": [],
+        "block": {
+          "type": "BlockStatement",
+          "start": 3,
+          "end": 22,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 3
+            },
+            "end": {
+              "line": 4,
+              "column": 3
+            }
+          },
+          "body": [
+            {
+              "type": "TryStatement",
+              "start": 7,
+              "end": 22,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 4,
+                  "column": 3
+                }
+              },
+              "handler": null,
+              "guardedHandlers": [],
+              "block": {
+                "type": "BlockStatement",
+                "start": 11,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 3
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 17,
+                    "end": 18,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 5
+                      }
+                    },
+                    "expression": {
+                      "type": "NumericLiteral",
+                      "start": 17,
+                      "end": 18,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 5
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  }
+                ],
+                "directives": [],
+                "extra": {
+                  "curly": true
+                }
+              },
+              "finalizer": null,
+              "coalesce": true
+            }
+          ],
+          "directives": [],
+          "extra": {
+            "curly": false
+          }
+        },
+        "finalizer": {
+          "type": "BlockStatement",
+          "start": 45,
+          "end": 50,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 7
+            },
+            "end": {
+              "line": 8,
+              "column": 3
+            }
+          },
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 49,
+              "end": 50,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 2
+                },
+                "end": {
+                  "line": 8,
+                  "column": 3
+                }
+              },
+              "expression": {
+                "type": "NumericLiteral",
+                "start": 49,
+                "end": 50,
+                "loc": {
+                  "start": {
+                    "line": 8,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 8,
+                    "column": 3
+                  }
+                },
+                "extra": {
+                  "rawValue": 3,
+                  "raw": "3"
+                },
+                "value": 3
+              }
+            }
+          ],
+          "directives": [],
+          "extra": {
+            "curly": false
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
