@@ -52,13 +52,6 @@ lscAssignment = new Plugin({
         this.next()
         node.right = this.parseMaybeAssign(noIn)
 
-      lscAssignment_checkIncorrectAssignment(node, startPos, state): void ->
-        if node.operator == "=":
-          if node.left.type == "MemberExpression": return
-          this.raise(startPos, "Incorrect assignment. To reassign, use `now`. To declare, use `let`, `var`, or `const`.", { code: "LSC_UNQUALIFIED_ASSIGNMENT" })
-        else:
-          this.raise(startPos, "Incorrect update. To update the value of a variable, use `now`.")
-
       lscAssignment_isConvertibleToImplicitConst(node, state): boolean ->
         node.left.type != "MemberExpression" and
         node.operator == "="
@@ -96,6 +89,9 @@ lscAssignment = new Plugin({
       isKeyword(word: string): boolean ->
         if word == 'now': true else: super.isKeyword(word)
 
+      // Mark the beginning of a statement so we can check later.
+      // XXX: consider factoring this out to a separate base plugin
+      // or reconsidering how it works altogether
       parseStatementContent(declaration, topLevel) ->
         this.setTokenMarker("beginsStatement")
         super.parseStatementContent(declaration, topLevel)
@@ -130,7 +126,6 @@ lscAssignment = new Plugin({
             // into a VariableDeclaration
             this.finishNode(node, IMPLICIT_CONST_NODE_TYPE)
           else:
-            this.lscAssignment_checkIncorrectAssignment(node, startPos, state)
             node.isNowAssign = false
             this.finishNode(node, "AssignmentExpression")
         else:
@@ -149,8 +144,16 @@ lscAssignment = new Plugin({
 
         node
 
+      // When we convert a CallExpr back to an arrow function, drop the "isNowAssign"
+      // flag from the node
+      setArrowFunctionParameters(node, params): void ->
+        for elem param in params:
+          if param.type == "AssignmentExpression":
+            delete param.isNowAssign
+        super.setArrowFunctionParameters(node, params)
+
+      // Convert implicit-const nodes to VarDecls as we exit the statement parser
       parseExpressionStatement(node, expr) ->
-        // Convert implicit Const nodes to VarDecls
         if expr.type == IMPLICIT_CONST_NODE_TYPE:
           decl = this.lscAssignment_rewriteAsDeclarator(expr)
           node.kind = "const"
