@@ -1,0 +1,255 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 43,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 43
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 43,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 43
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LscNamedArrowDeclaration",
+        "start": 0,
+        "end": 43,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 43
+          }
+        },
+        "skinny": false,
+        "id": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 1,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 1
+            },
+            "identifierName": "f"
+          },
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 2,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 2
+              },
+              "end": {
+                "line": 1,
+                "column": 37
+              },
+              "identifierName": "g"
+            },
+            "name": "g",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 3,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 3
+                },
+                "end": {
+                  "line": 1,
+                  "column": 37
+                }
+              },
+              "typeAnnotation": {
+                "type": "FunctionTypeAnnotation",
+                "start": 5,
+                "end": 37,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 37
+                  }
+                },
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start": 6,
+                    "end": 15,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 6
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 15
+                      }
+                    },
+                    "name": {
+                      "type": "Identifier",
+                      "start": 6,
+                      "end": 7,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 6
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 7
+                        },
+                        "identifierName": "a"
+                      },
+                      "name": "a"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start": 9,
+                      "end": 15,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 15
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "FunctionTypeParam",
+                    "start": 17,
+                    "end": 26,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 26
+                      }
+                    },
+                    "name": {
+                      "type": "Identifier",
+                      "start": 17,
+                      "end": 18,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 18
+                        },
+                        "identifierName": "b"
+                      },
+                      "name": "b"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start": 20,
+                      "end": 26,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 20
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 26
+                        }
+                      }
+                    }
+                  }
+                ],
+                "rest": null,
+                "returnType": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 31,
+                  "end": 37,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 31
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 37
+                    }
+                  }
+                },
+                "typeParameters": null
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "NumericLiteral",
+          "start": 42,
+          "end": 43,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 42
+            },
+            "end": {
+              "line": 1,
+              "column": 43
+            }
+          },
+          "extra": {
+            "rawValue": 1,
+            "raw": "1"
+          },
+          "value": 1
+        },
+        "expression": true
+      }
+    ],
+    "directives": []
+  }
+}

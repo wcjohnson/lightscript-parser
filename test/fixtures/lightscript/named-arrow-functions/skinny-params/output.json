@@ -1,0 +1,194 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 19,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 3
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 19,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 3
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "NamedArrowDeclaration",
+        "start": 0,
+        "end": 19,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 3
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 2,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 2
+            },
+            "identifierName": "fn"
+          },
+          "name": "fn"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 3,
+            "end": 4,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 3
+              },
+              "end": {
+                "line": 1,
+                "column": 4
+              },
+              "identifierName": "x"
+            },
+            "name": "x"
+          },
+          {
+            "type": "AssignmentPattern",
+            "start": 6,
+            "end": 11,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 11
+              }
+            },
+            "left": {
+              "type": "Identifier",
+              "start": 6,
+              "end": 7,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                },
+                "identifierName": "y"
+              },
+              "name": "y"
+            },
+            "right": {
+              "type": "NumericLiteral",
+              "start": 10,
+              "end": 11,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 11
+                }
+              },
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "skinny": true,
+        "body": {
+          "type": "BlockStatement",
+          "start": 13,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 2,
+              "column": 3
+            }
+          },
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 18,
+              "end": 19,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 3
+                }
+              },
+              "expression": {
+                "type": "Identifier",
+                "start": 18,
+                "end": 19,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 3
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              }
+            }
+          ],
+          "directives": [],
+          "extra": {
+            "curly": false
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

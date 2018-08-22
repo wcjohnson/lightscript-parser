@@ -1,0 +1,271 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 21,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 13
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 21,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 13
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LscNamedArrowDeclaration",
+        "start": 0,
+        "end": 21,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 13
+          }
+        },
+        "skinny": true,
+        "id": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 2,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 2
+            },
+            "identifierName": "fn"
+          },
+          "name": "fn"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start": 5,
+          "end": 21,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 2,
+              "column": 13
+            }
+          },
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 10,
+              "end": 21,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 13
+                }
+              },
+              "kind": "const",
+              "extra": {
+                "implicit": true
+              },
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 10,
+                  "end": 21,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 13
+                    }
+                  },
+                  "id": {
+                    "type": "ObjectPattern",
+                    "start": 10,
+                    "end": 16,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 8
+                      }
+                    },
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start": 11,
+                        "end": 12,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 3
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 4
+                          }
+                        },
+                        "method": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 11,
+                          "end": 12,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 3
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 4
+                            },
+                            "identifierName": "x"
+                          },
+                          "name": "x"
+                        },
+                        "computed": false,
+                        "shorthand": true,
+                        "value": {
+                          "type": "Identifier",
+                          "start": 11,
+                          "end": 12,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 3
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 4
+                            },
+                            "identifierName": "x"
+                          },
+                          "name": "x"
+                        },
+                        "extra": {
+                          "shorthand": true
+                        }
+                      },
+                      {
+                        "type": "ObjectProperty",
+                        "start": 14,
+                        "end": 15,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 6
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 7
+                          }
+                        },
+                        "method": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 14,
+                          "end": 15,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 6
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 7
+                            },
+                            "identifierName": "y"
+                          },
+                          "name": "y"
+                        },
+                        "computed": false,
+                        "shorthand": true,
+                        "value": {
+                          "type": "Identifier",
+                          "start": 14,
+                          "end": 15,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 6
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 7
+                            },
+                            "identifierName": "y"
+                          },
+                          "name": "y"
+                        },
+                        "extra": {
+                          "shorthand": true
+                        }
+                      }
+                    ]
+                  },
+                  "init": {
+                    "type": "ObjectExpression",
+                    "start": 19,
+                    "end": 21,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 13
+                      }
+                    },
+                    "properties": []
+                  }
+                }
+              ]
+            }
+          ],
+          "directives": [],
+          "extra": {
+            "curly": false
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

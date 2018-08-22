@@ -1,0 +1,140 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 18,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 9
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 18,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "NamedArrowDeclaration",
+        "start": 0,
+        "end": 18,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 9
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 2,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 2
+            },
+            "identifierName": "fn"
+          },
+          "name": "fn"
+        },
+        "generator": true,
+        "expression": false,
+        "async": false,
+        "params": [],
+        "skinny": true,
+        "body": {
+          "type": "BlockStatement",
+          "start": 5,
+          "end": 18,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 2,
+              "column": 9
+            }
+          },
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 11,
+              "end": 18,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 9
+                }
+              },
+              "expression": {
+                "type": "YieldExpression",
+                "start": 11,
+                "end": 18,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 9
+                  }
+                },
+                "delegate": false,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 17,
+                  "end": 18,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 9
+                    },
+                    "identifierName": "x"
+                  },
+                  "name": "x"
+                }
+              }
+            }
+          ],
+          "directives": [],
+          "extra": {
+            "curly": false
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

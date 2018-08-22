@@ -1,0 +1,9 @@
+{
+  "alternatives": {
+    "braceblock": {
+      "allPlugins": true,
+      "excludePlugins": ["whiteblockPreferred", "whiteblockOnly"],
+      "expected": "expected.braceblock.json"
+    }
+  }
+}

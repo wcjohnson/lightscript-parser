@@ -1,0 +1,236 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 19,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 19
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 19,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 19
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "NamedArrowDeclaration",
+        "start": 0,
+        "end": 19,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 19
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 2,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 2
+            },
+            "identifierName": "fn"
+          },
+          "name": "fn"
+        },
+        "generator": false,
+        "expression": true,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 6,
+            "end": 10,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 10
+              },
+              "identifierName": "x"
+            },
+            "name": "x",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 7,
+              "end": 10,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 7
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 9,
+                "end": 10,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 10
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 9,
+                  "end": 10,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 10
+                    },
+                    "identifierName": "T"
+                  },
+                  "name": "T"
+                }
+              }
+            }
+          }
+        ],
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 2,
+          "end": 5,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 2
+            },
+            "end": {
+              "line": 1,
+              "column": 5
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 3,
+              "end": 4,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 3
+                },
+                "end": {
+                  "line": 1,
+                  "column": 4
+                }
+              },
+              "name": "T",
+              "variance": null
+            }
+          ]
+        },
+        "returnType": {
+          "type": "TypeAnnotation",
+          "start": 11,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 11
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            }
+          },
+          "typeAnnotation": {
+            "type": "GenericTypeAnnotation",
+            "start": 13,
+            "end": 14,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 13
+              },
+              "end": {
+                "line": 1,
+                "column": 14
+              }
+            },
+            "typeParameters": null,
+            "id": {
+              "type": "Identifier",
+              "start": 13,
+              "end": 14,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 13
+                },
+                "end": {
+                  "line": 1,
+                  "column": 14
+                },
+                "identifierName": "T"
+              },
+              "name": "T"
+            }
+          }
+        },
+        "skinny": true,
+        "body": {
+          "type": "Identifier",
+          "start": 18,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 18
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            },
+            "identifierName": "x"
+          },
+          "name": "x"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

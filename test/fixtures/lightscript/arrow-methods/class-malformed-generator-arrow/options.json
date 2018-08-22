@@ -1,0 +1,3 @@
+{
+  "throws": "Can't declare generators with arrows; try -*> instead. (2:2)"
+}

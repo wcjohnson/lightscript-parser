@@ -1,0 +1,175 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 40,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 40,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 40,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "X"
+          },
+          "name": "X"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 8,
+          "end": 40,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 3,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 12,
+              "end": 38,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 28
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 19,
+                "end": 25,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 15
+                  },
+                  "identifierName": "method"
+                },
+                "name": "method"
+              },
+              "static": true,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": true,
+              "async": false,
+              "params": [],
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 27,
+                "end": 33,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 23
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "VoidTypeAnnotation",
+                  "start": 29,
+                  "end": 33,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 23
+                    }
+                  }
+                }
+              },
+              "skinny": true,
+              "body": {
+                "type": "NumericLiteral",
+                "start": 37,
+                "end": 38,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 27
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 28
+                  }
+                },
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

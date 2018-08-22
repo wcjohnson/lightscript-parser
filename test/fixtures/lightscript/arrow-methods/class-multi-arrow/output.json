@@ -1,0 +1,326 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 72,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 7,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 72,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 7,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 72,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "X"
+          },
+          "name": "X"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 8,
+          "end": 72,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 7,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 12,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 16
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 12,
+                "end": 19,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 9
+                  },
+                  "identifierName": "method1"
+                },
+                "name": "method1"
+              },
+              "static": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": true,
+              "async": false,
+              "params": [],
+              "skinny": false,
+              "body": {
+                "type": "Identifier",
+                "start": 25,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 16
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 29,
+              "end": 53,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 5,
+                  "column": 5
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 29,
+                "end": 36,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 9
+                  },
+                  "identifierName": "method2"
+                },
+                "name": "method2"
+              },
+              "static": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "skinny": true,
+              "body": {
+                "type": "BlockStatement",
+                "start": 39,
+                "end": 53,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 5
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 46,
+                    "end": 47,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 5
+                      }
+                    },
+                    "expression": {
+                      "type": "Identifier",
+                      "start": 46,
+                      "end": 47,
+                      "loc": {
+                        "start": {
+                          "line": 4,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 5
+                        },
+                        "identifierName": "a"
+                      },
+                      "name": "a"
+                    }
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 52,
+                    "end": 53,
+                    "loc": {
+                      "start": {
+                        "line": 5,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 5,
+                        "column": 5
+                      }
+                    },
+                    "expression": {
+                      "type": "Identifier",
+                      "start": 52,
+                      "end": 53,
+                      "loc": {
+                        "start": {
+                          "line": 5,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 5,
+                          "column": 5
+                        },
+                        "identifierName": "b"
+                      },
+                      "name": "b"
+                    }
+                  }
+                ],
+                "directives": [],
+                "extra": {
+                  "curly": false
+                }
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 56,
+              "end": 70,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 2
+                },
+                "end": {
+                  "line": 6,
+                  "column": 16
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 56,
+                "end": 63,
+                "loc": {
+                  "start": {
+                    "line": 6,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 9
+                  },
+                  "identifierName": "method3"
+                },
+                "name": "method3"
+              },
+              "static": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": true,
+              "async": false,
+              "params": [],
+              "skinny": true,
+              "body": {
+                "type": "Identifier",
+                "start": 69,
+                "end": 70,
+                "loc": {
+                  "start": {
+                    "line": 6,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 16
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
