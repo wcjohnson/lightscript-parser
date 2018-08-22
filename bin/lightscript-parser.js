@@ -29,6 +29,7 @@ mgr.addPlugins([
   "lscCoreSyntax",
   "lscIf",
   "lscIfExpression",
+  "lscTryExpression",
   "lscAssignment",
   "jsx",
   "flow",

@@ -96,6 +96,7 @@ export registerPlugins(registerPlugin, Plugin) ->
   registerNewPlugins(registerPlugin, Plugin)
 
 // Registration for plugins added by LightScript
+import tryCatch from './lightscript/tryCatch'
 import transientState from './lightscript/transientState'
 import versatileTypeAnnotations from './lightscript/versatileTypeAnnotations'
 import tildeCall from './lightscript/tildeCall'
@@ -106,9 +107,11 @@ import seqExprRequiresParen from './lightscript/seqExprRequiresParen'
 import lscCoreSyntax from './lightscript/lscCoreSyntax'
 import lscIf from './lightscript/lscIf'
 import lscIfExpression from './lightscript/lscIfExpression'
+import lscTryExpression from './lightscript/lscTryExpression'
 import lscAssignment from './lightscript/lscAssignment'
 
 registerNewPlugins(registerPlugin, Plugin) ->
+  registerPlugin(tryCatch)
   registerPlugin(transientState)
   registerPlugin(versatileTypeAnnotations)
   registerPlugin(tildeCall)
@@ -119,4 +122,5 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(lscCoreSyntax)
   registerPlugin(lscIf)
   registerPlugin(lscIfExpression)
+  registerPlugin(lscTryExpression)
   registerPlugin(lscAssignment)

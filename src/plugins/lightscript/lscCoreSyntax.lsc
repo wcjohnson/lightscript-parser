@@ -13,7 +13,7 @@ import * as charCodes from "charcodes"
 
 lscCoreSyntax = new Plugin({
   name: 'lscCoreSyntax'
-  dependencies: ['significantWhitespace', 'seqExprRequiresParen']
+  dependencies: ['significantWhitespace', 'seqExprRequiresParen', 'tryCatch']
 
   load() ->
     tt._class.startsExpr = true

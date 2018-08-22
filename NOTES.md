@@ -3,9 +3,10 @@ TODO:
   - [ ] commaOrLineBreak syntax
   - [x] for
   - [x] for/in
-  - [ ] try/catch
+  - [x] try/catch
   - [x] class body
   - [ ] Flow and JSX `readToken` extensions
 
 BREAKING CHANGES:
   - Removed scientific notation from dot property access (x.1e3 is no longer valid)
+  - Parens around an auto-const no longer work: `a=b` is OK -- `(a=b)` is not

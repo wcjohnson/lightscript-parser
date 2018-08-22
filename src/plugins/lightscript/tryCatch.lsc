@@ -1,0 +1,126 @@
+// Parse `try`/`catch`
+
+import { Plugin } from '../core/plugin'
+import { types as tt } from "../../tokenizer/types"
+
+tryCatch = new Plugin({
+  name: 'tryCatch'
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase:
+      // Hook global try parsing
+      parseTryStatement(node) ->
+        this.tryCatch_parseTry(node, false)
+
+      tryCatch_parseTry(node, isExpression) -> {
+        // Advance past `try` token
+        this.next();
+
+        // Disambiguate whiteblock
+        let indentLevel, isBrace = true;
+        if (this.hasPlugin("lscCoreSyntax")) {
+          now indentLevel = this.state.indentLevel;
+          now isBrace = this.match(tt.braceL);
+          if (!isBrace) this.pushBlockState("try", indentLevel);
+        }
+
+        node.handler = null;
+        node.guardedHandlers = [];
+
+        // Parse the guts
+        this.tryCatch_parseTryBlock(node, indentLevel, isBrace, isExpression);
+        this.tryCatch_parseCatchBlock(node, indentLevel, isBrace, isExpression);
+        this.tryCatch_parseFinallyBlock(node, indentLevel, isBrace, isExpression);
+
+        // Restore whiteblock state
+        if (this.hasPlugin("lscCoreSyntax") && !isBrace) this.popBlockState();
+
+        // Validate the node
+        return this.tryCatch_finishNode(node, isExpression);
+      } // tryCatch_parseTry
+
+      tryCatch_parseTryBlock(node, indentLevel, isBrace, isExpression): void ->
+        node.block = this.parseBlock()
+
+      tryCatch_parseCatchBlock(node, tryIndentLevel, isBrace, isExpression): void -> {
+        // Verify `catch` token and matching whiteblock levels
+        const shouldParseCatch = this.match(tt._catch) && (
+          !this.hasPlugin("lscCoreSyntax") ||
+          tryIndentLevel <= this.state.indentLevel ||
+          (isBrace && !this.matchBlockState("try", this.state.indentLevel))
+        );
+        if (!shouldParseCatch) return;
+
+        const clause = this.startNode();
+        this.next();
+
+        // Verify error binding
+        if (!this.match(tt.colon) && !this.match(tt.braceL)) {
+          this.tryCatch_parseCatchClauseParam(clause);
+        } else {
+          this.expectPlugin("optionalCatchBinding");
+          clause.param = null;
+        }
+
+        // Parse body
+        if (this.hasPlugin("lscCoreSyntax")) {
+          if (!this.match(tt.colon) && !this.match(tt.braceL)) {
+            this.unexpected(null, "Expected a block.");
+          }
+        }
+        clause.body = this.parseBlock();
+
+        node.handler = this.finishNode(clause, "CatchClause");
+      } // tryCatch_parseCatchBlock
+
+      tryCatch_parseCatchClauseParam(clause): void -> {
+        let isParen = false;
+        if (this.hasPlugin("lscCoreSyntax")) {
+          if (this.eat(tt.parenL)) {
+            now isParen = true;
+            this.addExtra(clause, "hasParens", true);
+          }
+        } else {
+          now isParen = true;
+          this.expect(tt.parenL);
+        }
+        clause.param = this.parseBindingAtom();
+        this.checkLVal(clause.param, true, Object.create(null), "catch clause");
+        if (isParen || !this.hasPlugin("lscCoreSyntax")) {
+          this.expect(tt.parenR);
+        }
+      } // tryCatch_parseCatchClauseParam
+
+      tryCatch_parseFinallyBlock(node, tryIndentLevel, isBrace, isExpression): void -> {
+        if (this.hasPlugin("lscCoreSyntax")) {
+          const shouldParseFinally = this.match(tt._finally) && (
+            tryIndentLevel <= this.state.indentLevel ||
+            (isBrace && !this.matchBlockState("try", this.state.indentLevel))
+          );
+          if (shouldParseFinally) {
+            this.next();
+            if (!this.match(tt.colon) && !this.match(tt.braceL)) {
+              this.unexpected(null, "Expected a block.");
+            }
+            node.finalizer = this.parseBlock();
+          } else {
+            node.finalizer = null;
+          }
+        } else {
+          node.finalizer = this.eat(tt._finally) ? this.parseBlock() : null;
+        }
+      } // tryCatch_parseFinallyBlock
+
+      tryCatch_finishNode(node, isExpression) ->
+        if (not node.handler) and (not node.finalizer):
+          if this.hasPlugin("lscCoreSyntax"):
+            node.coalesce = true
+          else:
+            this.raise(node.start, "Missing catch or finally clause")
+
+        this.finishNode(node, isExpression ? "LscTryExpression" : "TryStatement")
+
+  } // mixin
+})
+
+export default tryCatch
