@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 21,
+  "end": 13,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 21
+      "column": 13
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 21,
+    "end": 13,
     "loc": {
       "start": {
         "line": 1,
@@ -23,15 +23,16 @@
       },
       "end": {
         "line": 1,
-        "column": 21
+        "column": 13
       }
     },
     "sourceType": "module",
+    "interpreter": null,
     "body": [
       {
         "type": "ExportNamedDeclaration",
         "start": 0,
-        "end": 21,
+        "end": 13,
         "loc": {
           "start": {
             "line": 1,
@@ -39,7 +40,7 @@
           },
           "end": {
             "line": 1,
-            "column": 21
+            "column": 13
           }
         },
         "specifiers": [],
@@ -47,7 +48,7 @@
         "declaration": {
           "type": "VariableDeclaration",
           "start": 7,
-          "end": 21,
+          "end": 13,
           "loc": {
             "start": {
               "line": 1,
@@ -55,14 +56,14 @@
             },
             "end": {
               "line": 1,
-              "column": 21
+              "column": 13
             }
           },
           "declarations": [
             {
               "type": "VariableDeclarator",
               "start": 7,
-              "end": 21,
+              "end": 13,
               "loc": {
                 "start": {
                   "line": 1,
@@ -70,13 +71,13 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 21
+                  "column": 13
                 }
               },
               "id": {
                 "type": "Identifier",
                 "start": 7,
-                "end": 16,
+                "end": 8,
                 "loc": {
                   "start": {
                     "line": 1,
@@ -84,54 +85,24 @@
                   },
                   "end": {
                     "line": 1,
-                    "column": 16
+                    "column": 8
                   },
                   "identifierName": "x"
                 },
-                "name": "x",
-                "typeAnnotation": {
-                  "type": "TypeAnnotation",
-                  "start": 8,
-                  "end": 16,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 8
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 16
-                    }
-                  },
-                  "typeAnnotation": {
-                    "type": "NumberTypeAnnotation",
-                    "start": 10,
-                    "end": 16,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 10
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 16
-                      }
-                    }
-                  }
-                }
+                "name": "x"
               },
               "init": {
                 "type": "NumericLiteral",
-                "start": 19,
-                "end": 21,
+                "start": 11,
+                "end": 13,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 19
+                    "column": 11
                   },
                   "end": {
                     "line": 1,
-                    "column": 21
+                    "column": 13
                   }
                 },
                 "extra": {
