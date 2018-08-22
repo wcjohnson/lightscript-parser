@@ -371,9 +371,13 @@ export default class StatementParser extends ExpressionParser {
 
     // XXX: LSC
     let isWhiteBlock, indentLevel, oldExtraWhiteblockTerminator;
-    if (this.hasPlugin("lscCoreSyntax") && this.match(tt.colon)) {
-      isWhiteBlock = true;
-      indentLevel = this.state.indentLevel;
+    if (this.hasPlugin("lscCoreSyntax")) {
+      // Capture indent level of do block
+      if (this.match(tt.colon)) {
+        isWhiteBlock = true;
+        indentLevel = this.state.indentLevel;
+      }
+      // Enable object-block ambiguity parsing for the body
       this.state.nextBraceIsBlock = true;
       oldExtraWhiteblockTerminator = this.state.extraWhiteblockTerminator
       this.state.extraWhiteblockTerminator = tt._while
