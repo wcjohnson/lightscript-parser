@@ -18,28 +18,6 @@ lscAssignment = new Plugin({
 
   mixin(ParserBase, opts) -> {
     return class extends ParserBase:
-      isKeyword(word: string): boolean ->
-        if word == 'now': true else: super.isKeyword(word)
-
-      parseStatementContent(declaration, topLevel) ->
-        this.setTokenMarker("beginsStatement")
-        super.parseStatementContent(declaration, topLevel)
-
-      parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state) ->
-        // Determine if we are at the start of a statement
-        isStatementStart = (this.getTokenMarker() == "beginsStatement")
-        state.isStatementStart = isStatementStart
-        // Determine if the subsequent assignment will be a "now"-qualifier
-        state.isNowAssign = this.eat(tt._now)
-
-        // Get LHS
-        left = super.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state)
-
-        // ...then get possible type annotation
-        this.lscAssignment_maybeParseTypeAnnotation(isStatementStart, state)
-
-        left
-
       lscAssignment_maybeParseTypeAnnotation(isStatementStart, funcState) -> {
         // If there's a colon, and we could conceivably be parsing a statement,
         // and there's no linebreak after the colon (as in a whiteblock)
@@ -73,6 +51,69 @@ lscAssignment = new Plugin({
       lscAssignment_parseRight(node, startPos, startLoc, noIn): void ->
         this.next()
         node.right = this.parseMaybeAssign(noIn)
+
+      lscAssignment_checkIncorrectAssignment(node, startPos, state): void ->
+        if node.operator == "=":
+          if node.left.type == "MemberExpression": return
+          this.raise(startPos, "Incorrect assignment. To reassign, use `now`. To declare, use `let`, `var`, or `const`.", { code: "LSC_UNQUALIFIED_ASSIGNMENT" })
+        else:
+          this.raise(startPos, "Incorrect update. To update the value of a variable, use `now`.")
+
+      lscAssignment_isConvertibleToImplicitConst(node, state): boolean ->
+        node.left.type != "MemberExpression" and
+        node.operator == "="
+
+      lscAssignment_rewriteAsDeclarator(node) ->
+        node.type = "VariableDeclarator"
+        node.id = node.left
+        node.init = node.right
+        delete node.left
+        delete node.operator
+        delete node.right
+        node
+
+      lscAssignment_tryParseImplicitConstDeclaration() ->
+        let state
+        try:
+          now state = this.state.clone()
+          node = this.startNode()
+          decl = this.startNode()
+          this.parseVarHead(decl)
+          this.expect(tt.eq)
+          decl.init = this.parseMaybeAssign()
+          node.declarations = [this.finishNode(decl, "VariableDeclarator")]
+          node.kind = "const"
+          this.semicolon()
+          return this.finishNode(node, "VariableDeclaration")
+        catch err:
+          this.state = state // rewind
+          return err
+
+      ///////
+      // OVERRIDES
+      ///////
+
+      isKeyword(word: string): boolean ->
+        if word == 'now': true else: super.isKeyword(word)
+
+      parseStatementContent(declaration, topLevel) ->
+        this.setTokenMarker("beginsStatement")
+        super.parseStatementContent(declaration, topLevel)
+
+      parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state) ->
+        // Determine if we are at the start of a statement
+        isStatementStart = (this.getTokenMarker() == "beginsStatement")
+        state.isStatementStart = isStatementStart
+        // Determine if the subsequent assignment will be a "now"-qualifier
+        state.isNowAssign = this.eat(tt._now)
+
+        // Get LHS
+        left = super.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state)
+
+        // ...then get possible type annotation
+        this.lscAssignment_maybeParseTypeAnnotation(isStatementStart, state)
+
+        left
 
       parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn, state) ->
         { isStatementStart, isNowAssign, typeAnnotation } = state
@@ -119,43 +160,6 @@ lscAssignment = new Plugin({
           this.finishNode(node, "VariableDeclaration")
         else:
           super.parseExpressionStatement(node, expr)
-
-      lscAssignment_checkIncorrectAssignment(node, startPos, state): void ->
-        if node.operator == "=":
-          if node.left.type == "MemberExpression": return
-          this.raise(startPos, "Incorrect assignment. To reassign, use `now`. To declare, use `let`, `var`, or `const`.", { code: "LSC_UNQUALIFIED_ASSIGNMENT" })
-        else:
-          this.raise(startPos, "Incorrect update. To update the value of a variable, use `now`.")
-
-      lscAssignment_isConvertibleToImplicitConst(node, state): boolean ->
-        node.left.type != "MemberExpression" and
-        node.operator == "="
-
-      lscAssignment_rewriteAsDeclarator(node) ->
-        node.type = "VariableDeclarator"
-        node.id = node.left
-        node.init = node.right
-        delete node.left
-        delete node.operator
-        delete node.right
-        node
-
-      lscAssignment_tryParseImplicitConstDeclaration() ->
-        let state
-        try:
-          now state = this.state.clone()
-          node = this.startNode()
-          decl = this.startNode()
-          this.parseVarHead(decl)
-          this.expect(tt.eq)
-          decl.init = this.parseMaybeAssign()
-          node.declarations = [this.finishNode(decl, "VariableDeclarator")]
-          node.kind = "const"
-          this.semicolon()
-          return this.finishNode(node, "VariableDeclaration")
-        catch err:
-          this.state = state // rewind
-          return err
 
       // Intercept `export name = value`
       parseExport(node) ->
