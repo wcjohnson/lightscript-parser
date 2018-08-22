@@ -1464,8 +1464,9 @@ export default class StatementParser extends ExpressionParser {
       specifier.exported = this.parseIdentifier(true);
       const specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
       node.specifiers = specifiers;
-      if (this.match(tt.comma) && this.lookahead().type === tt.star) {
-        this.expect(tt.comma);
+      // XXX: LSC commaless
+      if (this.matchListSeparator() && this.lookahead().type === tt.star) {
+        this.expectListSeparator();
         const specifier = this.startNode();
         this.expect(tt.star);
         this.expectContextual("as");
@@ -1758,7 +1759,8 @@ export default class StatementParser extends ExpressionParser {
       if (first) {
         first = false;
       } else {
-        this.expect(tt.comma);
+        // XXX: LSC commaless
+        this.expectListSeparator();
         if (this.eat(tt.braceR)) break;
       }
 
@@ -1860,7 +1862,8 @@ export default class StatementParser extends ExpressionParser {
           );
         }
 
-        this.expect(tt.comma);
+        // XXX: LSC Commaless
+        this.expectListSeparator();
         if (this.eat(tt.braceR)) break;
       }
 

@@ -365,8 +365,13 @@ lscCoreSyntax = new Plugin({
             return this.finishToken(tt.jsxTagStart)
         super.readToken(code)
 
+      // Commaless
+      matchListSeparator(): boolean ->
+        this.match(tt.comma) or this.isLineBreak()
 
-
+      expectListSeparator(loc): void ->
+        if not (this.eat(tt.comma) or this.isLineBreak()):
+          this.unexpected(loc, tt.comma)
 
     return clazz
   } // mixin

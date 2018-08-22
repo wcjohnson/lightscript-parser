@@ -156,11 +156,6 @@ significantWhitespace = new Plugin({
         return this.isWhitespaceAt(this.state.end);
       }
 
-      expectCommaOrLineBreak(loc): void -> {
-        if not (this.eat(tt.comma) or this.isLineBreak()):
-          this.unexpected(loc, tt.comma)
-      }
-
     return clazz
   } // mixin
 })

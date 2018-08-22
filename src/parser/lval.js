@@ -248,7 +248,8 @@ export default class LValParser extends NodeUtils {
       if (first) {
         first = false;
       } else {
-        this.expect(tt.comma);
+        // XXX: LSC commaless
+        this.expectListSeparator();
       }
       if (allowEmpty && this.match(tt.comma)) {
         // $FlowFixMe This method returns `$ReadOnlyArray<?Pattern>` if `allowEmpty` is set.

@@ -726,7 +726,8 @@ export default class ExpressionParser extends LValParser {
       if (first) {
         first = false;
       } else {
-        this.expect(tt.comma);
+        // XXX: LSC commaless
+        this.expectListSeparator();
         if (this.eat(close)) break;
       }
 
@@ -1126,7 +1127,8 @@ export default class ExpressionParser extends LValParser {
       if (first) {
         first = false;
       } else {
-        this.expect(tt.comma, refNeedsArrowPos.start || null);
+        // XXX: LSC commaless
+        this.expectListSeparator(refNeedsArrowPos.start || null);
         if (this.match(tt.parenR)) {
           optionalCommaStart = this.state.start;
           break;
@@ -1352,7 +1354,8 @@ export default class ExpressionParser extends LValParser {
       if (first) {
         first = false;
       } else {
-        this.expect(tt.comma);
+        // XXX: LSC commaless
+        this.expectListSeparator();
         if (this.eat(tt.braceR)) break;
       }
 
@@ -1436,7 +1439,7 @@ export default class ExpressionParser extends LValParser {
           this.match(tt.parenL) ||
           this.match(tt.braceR) ||
           this.match(tt.eq) ||
-          this.match(tt.comma)
+          this.matchListSeparator() // XXX: LSC commaless
         ) {
           prop.key = asyncId;
           prop.computed = false;
@@ -1851,7 +1854,8 @@ export default class ExpressionParser extends LValParser {
       if (first) {
         first = false;
       } else {
-        this.expect(tt.comma);
+        // XXX: LSC commaless
+        this.expectListSeparator();
         if (this.eat(close)) break;
       }
 
@@ -1867,7 +1871,7 @@ export default class ExpressionParser extends LValParser {
     refTrailingCommaPos?: Pos,
   ): ?N.Expression {
     let elt;
-    if (allowEmpty && this.match(tt.comma)) {
+    if (allowEmpty && this.match(tt.comma)) { // XXX: LSC - listSeparator?
       elt = null;
     } else if (this.match(tt.ellipsis)) {
       const spreadNodeStartPos = this.state.start;
