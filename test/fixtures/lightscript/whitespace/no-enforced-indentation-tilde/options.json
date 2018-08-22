@@ -1,0 +1,11 @@
+{
+  "alternatives": {
+    "all": {
+      "throws": "Indentation required. (2:0)"
+    },
+    "noEnforcedSubscriptIndentation": {
+      "allPlugins": true,
+      "excludePlugins": ["existentialExpression", "safeCallExpression", "splatComprehension", "bangCall", "flippedImports", "enforceSubscriptIndentation"]
+    }
+  }
+}
