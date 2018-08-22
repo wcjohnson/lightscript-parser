@@ -136,6 +136,9 @@ export default class ExpressionParser extends LValParser {
       return left;
     }
 
+    // XXX: LSC state vector for extensions
+    const state = {}
+
     let failOnShorthandAssign;
     if (refShorthandDefaultPos) {
       failOnShorthandAssign = false;
@@ -147,9 +150,6 @@ export default class ExpressionParser extends LValParser {
     if (this.match(tt.parenL) || this.match(tt.name) || this.match(tt._yield)) {
       this.state.potentialArrowAt = this.state.start;
     }
-
-    // XXX: LSC state vector for extensions
-    const state = {}
 
     // XXX: LSC extension point
     let left = this.parseMaybeAssign_parseLeft(startPos, startLoc, noIn, refShorthandDefaultPos, refNeedsArrowPos, state);
@@ -883,7 +883,8 @@ export default class ExpressionParser extends LValParser {
           return node;
         }
 
-        if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
+        // XXX: LSC - use parseArrow for arrow parsing (possible Babylon upstream patch)
+        if (canBeArrow && !this.canInsertSemicolon() && this.parseArrow(node)) {
           const oldYield = this.state.yieldInPossibleArrowParameters;
           this.state.yieldInPossibleArrowParameters = null;
           this.parseArrowExpression(node, [id]);
