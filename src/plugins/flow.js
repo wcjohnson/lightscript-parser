@@ -1867,7 +1867,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      return exprList;
+      // XXX: LSC - call super. Possible Babylon bug.
+      return super.toReferencedList(exprList);
     }
 
     // parse an item inside a expression list eg. `(NODE, NODE)` where NODE represents

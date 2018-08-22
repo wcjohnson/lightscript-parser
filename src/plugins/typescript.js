@@ -2124,7 +2124,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      return exprList;
+      // XXX: LSC - call super. Possible Babylon bug.
+      return super.toReferencedList(exprList);
     }
 
     shouldParseArrow() {
