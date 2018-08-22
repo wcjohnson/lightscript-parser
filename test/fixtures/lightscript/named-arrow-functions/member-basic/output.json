@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -43,7 +44,7 @@
           }
         },
         "expression": {
-          "type": "NamedArrowMemberExpression",
+          "type": "LscNamedArrowMemberExpression",
           "start": 0,
           "end": 10,
           "loc": {
@@ -56,6 +57,7 @@
               "column": 10
             }
           },
+          "skinny": true,
           "id": {
             "type": "Identifier",
             "start": 2,
@@ -74,7 +76,6 @@
             "name": "f"
           },
           "generator": false,
-          "expression": true,
           "async": false,
           "params": [],
           "object": {
@@ -94,7 +95,6 @@
             },
             "name": "o"
           },
-          "skinny": true,
           "body": {
             "type": "Identifier",
             "start": 9,
@@ -111,7 +111,8 @@
               "identifierName": "x"
             },
             "name": "x"
-          }
+          },
+          "expression": true
         }
       }
     ],

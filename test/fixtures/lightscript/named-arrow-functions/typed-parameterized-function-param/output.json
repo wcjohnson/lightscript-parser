@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "NamedArrowDeclaration",
+        "type": "LscNamedArrowDeclaration",
         "start": 0,
         "end": 60,
         "loc": {
@@ -60,8 +61,41 @@
           "name": "findMax"
         },
         "generator": false,
-        "expression": true,
         "async": false,
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 7,
+          "end": 10,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 10
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 8,
+              "end": 9,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 8
+                },
+                "end": {
+                  "line": 1,
+                  "column": 9
+                }
+              },
+              "name": "T",
+              "variance": null
+            }
+          ]
+        },
         "params": [
           {
             "type": "Identifier",
@@ -342,40 +376,6 @@
             }
           }
         ],
-        "typeParameters": {
-          "type": "TypeParameterDeclaration",
-          "start": 7,
-          "end": 10,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 7
-            },
-            "end": {
-              "line": 1,
-              "column": 10
-            }
-          },
-          "params": [
-            {
-              "type": "TypeParameter",
-              "start": 8,
-              "end": 9,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 8
-                },
-                "end": {
-                  "line": 1,
-                  "column": 9
-                }
-              },
-              "name": "T",
-              "variance": null
-            }
-          ]
-        },
         "skinny": true,
         "body": {
           "type": "Identifier",
@@ -393,7 +393,8 @@
             "identifierName": "arr"
           },
           "name": "arr"
-        }
+        },
+        "expression": true
       }
     ],
     "directives": []

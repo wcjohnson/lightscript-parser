@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 21,
+  "end": 20,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 21
+      "column": 20
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 21,
+    "end": 20,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 21
+        "column": 20
       }
     },
     "sourceType": "script",
@@ -32,7 +32,7 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 21,
+        "end": 20,
         "loc": {
           "start": {
             "line": 1,
@@ -40,7 +40,7 @@
           },
           "end": {
             "line": 1,
-            "column": 21
+            "column": 20
           }
         },
         "kind": "const",
@@ -51,7 +51,7 @@
           {
             "type": "VariableDeclarator",
             "start": 0,
-            "end": 21,
+            "end": 20,
             "loc": {
               "start": {
                 "line": 1,
@@ -59,7 +59,7 @@
               },
               "end": {
                 "line": 1,
-                "column": 21
+                "column": 20
               }
             },
             "id": {
@@ -82,7 +82,7 @@
             "init": {
               "type": "LscIfExpression",
               "start": 4,
-              "end": 21,
+              "end": 20,
               "loc": {
                 "start": {
                   "line": 1,
@@ -90,7 +90,7 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 21
+                  "column": 20
                 }
               },
               "test": {
@@ -127,9 +127,9 @@
                 "arguments": []
               },
               "consequent": {
-                "type": "LscNamedArrowExpression",
+                "type": "ArrowFunctionExpression",
                 "start": 13,
-                "end": 21,
+                "end": 20,
                 "loc": {
                   "start": {
                     "line": 1,
@@ -137,42 +137,44 @@
                   },
                   "end": {
                     "line": 1,
-                    "column": 21
+                    "column": 20
                   }
                 },
                 "skinny": false,
-                "id": {
-                  "type": "Identifier",
-                  "start": 13,
-                  "end": 14,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 13
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 14
-                    },
-                    "identifierName": "y"
-                  },
-                  "name": "y"
-                },
+                "id": null,
                 "generator": false,
                 "async": false,
-                "params": [],
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 13,
+                    "end": 15,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 15
+                      },
+                      "identifierName": "xx"
+                    },
+                    "name": "xx"
+                  }
+                ],
                 "body": {
                   "type": "NumericLiteral",
-                  "start": 20,
-                  "end": 21,
+                  "start": 19,
+                  "end": 20,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 20
+                      "column": 19
                     },
                     "end": {
                       "line": 1,
-                      "column": 21
+                      "column": 20
                     }
                   },
                   "extra": {

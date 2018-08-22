@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "NamedArrowDeclaration",
+        "type": "LscNamedArrowDeclaration",
         "start": 0,
         "end": 14,
         "loc": {
@@ -42,6 +43,7 @@
             "column": 14
           }
         },
+        "skinny": true,
         "id": {
           "type": "Identifier",
           "start": 0,
@@ -60,7 +62,6 @@
           "name": "fn"
         },
         "generator": false,
-        "expression": true,
         "async": false,
         "params": [
           {
@@ -116,7 +117,6 @@
             }
           }
         ],
-        "skinny": true,
         "body": {
           "type": "Identifier",
           "start": 13,
@@ -133,7 +133,8 @@
             "identifierName": "x"
           },
           "name": "x"
-        }
+        },
+        "expression": true
       }
     ],
     "directives": []

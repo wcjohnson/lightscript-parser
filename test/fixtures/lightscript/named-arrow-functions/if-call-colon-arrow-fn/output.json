@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -79,7 +80,7 @@
               "name": "x"
             },
             "init": {
-              "type": "IfExpression",
+              "type": "LscIfExpression",
               "start": 4,
               "end": 20,
               "loc": {
@@ -139,12 +140,11 @@
                     "column": 20
                   }
                 },
+                "skinny": false,
                 "id": null,
                 "generator": false,
-                "expression": true,
                 "async": false,
                 "params": [],
-                "skinny": false,
                 "body": {
                   "type": "NumericLiteral",
                   "start": 19,
@@ -164,7 +164,8 @@
                     "raw": "4"
                   },
                   "value": 4
-                }
+                },
+                "expression": true
               },
               "alternate": null
             }

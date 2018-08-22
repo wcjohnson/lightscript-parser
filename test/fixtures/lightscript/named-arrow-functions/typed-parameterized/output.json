@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "NamedArrowDeclaration",
+        "type": "LscNamedArrowDeclaration",
         "start": 0,
         "end": 19,
         "loc": {
@@ -60,8 +61,41 @@
           "name": "fn"
         },
         "generator": false,
-        "expression": true,
         "async": false,
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 2,
+          "end": 5,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 2
+            },
+            "end": {
+              "line": 1,
+              "column": 5
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 3,
+              "end": 4,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 3
+                },
+                "end": {
+                  "line": 1,
+                  "column": 4
+                }
+              },
+              "name": "T",
+              "variance": null
+            }
+          ]
+        },
         "params": [
           {
             "type": "Identifier",
@@ -129,40 +163,7 @@
             }
           }
         ],
-        "typeParameters": {
-          "type": "TypeParameterDeclaration",
-          "start": 2,
-          "end": 5,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 2
-            },
-            "end": {
-              "line": 1,
-              "column": 5
-            }
-          },
-          "params": [
-            {
-              "type": "TypeParameter",
-              "start": 3,
-              "end": 4,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 3
-                },
-                "end": {
-                  "line": 1,
-                  "column": 4
-                }
-              },
-              "name": "T",
-              "variance": null
-            }
-          ]
-        },
+        "predicate": null,
         "returnType": {
           "type": "TypeAnnotation",
           "start": 11,
@@ -228,7 +229,8 @@
             "identifierName": "x"
           },
           "name": "x"
-        }
+        },
+        "expression": true
       }
     ],
     "directives": []
