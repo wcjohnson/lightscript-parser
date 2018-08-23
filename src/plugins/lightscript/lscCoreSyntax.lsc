@@ -217,7 +217,9 @@ lscCoreSyntax = new Plugin({
           super.parseStatementContent(declaration, topLevel)
 
       canInsertSemicolon(): boolean ->
-        this.matchesWhiteBlockASIToken() or super.canInsertSemicolon()
+        this.matchesWhiteBlockASIToken() or
+        this.state.lastTokType == tt.semi or // can insert a semi after a semi
+        super.canInsertSemicolon()
 
       // Hooking parseParenExpression enables paren-free for if,switch,while,with
       parseParenExpression() -> {
