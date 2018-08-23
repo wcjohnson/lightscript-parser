@@ -1,0 +1,155 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 19,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 19
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 19,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 19
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 19,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 19
+          }
+        },
+        "test": {
+          "type": "CallExpression",
+          "start": 3,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 3
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "callee": {
+            "type": "Identifier",
+            "start": 3,
+            "end": 7,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 3
+              },
+              "end": {
+                "line": 1,
+                "column": 7
+              },
+              "identifierName": "test"
+            },
+            "name": "test"
+          },
+          "arguments": []
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start": 11,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 11
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            }
+          },
+          "expression": {
+            "type": "ArrowFunctionExpression",
+            "start": 11,
+            "end": 19,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 11
+              },
+              "end": {
+                "line": 1,
+                "column": 19
+              }
+            },
+            "skinny": true,
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 12,
+                "end": 13,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 13
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 18,
+              "end": 19,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 18
+                },
+                "end": {
+                  "line": 1,
+                  "column": 19
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            },
+            "expression": true
+          }
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}
