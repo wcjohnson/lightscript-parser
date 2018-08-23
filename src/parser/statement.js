@@ -451,6 +451,12 @@ export default class StatementParser extends ExpressionParser {
       return this.parseFor(node, null);
     }
 
+    // LSC: for-in
+    if ((!forAwait) && this.hasPlugin("lscForIn")) {
+      const result = this.lscForIn_tryParseEnhancedForIn(node);
+      if (result) return result;
+    }
+
     if (this.match(tt._var) || this.match(tt._let) || this.match(tt._const)) {
       const init = this.startNode();
       const varKind = this.state.type;

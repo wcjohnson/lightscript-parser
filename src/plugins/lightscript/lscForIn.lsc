@@ -1,0 +1,102 @@
+// Parsing for enhanced `for`-`in` loops
+
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType, registerToken, registerKeywordToken } from "../../tokenizer/register"
+
+MATCHING_ITER_VARS = {
+  "idx": "elem",
+  "elem": "idx",
+  "key": "val",
+  "val": "key",
+}
+
+lscForIn = new Plugin({
+  name: 'lscForIn'
+  dependencies: ['lscCoreSyntax']
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase:
+      // XXX: factor this out in case useful elsewhere
+      tokenLookahead(n) {
+        const result = [];
+
+        const old = this.state;
+        this.state = old.clone(true);
+
+        this.isLookahead = true;
+        while (n > 0) {
+          this.next();
+          result.push(this.state.type, this.state.value);
+          if (this.state.type === tt.eof) break;
+          n--;
+        }
+        this.isLookahead = false;
+
+        this.state = old;
+        return result;
+      }
+
+      lscForIn_parseIterationVariable(node, targetType = null) -> {
+        const iterType = this.state.value;
+        if (targetType && targetType !== iterType) {
+          this.unexpected(null, `Unexpected token, expected ${targetType}`);
+        }
+
+        this.next();
+        node[iterType] = iterType === "elem" || iterType === "val"
+          ? this.parseBindingAtom()
+          : this.parseBindingIdentifier();
+        return MATCHING_ITER_VARS[iterType];
+      }
+
+      lscForIn_parseEnhancedForIn(node) -> {
+        const matchingIterationType = this.lscForIn_parseIterationVariable(node);
+        if (this.eat(tt.comma)) {
+          this.lscForIn_parseIterationVariable(node, matchingIterationType);
+        }
+
+        this.expect(tt._in);
+
+        const iterable = this.parseMaybeAssign(true);
+
+        this.expectParenFreeBlockStart(node);
+        this.state.nextBraceIsBlock = true;
+        node.body = this.parseStatement(false);
+
+        if ((matchingIterationType === "idx") || (matchingIterationType === "elem")) {
+          node.array = iterable;
+          return this.finishNode(node, "LscForInArrayStatement");
+        } else {
+          node.object = iterable;
+          return this.finishNode(node, "LscForInObjectStatement");
+        }
+      }
+
+      lscForIn_tryParseEnhancedForIn(node) -> {
+        // idx, elem, key, or val begins a LS-enhanced loop.
+        if (
+          this.isContextual("idx") ||
+          this.isContextual("elem") ||
+          this.isContextual("key") ||
+          this.isContextual("val")
+        ) {
+          // Disambiguate between:
+          // for idx of e: body
+          // for idx of in e: body
+          // for idx of, elem x in e: body
+          //
+          // If next isn't "of", or next+1 is "in" or ",", then it's a for-in
+          const nextTwo = this.tokenLookahead(2);
+          if (
+            (!(nextTwo[0] === tt.name && nextTwo[1] === "of")) || // next isnt of
+            (nextTwo[2] === tt._in || nextTwo[2] === tt.comma) // next+1 is "in" or ","
+          ) {
+            return this.lscForIn_parseEnhancedForIn(node);
+          }
+        }
+      }
+
+  } // mixin
+})
+
+export default lscForIn
