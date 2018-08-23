@@ -259,10 +259,9 @@ lscCoreSyntax = new Plugin({
 
           // otherwise, try traditional parseParenExpression
           this.state = state;
-          inner_old_banAmbiguousArrows = this.state.banAmbiguousArrows
           this.state.banAmbiguousArrows = false;
           inner_result = super.parseParenExpression();
-          this.state.banAmbiguousArrows = inner_old_banAmbiguousArrows;
+          this.state.banAmbiguousArrows = oldBanAmbiguousArrows;
           return inner_result;
         } // if this.match(tt.parenL)
 
