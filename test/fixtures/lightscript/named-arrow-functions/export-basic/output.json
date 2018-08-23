@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "module",
+    "interpreter": null,
     "body": [
       {
         "type": "ExportNamedDeclaration",
@@ -45,7 +46,7 @@
         "specifiers": [],
         "source": null,
         "declaration": {
-          "type": "NamedArrowDeclaration",
+          "type": "LscNamedArrowDeclaration",
           "start": 7,
           "end": 16,
           "loc": {
@@ -76,7 +77,6 @@
             "name": "fn"
           },
           "generator": false,
-          "expression": true,
           "async": false,
           "params": [],
           "skinny": true,
@@ -96,7 +96,8 @@
               "identifierName": "x"
             },
             "name": "x"
-          }
+          },
+          "expression": true
         },
         "exportKind": "value"
       }

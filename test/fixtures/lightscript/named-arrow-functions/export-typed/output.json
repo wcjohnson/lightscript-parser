@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "module",
+    "interpreter": null,
     "body": [
       {
         "type": "ExportNamedDeclaration",
@@ -45,7 +46,7 @@
         "specifiers": [],
         "source": null,
         "declaration": {
-          "type": "NamedArrowDeclaration",
+          "type": "LscNamedArrowDeclaration",
           "start": 7,
           "end": 30,
           "loc": {
@@ -58,6 +59,25 @@
               "column": 30
             }
           },
+          "id": {
+            "type": "Identifier",
+            "start": 7,
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 7
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              },
+              "identifierName": "fn"
+            },
+            "name": "fn"
+          },
+          "generator": false,
+          "async": false,
           "typeParameters": {
             "type": "TypeParameterDeclaration",
             "start": 9,
@@ -140,26 +160,6 @@
               }
             ]
           },
-          "id": {
-            "type": "Identifier",
-            "start": 7,
-            "end": 9,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 7
-              },
-              "end": {
-                "line": 1,
-                "column": 9
-              },
-              "identifierName": "fn"
-            },
-            "name": "fn"
-          },
-          "generator": false,
-          "expression": true,
-          "async": false,
           "params": [
             {
               "type": "Identifier",
@@ -227,6 +227,7 @@
               }
             }
           ],
+          "predicate": null,
           "returnType": {
             "type": "TypeAnnotation",
             "start": 22,
@@ -292,7 +293,8 @@
               "identifierName": "x"
             },
             "name": "x"
-          }
+          },
+          "expression": true
         },
         "exportKind": "value"
       }
