@@ -1,0 +1,343 @@
+// Parsing for LightScript named arrows and skinny arrows
+
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType, registerToken, registerKeywordToken } from "../../tokenizer/register"
+import * as charCodes from "charcodes"
+
+lscArrows = new Plugin({
+  name: 'lscArrows'
+  dependencies: ['lscCoreSyntax']
+
+  load() ->
+    // TODO: Change this system.
+    // tokenStartsExpr() should be an extension point.
+    // Anyone who wants to know if a token starts an expr should call
+    // this.tokenStartsExpr().
+    // Changing the global value taints the whole parser and someone
+    // who may run the same parser instance without the lightscript plugin
+    // will still have the tainted version of the if token in memory.
+    tt.arrow.startsExpr = true
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase:
+      lscArrows_maybeReadArrowToken(skinny: boolean): boolean -> {
+        tokValue = if skinny: '-' else: '='
+
+        // ->, =>
+        next = this.input.charCodeAt(this.state.pos + 1)
+        if next == charCodes.greaterThan:
+          this.state.pos += 2
+          this.finishToken(tt.arrow, tokValue + '>')
+          return true
+
+        // -/>, =/>
+        next2 = this.input.charCodeAt(this.state.pos + 2)
+        if (next == charCodes.slash) and (next2 == charCodes.greaterThan):
+          this.state.pos += 3
+          this.finishToken(tt.arrow, tokValue + '/>')
+          return true
+
+        // -*>, =*>
+        if (next == charCodes.asterisk) and (next2 == charCodes.greaterThan):
+          this.state.pos += 3
+          this.finishToken(tt.arrow, tokValue + '*>')
+          return true
+
+        // -*/>, -/*>, =*/>, =/*>
+        if this.hasPlugin("asyncGenerators"):
+          next3 = this.input.charCodeAt(this.state.pos + 3)
+          if(
+            (next3 == charCodes.greaterThan) and
+            (
+              ((next == charCodes.asterisk) and (next2 == charCodes.slash)) or
+              ((next == charCodes.slash) and (next2 == charCodes.asterisk))
+            )
+          ):
+            this.state.pos += 4
+            this.finishToken(tt.arrow, tokValue + '*/>')
+            return true
+
+        // None of the above
+        return false
+      } // lscArrows_maybeReadArrowToken
+
+      lscArrows_parseArrowType(node) -> {
+        this.check(tt.arrow)
+        val = this.state.value;
+
+        const isPlainFatArrow = val === "=>" && !node.id && !node.key;
+        if (node.async && !isPlainFatArrow) this.unexpected(node.start, "Use =/>, rather than the `async` keyword, to declare an async arrow function.");
+        if (node.generator) this.unexpected(node.start, "Use =*>, rather than the `*` prefix, to declare a generator arrow function.");
+        if (node.kind === "constructor" && val !== "->") this.unexpected(null, "Use `->` when declaring a constructor.");
+
+        if ((node.kind === "get" || node.kind === "set") && val !== "->") {
+          this.unexpected(node.start, "Use `->` when declaring a getter or setter.");
+        }
+
+        switch (val) {
+          case "=/>": case "-/>":
+            node.async = true;
+            break;
+          case "=*>": case "-*>":
+            node.generator = true;
+            break;
+          case "=*/>": case "-*/>":
+            node.async = true;
+            node.generator = true;
+            break;
+          case "=>": case "->":
+            break;
+          default:
+            this.unexpected();
+        }
+
+        if (val[0] === "-") {
+          node.skinny = true;
+        } else if (val[0] === "=") {
+          node.skinny = false;
+        } else {
+          this.unexpected();
+        }
+
+      } // lscArrows_parseArrowType
+
+      // c/p expression.js/parseFunctionBody
+      lscArrows_parseArrowFunctionBody(node, allowExpression): void -> {
+        const oldInParameters = this.state.inParameters;
+        const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+        const oldInAsync = this.state.inAsync;
+        const oldInGen = this.state.inGenerator;
+        const oldInFunc = this.state.inFunction;
+        const oldLabels = this.state.labels;
+        this.state.inParameters = false;
+        this.state.maybeInArrowParameters = false;
+        this.state.inAsync = node.async;
+        this.state.inGenerator = node.generator;
+        this.state.inFunction = true;
+        this.state.labels = [];
+
+        const indentLevel = this.state.indentLevel;
+        const nodeAtArrow = this.startNode();
+        this.expect(tt.arrow);
+        if (!this.isLineBreak()) {
+          if (this.match(tt.braceL)) {
+            // Brace case. Parse as an object-block ambiguity, then hoist
+            // ObjectExpression-type things.
+            body = this.parseObjectBlockAmbiguity(false, true);
+            if (allowExpression and (body.type === "ExpressionStatement")) {
+              node.body = body.expression;
+            } else {
+              node.body = node;
+            }
+          } else {
+            node.body = this.parseInlineWhiteBlock(nodeAtArrow, allowExpression);
+          }
+        } else {
+          node.body = this.parseMultilineWhiteBlock(nodeAtArrow, indentLevel);
+        }
+
+        if (node.body.type !== "BlockStatement") {
+          node.expression = true;
+        }
+
+        this.state.inFunction = oldInFunc;
+        this.state.inGenerator = oldInGen;
+        this.state.labels = oldLabels;
+        this.state.inAsync = oldInAsync;
+
+        this.checkFunctionNameAndParams(node, allowExpression);
+        this.state.inParameters = oldInParameters;
+        this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+      } // lscArrows_parseArrowFunctionBody
+
+      lscArrows_parseNamedArrowFromCallExpression(node, call) -> {
+        this.lscArrows_initFunction(node, node.async)
+        if (call.arguments) this.setArrowFunctionParameters(node, call.arguments)
+
+        let isMember;
+        if (call.callee.type === "Identifier") {
+          node.id = call.callee;
+          now isMember = false;
+        } else if (call.callee.type === "MemberExpression") {
+          node.id = call.callee.property;
+          node.object = call.callee.object;
+          now isMember = true;
+        } else {
+          this.unexpected();
+        }
+
+        // XXX: allow expr here or not??
+        this.lscArrows_parseArrowFunctionBody(node, true)
+
+        this.finishNode(node, if isMember: 'LscNamedArrowMemberExpression' else: 'LscNamedArrowExpression')
+      } // lscArrows_parseNamedArrowFromCallExpression
+
+      // Parse a named arrow with type parameters.
+      // Based on flow.js/parseAsyncArrowWithTypeParameters
+      lscArrows_parseNamedArrowWithTypeParameters(name) -> {
+        node = this.startNodeAtNode(name)
+        this.lscArrows_initFunction(node, node.async)
+        node.id = name
+        this.parseFunctionParams(node)
+        if not this.parseArrow(node): this.unexpected(null, tt.arrow)
+        this.lscArrows_parseArrowFunctionBody(node, true)
+        this.finishNode(node, "LscNamedArrowExpression")
+      }
+
+      lscArrows_atPossibleNamedArrow(base) -> {
+        if(
+          this.state.banAmbiguousArrows or
+          this.state.containsEsc or
+          this.state.potentialArrowAt != base.start or
+          (base.type == "Identifier" and base.name == "async")
+        ): null else: base
+      }
+
+      // vanilla initFunction destroys what we learned from parseArrow.
+      lscArrows_initFunction(node, isAsync): void -> {
+        wasGenerator = !!node.generator
+        this.initFunction(node, isAsync or node.async)
+        node.generator = wasGenerator
+      }
+
+      ///////////////////////
+      // OVERRIDES
+      ///////////////////////
+
+      // Tokenize arrows
+      readToken_plus_min(code): void ->
+        if code == charCodes.dash:
+          if this.lscArrows_maybeReadArrowToken(true): return
+        super.readToken_plus_min(code)
+
+      readToken_eq_excl(code): void ->
+        if code == charCodes.equalsTo:
+          if this.lscArrows_maybeReadArrowToken(false): return
+        super.readToken_eq_excl(code)
+
+      // This will catch arrows in object and class bodies.
+      parseFunctionBodyAndFinish(node, type, allowExpressionBody): void -> {
+        // Check for arrow; if not, punt
+        if not this.match(tt.arrow):
+          return super.parseFunctionBodyAndFinish(node, type, allowExpressionBody)
+
+        // If so, grok arrow type
+        this.lscArrows_parseArrowType(node)
+
+        this.lscArrows_parseArrowFunctionBody(node, allowExpressionBody)
+        this.finishNode(node, type)
+      } // parseFunctionBodyAndFinish
+
+      // Here we decide if it's a regular ES2017 `async (foo) => bar` or
+      // an actual LSC arrow, then transform accordingly.
+      parseAsyncArrowFromCallExpression(node, call) -> {
+        const oldYield = this.state.yieldInPossibleArrowParameters;
+        this.state.yieldInPossibleArrowParameters = null;
+        this.lscArrows_parseArrowType(node);
+
+        // Distinguish a named arrow from an actual `async` arrow
+        if call.callee.type == "Identifier" and call.callee.name == "async":
+          // Genuine ES2017 async arrow
+          // Fat arrows only
+          if (this.state.value != '=>') {
+            this.unexpected(null, "Can't use async with lightscript arrows.")
+          }
+          this.eat(tt.arrow);
+          this.parseArrowExpression(node, call.arguments, true);
+        else:
+          // Named arrow
+          this.lscArrows_parseNamedArrowFromCallExpression(node, call);
+
+        this.state.yieldInPossibleArrowParameters = oldYield;
+        return node;
+      } // parseAsyncArrowFromCallExpression
+
+      // Convert named arrow back to declaration when it's found at statement level
+      parseExpressionStatement(node, expr) ->
+        if expr.type == "LscNamedArrowExpression":
+          this.finishNode(expr, "LscNamedArrowDeclaration")
+        else:
+          super.parseExpressionStatement(node, expr)
+
+      // Handle vanilla arrow expressions that aren't named.
+      parseArrow(node) ->
+        if this.match(tt.arrow):
+          this.lscArrows_parseArrowType(node)
+          node
+
+      parseArrowExpression(node, params, isAsync) ->
+        this.lscArrows_initFunction(node, isAsync or node.async)
+        if (params) this.setArrowFunctionParameters(node, params)
+        this.lscArrows_parseArrowFunctionBody(node, true)
+        this.finishNode(node, "ArrowFunctionExpression")
+
+      // Clear the ban on ambiguous arrows when they can be unambiguously parsed
+      parseParenAndDistinguishExpression(canBeArrow) ->
+        oldBanAmbiguousArrows = this.state.banAmbiguousArrows
+        this.state.banAmbiguousArrows = false
+        result = super.parseParenAndDistinguishExpression(canBeArrow)
+        this.state.banAmbiguousArrows = oldBanAmbiguousArrows
+        result
+
+      // Ban ambiguous arrows in ternaries.
+      // Sadly, Flow totally takes over `parseConditional`, so we have to
+      // c/p `parseMaybeConditional` which is safe.
+      parseMaybeConditional(noIn, refShorthandDefaultPos, refNeedsArrowPos) -> {
+        const startPos = this.state.start;
+        const startLoc = this.state.startLoc;
+        const potentialArrowAt = this.state.potentialArrowAt;
+        const expr = this.parseExprOps(noIn, refShorthandDefaultPos);
+
+        if (
+          expr.type === "ArrowFunctionExpression" &&
+          expr.start === potentialArrowAt
+        ) {
+          return expr;
+        }
+        if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
+
+        oldBanAmbiguousArrows = this.state.banAmbiguousArrows;
+        this.state.banAmbiguousArrows = true;
+        result = this.parseConditional(
+          expr,
+          noIn,
+          startPos,
+          startLoc,
+          refNeedsArrowPos,
+        );
+        this.state.banAmbiguousArrows = oldBanAmbiguousArrows;
+        return result;
+      }
+
+      // Try to parse named arrow functions with type parameters, e.g.
+      // f<T>(x) -> x
+      parseSubscripts(base, startPos, startLoc, noCalls) -> {
+        if(
+          this.state.potentialArrowAt == base.start and
+          this.isRelational("<") and
+          this.isAdjacent()
+        ) {
+          // Speculative parse: could just be a regular less-than
+          state = this.state.clone()
+          let error
+          try:
+            node = this.lscArrows_parseNamedArrowWithTypeParameters(base)
+            if node: return node
+          catch e:
+            now error = e
+
+          this.state = state
+          try:
+            return super.parseSubscripts(base, startPos, startLoc, noCalls)
+          catch e:
+            throw error or e
+        }
+
+        super.parseSubscripts(base, startPos, startLoc, noCalls)
+      }
+
+
+  } // mixin
+})
+
+export default lscArrows

@@ -109,6 +109,7 @@ import lscIf from './lightscript/lscIf'
 import lscIfExpression from './lightscript/lscIfExpression'
 import lscTryExpression from './lightscript/lscTryExpression'
 import lscAssignment from './lightscript/lscAssignment'
+import lscArrows from './lightscript/lscArrows'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tryCatch)
@@ -124,3 +125,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(lscIfExpression)
   registerPlugin(lscTryExpression)
   registerPlugin(lscAssignment)
+  registerPlugin(lscArrows)

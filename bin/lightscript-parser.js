@@ -31,6 +31,7 @@ mgr.addPlugins([
   "lscIfExpression",
   "lscTryExpression",
   "lscAssignment",
+  "lscArrows",
   "jsx",
   "flow",
 ]);

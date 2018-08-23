@@ -600,6 +600,8 @@ export default class ExpressionParser extends LValParser {
       return this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {
       const possibleAsync = this.atPossibleAsync(base);
+      // LSC: named arrow parsing
+      const possibleNamedArrowId = this.hasPlugin("lscArrows") ? this.lscArrows_atPossibleNamedArrow(base) : null
       this.next();
 
       const node = this.startNodeAt(startPos, startLoc);
@@ -612,7 +614,7 @@ export default class ExpressionParser extends LValParser {
 
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
-        possibleAsync,
+        !!(possibleAsync || possibleNamedArrowId), // LSC
         refTrailingCommaPos,
       );
       if (!state.optionalChainMember) {
@@ -621,7 +623,10 @@ export default class ExpressionParser extends LValParser {
         this.finishOptionalCallExpression(node);
       }
 
-      if (possibleAsync && this.shouldParseAsyncArrow()) {
+      if (
+        (possibleNamedArrowId || possibleAsync) && // LSC
+        this.shouldParseAsyncArrow()
+      ) {
         state.stop = true;
 
         if (refTrailingCommaPos.start > -1) {
