@@ -156,6 +156,11 @@ significantWhitespace = new Plugin({
         return this.isWhitespaceAt(this.state.end);
       }
 
+      // Determine if the current token is adjacent to the previous.
+      isAdjacent(): boolean ->
+        this.state.pos == 0 or
+        this.state.lastTokEnd == (this.state.pos - 1)
+
     return clazz
   } // mixin
 })
