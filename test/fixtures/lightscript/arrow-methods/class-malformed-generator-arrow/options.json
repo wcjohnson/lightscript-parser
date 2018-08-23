@@ -1,3 +1,3 @@
 {
-  "throws": "Can't declare generators with arrows; try -*> instead. (2:2)"
+  "throws": "Use =*>, rather than the `*` prefix, to declare a generator arrow function. (2:2)"
 }

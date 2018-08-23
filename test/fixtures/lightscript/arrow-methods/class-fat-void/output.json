@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
@@ -89,7 +90,7 @@
                   "column": 5
                 }
               },
-              "computed": false,
+              "static": false,
               "key": {
                 "type": "Identifier",
                 "start": 12,
@@ -107,13 +108,13 @@
                 },
                 "name": "method"
               },
-              "static": false,
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
+              "predicate": null,
               "returnType": {
                 "type": "TypeAnnotation",
                 "start": 20,

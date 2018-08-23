@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -43,6 +44,9 @@
           }
         },
         "kind": "const",
+        "extra": {
+          "implicit": true
+        },
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -105,7 +109,6 @@
                     }
                   },
                   "method": true,
-                  "shorthand": false,
                   "computed": true,
                   "key": {
                     "type": "StringLiteral",
@@ -130,9 +133,9 @@
                   "kind": "method",
                   "id": null,
                   "generator": false,
-                  "expression": false,
                   "async": false,
                   "params": [],
+                  "predicate": null,
                   "returnType": {
                     "type": "TypeAnnotation",
                     "start": 20,

@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -43,6 +44,9 @@
           }
         },
         "kind": "const",
+        "extra": {
+          "implicit": true
+        },
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -105,8 +109,6 @@
                     }
                   },
                   "method": true,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 8,
@@ -124,10 +126,10 @@
                     },
                     "name": "method1"
                   },
+                  "computed": false,
                   "kind": "method",
                   "id": null,
                   "generator": false,
-                  "expression": false,
                   "async": false,
                   "params": [],
                   "skinny": true,
@@ -232,8 +234,6 @@
                     }
                   },
                   "method": true,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 35,
@@ -251,10 +251,10 @@
                     },
                     "name": "method2"
                   },
+                  "computed": false,
                   "kind": "method",
                   "id": null,
                   "generator": false,
-                  "expression": false,
                   "async": false,
                   "params": [],
                   "skinny": true,
@@ -359,8 +359,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 62,
@@ -378,6 +376,8 @@
                     },
                     "name": "c"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 62,
