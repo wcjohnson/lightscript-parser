@@ -233,19 +233,19 @@ lscArrows = new Plugin({
       parseAsyncArrowFromCallExpression(node, call) -> {
         const oldYield = this.state.yieldInPossibleArrowParameters;
         this.state.yieldInPossibleArrowParameters = null;
-        this.lscArrows_parseArrowType(node);
 
         // Distinguish a named arrow from an actual `async` arrow
         if call.callee.type == "Identifier" and call.callee.name == "async":
           // Genuine ES2017 async arrow
           // Fat arrows only
           if (this.state.value != '=>') {
-            this.unexpected(null, "Can't use async with lightscript arrows.")
+            this.unexpected(call.start, "Can't use async with lightscript arrows.")
           }
-          this.eat(tt.arrow);
+          this.parseArrow(node);
           this.parseArrowExpression(node, call.arguments, true);
         else:
           // Named arrow
+          this.parseArrow(node);
           this.lscArrows_parseNamedArrowFromCallExpression(node, call);
 
         this.state.yieldInPossibleArrowParameters = oldYield;
@@ -260,6 +260,14 @@ lscArrows = new Plugin({
           super.parseExpressionStatement(node, expr)
 
       // Handle vanilla arrow expressions that aren't named.
+      parseExprAtom(refShorthandDefaultPos) ->
+        if this.state.type == tt.arrow:
+          node = this.startNode()
+          this.parseArrow(node)
+          this.parseArrowExpression(node, [])
+        else:
+          super.parseExprAtom(refShorthandDefaultPos)
+
       parseArrow(node) ->
         if this.match(tt.arrow):
           this.lscArrows_parseArrowType(node)
