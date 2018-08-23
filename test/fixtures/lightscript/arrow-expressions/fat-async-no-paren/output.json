@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -43,6 +44,9 @@
           }
         },
         "kind": "const",
+        "extra": {
+          "implicit": true
+        },
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -89,10 +93,10 @@
                   "column": 17
                 }
               },
+              "async": true,
+              "skinny": false,
               "id": null,
               "generator": false,
-              "expression": true,
-              "async": true,
               "params": [
                 {
                   "type": "Identifier",
@@ -112,7 +116,6 @@
                   "name": "b"
                 }
               ],
-              "skinny": false,
               "body": {
                 "type": "AwaitExpression",
                 "start": 10,
@@ -144,7 +147,8 @@
                   },
                   "name": "b"
                 }
-              }
+              },
+              "expression": true
             }
           }
         ]

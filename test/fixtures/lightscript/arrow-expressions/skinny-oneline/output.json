@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -56,12 +57,11 @@
               "column": 7
             }
           },
+          "skinny": true,
           "id": null,
           "generator": false,
-          "expression": true,
           "async": false,
           "params": [],
-          "skinny": true,
           "body": {
             "type": "Identifier",
             "start": 6,
@@ -78,7 +78,8 @@
               "identifierName": "x"
             },
             "name": "x"
-          }
+          },
+          "expression": true
         }
       }
     ],

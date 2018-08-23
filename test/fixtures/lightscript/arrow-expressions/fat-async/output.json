@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -60,7 +61,6 @@
           "skinny": false,
           "id": null,
           "generator": false,
-          "expression": true,
           "params": [],
           "body": {
             "type": "AwaitExpression",
@@ -93,7 +93,8 @@
               },
               "name": "x"
             }
-          }
+          },
+          "expression": true
         }
       }
     ],

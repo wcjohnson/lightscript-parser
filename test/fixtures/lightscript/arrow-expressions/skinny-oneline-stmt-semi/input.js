@@ -1,1 +1,1 @@
--> for idx i in Array(1): i; after()
+-> for x in y: z; after()

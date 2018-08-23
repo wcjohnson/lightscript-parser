@@ -1,1 +1,1 @@
-(-> throw new Error)()
+(-> for x in y: z)()

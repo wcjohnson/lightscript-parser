@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -56,81 +57,63 @@
               "column": 18
             }
           },
+          "skinny": true,
           "id": null,
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [],
-          "skinny": true,
           "body": {
-            "type": "BlockStatement",
-            "start": 0,
+            "type": "UnaryExpression",
+            "start": 3,
             "end": 18,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 0
+                "column": 3
               },
               "end": {
                 "line": 1,
                 "column": 18
               }
             },
-            "body": [
-              {
-                "type": "ThrowStatement",
-                "start": 3,
+            "operator": "throw",
+            "prefix": true,
+            "argument": {
+              "type": "NewExpression",
+              "start": 9,
+              "end": 18,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 18
+                }
+              },
+              "callee": {
+                "type": "Identifier",
+                "start": 13,
                 "end": 18,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 3
+                    "column": 13
                   },
                   "end": {
                     "line": 1,
                     "column": 18
-                  }
+                  },
+                  "identifierName": "Error"
                 },
-                "argument": {
-                  "type": "NewExpression",
-                  "start": 9,
-                  "end": 18,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 9
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 18
-                    }
-                  },
-                  "callee": {
-                    "type": "Identifier",
-                    "start": 13,
-                    "end": 18,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 13
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 18
-                      },
-                      "identifierName": "Error"
-                    },
-                    "name": "Error"
-                  },
-                  "arguments": []
-                }
-              }
-            ],
-            "directives": [],
-            "extra": {
-              "curly": false
+                "name": "Error"
+              },
+              "typeArguments": null,
+              "arguments": []
             }
-          }
+          },
+          "expression": true
         }
       }
     ],

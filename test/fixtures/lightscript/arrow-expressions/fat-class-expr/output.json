@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -92,9 +93,9 @@
                   "column": 21
                 }
               },
+              "skinny": false,
               "id": null,
               "generator": false,
-              "expression": true,
               "async": false,
               "params": [
                 {
@@ -115,7 +116,6 @@
                   "name": "arg"
                 }
               ],
-              "skinny": false,
               "body": {
                 "type": "ClassExpression",
                 "start": 11,
@@ -164,7 +164,8 @@
                   },
                   "body": []
                 }
-              }
+              },
+              "expression": true
             }
           }
         ]

@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -56,9 +57,9 @@
               "column": 12
             }
           },
+          "skinny": false,
           "id": null,
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [
             {
@@ -79,7 +80,6 @@
               "name": "a"
             }
           ],
-          "skinny": false,
           "body": {
             "type": "BlockStatement",
             "start": 2,
@@ -139,8 +139,6 @@
                         }
                       },
                       "method": false,
-                      "shorthand": false,
-                      "computed": false,
                       "key": {
                         "type": "StringLiteral",
                         "start": 9,
@@ -161,6 +159,8 @@
                         },
                         "value": "a"
                       },
+                      "computed": false,
+                      "shorthand": false,
                       "value": {
                         "type": "Identifier",
                         "start": 14,

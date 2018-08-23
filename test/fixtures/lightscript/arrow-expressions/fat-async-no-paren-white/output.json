@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -43,6 +44,9 @@
           }
         },
         "kind": "const",
+        "extra": {
+          "implicit": true
+        },
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -89,10 +93,10 @@
                   "column": 3
                 }
               },
+              "async": true,
+              "skinny": false,
               "id": null,
               "generator": false,
-              "expression": false,
-              "async": true,
               "params": [
                 {
                   "type": "Identifier",
@@ -112,7 +116,6 @@
                   "name": "b"
                 }
               ],
-              "skinny": false,
               "body": {
                 "type": "BlockStatement",
                 "start": 6,

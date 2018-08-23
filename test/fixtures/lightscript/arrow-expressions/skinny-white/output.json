@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -56,12 +57,11 @@
               "column": 3
             }
           },
+          "skinny": true,
           "id": null,
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [],
-          "skinny": true,
           "body": {
             "type": "BlockStatement",
             "start": 3,

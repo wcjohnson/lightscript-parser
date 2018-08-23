@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -92,12 +93,11 @@
                   "column": 8
                 }
               },
+              "skinny": false,
               "id": null,
               "generator": false,
-              "expression": true,
               "async": false,
               "params": [],
-              "skinny": false,
               "body": {
                 "type": "NumericLiteral",
                 "start": 7,
@@ -117,7 +117,8 @@
                   "raw": "1"
                 },
                 "value": 1
-              }
+              },
+              "expression": true
             }
           }
         ]
