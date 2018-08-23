@@ -344,6 +344,15 @@ lscArrows = new Plugin({
         super.parseSubscripts(base, startPos, startLoc, noCalls)
       }
 
+      // While parsing object methods, we have to ban flow anonymous
+      // arrow types to prevent ambiguities.
+      parseMethod(node, isGenerator: boolean, isAsync: boolean, isConstructor: boolean, type: string) -> {
+        oldNoAnonFunctionType = this.state.noAnonFunctionType
+        this.state.noAnonFunctionType = true
+        result = super.parseMethod(node, isGenerator, isAsync, isConstructor, type)
+        this.state.noAnonFunctionType = oldNoAnonFunctionType
+        result
+      }
 
   } // mixin
 })
