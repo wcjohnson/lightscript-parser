@@ -1,5 +1,6 @@
 // Parsing for implicit-const declarations
 // `now` keyword/assignments
+// Export auto-const
 
 import { Plugin } from '../core/plugin'
 import { types as tt, TokenType, registerToken, registerKeywordToken } from "../../tokenizer/register"

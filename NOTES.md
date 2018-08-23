@@ -2,7 +2,7 @@ TODO:
   - [x] arr.0 = arr[0] syntax (test with BigInts, numericSeparators)
   - [x] commaOrLineBreak syntax
   - [x] for
-  - [ ] for/in idx/elem/key/val
+  - [x] for/in idx/elem/key/val
   - [x] try/catch
   - [x] class body
   - [x] Flow and JSX `readToken` extensions
@@ -11,6 +11,11 @@ TODO:
   - [x] `export` arrows
   - [x] Named arrows should be banned in paren-free and ternary consequent except in parens.
   - [ ] `<-`
+  - [ ] Spread loops
+  - [ ] Bang calls
+  - [ ] Better safecalls `?(` instead of `?.()`
+  - [ ] Existentials
+  - [ ] Syntactic placeholders
 
 BREAKING CHANGES:
   - Removed scientific notation from dot property access (x.1e3 is no longer valid)
@@ -22,3 +27,7 @@ BREAKING CHANGES:
 
 OTHER CHANGES:
   - Anonymous arrow flow types are banned in methods. This was always true in LSC but not explicity documented.
+
+MISC IDEAS:
+  - Pattern matching: remove implicit dependency on runtime. require an import of the runtime; fail if not present. add compiler option to overrule and pull runtime from a specified global var.
+  - Stdlib change: require lodash to be explicitly specified so it isn't silently added as s dependency
