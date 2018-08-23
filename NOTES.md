@@ -2,14 +2,15 @@ TODO:
   - [x] arr.0 = arr[0] syntax (test with BigInts, numericSeparators)
   - [x] commaOrLineBreak syntax
   - [x] for
-  - [ ] for/in
+  - [ ] for/in idx/elem/key/val
   - [x] try/catch
   - [x] class body
   - [x] Flow and JSX `readToken` extensions
   - [x] `export` autoconst
   - [x] arrows
-  - [ ] `export` arrows
+  - [x] `export` arrows
   - [x] Named arrows should be banned in paren-free and ternary consequent except in parens.
+  - [ ] `<-`
 
 BREAKING CHANGES:
   - Removed scientific notation from dot property access (x.1e3 is no longer valid)
@@ -17,3 +18,7 @@ BREAKING CHANGES:
   - `enhancedTry` removed. `try x` illegal. `try` without `catch` legal.
   - "Safe await" `<!-` removed. (Use `try: <- x`) instead
   - Named arrow declarations without parenthesis are banned in paren-free contexts and in ternary consequents. Wrapping in parens fixes. (should be very rare)
+  - Named arrow declarations with type parameters `f<T>(x) -> y` must have no space between the name and the `<` (`f<T>` is OK, `f <T>` is not)
+
+OTHER CHANGES:
+  - Anonymous arrow flow types are banned in methods. This was always true in LSC but not explicity documented.

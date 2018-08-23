@@ -184,6 +184,15 @@ lscArrows = new Plugin({
         this.finishNode(node, "LscNamedArrowExpression")
       }
 
+      lscArrows_tryParseNamedArrowWithTypeParameters() ->
+        state = this.state.clone()
+        let error
+        try:
+          this.lscArrows_parseNamedArrowWithTypeParameters(this.parseIdentifier())
+        catch e:
+          this.state = state
+          e
+
       lscArrows_atPossibleNamedArrow(base) -> {
         if(
           this.state.banAmbiguousArrows or
@@ -352,6 +361,21 @@ lscArrows = new Plugin({
         result = super.parseMethod(node, isGenerator, isAsync, isConstructor, type)
         this.state.noAnonFunctionType = oldNoAnonFunctionType
         result
+      }
+
+      // Allow e.g. `export f() -> x`
+      parseExport(node) -> {
+        if this.match(tt.name):
+          decl = this.lscArrows_tryParseNamedArrowWithTypeParameters()
+          if not (decl instanceof Error):
+            decl.type = "LscNamedArrowDeclaration"
+            node.specifiers = []
+            node.source = null
+            node.declaration = decl
+            this.checkExport(node, true)
+            return this.finishNode(node, "ExportNamedDeclaration")
+
+        super.parseExport(node)
       }
 
   } // mixin
