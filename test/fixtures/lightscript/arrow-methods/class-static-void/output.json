@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
@@ -89,7 +90,7 @@
                   "column": 28
                 }
               },
-              "computed": false,
+              "static": true,
               "key": {
                 "type": "Identifier",
                 "start": 19,
@@ -107,13 +108,13 @@
                 },
                 "name": "method"
               },
-              "static": true,
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": true,
               "async": false,
               "params": [],
+              "predicate": null,
               "returnType": {
                 "type": "TypeAnnotation",
                 "start": 27,
@@ -146,24 +147,60 @@
               },
               "skinny": true,
               "body": {
-                "type": "NumericLiteral",
-                "start": 37,
+                "type": "BlockStatement",
+                "start": 34,
                 "end": 38,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 27
+                    "column": 24
                   },
                   "end": {
                     "line": 2,
                     "column": 28
                   }
                 },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 37,
+                    "end": 38,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 27
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 28
+                      }
+                    },
+                    "expression": {
+                      "type": "NumericLiteral",
+                      "start": 37,
+                      "end": 38,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 27
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 28
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  }
+                ],
+                "directives": [],
                 "extra": {
-                  "rawValue": 1,
-                  "raw": "1"
-                },
-                "value": 1
+                  "curly": false
+                }
               }
             }
           ]

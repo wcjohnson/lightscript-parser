@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
@@ -89,7 +90,7 @@
                   "column": 15
                 }
               },
-              "computed": false,
+              "static": false,
               "key": {
                 "type": "Identifier",
                 "start": 12,
@@ -107,30 +108,65 @@
                 },
                 "name": "method"
               },
-              "static": false,
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": true,
               "async": false,
               "params": [],
               "skinny": false,
               "body": {
-                "type": "Identifier",
-                "start": 24,
+                "type": "BlockStatement",
+                "start": 21,
                 "end": 25,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 14
+                    "column": 11
                   },
                   "end": {
                     "line": 2,
                     "column": 15
-                  },
-                  "identifierName": "a"
+                  }
                 },
-                "name": "a"
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 24,
+                    "end": 25,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 15
+                      }
+                    },
+                    "expression": {
+                      "type": "Identifier",
+                      "start": 24,
+                      "end": 25,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 14
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 15
+                        },
+                        "identifierName": "a"
+                      },
+                      "name": "a"
+                    }
+                  }
+                ],
+                "directives": [],
+                "extra": {
+                  "curly": false
+                }
               }
             }
           ]

@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -43,6 +44,9 @@
           }
         },
         "kind": "const",
+        "extra": {
+          "implicit": true
+        },
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -105,8 +109,6 @@
                     }
                   },
                   "method": true,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 6,
@@ -124,29 +126,65 @@
                     },
                     "name": "method1"
                   },
+                  "computed": false,
                   "kind": "method",
                   "id": null,
                   "generator": false,
-                  "expression": true,
                   "async": false,
                   "params": [],
                   "skinny": true,
                   "body": {
-                    "type": "Identifier",
-                    "start": 19,
+                    "type": "BlockStatement",
+                    "start": 16,
                     "end": 20,
                     "loc": {
                       "start": {
                         "line": 1,
-                        "column": 19
+                        "column": 16
                       },
                       "end": {
                         "line": 1,
                         "column": 20
-                      },
-                      "identifierName": "a"
+                      }
                     },
-                    "name": "a"
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start": 19,
+                        "end": 20,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 19
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 20
+                          }
+                        },
+                        "expression": {
+                          "type": "Identifier",
+                          "start": 19,
+                          "end": 20,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 19
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 20
+                            },
+                            "identifierName": "a"
+                          },
+                          "name": "a"
+                        }
+                      }
+                    ],
+                    "directives": [],
+                    "extra": {
+                      "curly": false
+                    }
                   }
                 },
                 {
@@ -164,8 +202,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 22,
@@ -183,6 +219,8 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 22,

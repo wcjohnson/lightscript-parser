@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
@@ -89,7 +90,7 @@
                   "column": 29
                 }
               },
-              "computed": false,
+              "static": true,
               "key": {
                 "type": "Identifier",
                 "start": 19,
@@ -107,44 +108,79 @@
                 },
                 "name": "method"
               },
-              "static": true,
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": true,
               "async": true,
               "params": [],
               "skinny": true,
               "body": {
-                "type": "AwaitExpression",
-                "start": 32,
+                "type": "BlockStatement",
+                "start": 28,
                 "end": 39,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 22
+                    "column": 18
                   },
                   "end": {
                     "line": 2,
                     "column": 29
                   }
                 },
-                "argument": {
-                  "type": "Identifier",
-                  "start": 38,
-                  "end": 39,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 28
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 32,
+                    "end": 39,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 29
+                      }
                     },
-                    "end": {
-                      "line": 2,
-                      "column": 29
-                    },
-                    "identifierName": "a"
-                  },
-                  "name": "a"
+                    "expression": {
+                      "type": "AwaitExpression",
+                      "start": 32,
+                      "end": 39,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 22
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 29
+                        }
+                      },
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 38,
+                        "end": 39,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 28
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 29
+                          },
+                          "identifierName": "a"
+                        },
+                        "name": "a"
+                      }
+                    }
+                  }
+                ],
+                "directives": [],
+                "extra": {
+                  "curly": false
                 }
               }
             }
