@@ -36,18 +36,14 @@ lscAssignment = new Plugin({
             this.state = state
             return
 
-          // In case the type annotation is invalid, rewind to before we
-          // parsed it
-          if not this.lscAssignment_validateTypeAnnotation(typeAnnotation):
+          // We must have some kind of assignment operator here. Otherwise
+          // it's a bogus parse.
+          if not this.matchStrictAssignment():
             this.state = state
           else:
             funcState.typeAnnotation = typeAnnotation
         } // if
       } // maybeParseTypeAnnotation
-
-      lscAssignment_validateTypeAnnotation(typeAnnotation): boolean ->
-        // Only valid if followed by equals
-        this.match(tt.eq)
 
       lscAssignment_parseRight(node, startPos, startLoc, noIn): void ->
         this.next()
