@@ -45,10 +45,6 @@ lscAssignment = new Plugin({
         } // if
       } // maybeParseTypeAnnotation
 
-      lscAssignment_parseRight(node, startPos, startLoc, noIn): void ->
-        this.next()
-        node.right = this.parseMaybeAssign(noIn)
-
       lscAssignment_isConvertibleToImplicitConst(node, state): boolean ->
         node.left.type != "MemberExpression" and
         node.operator == "="
@@ -110,8 +106,6 @@ lscAssignment = new Plugin({
 
       parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn, state) ->
         { isStatementStart, isNowAssign, typeAnnotation } = state
-
-        this.lscAssignment_parseRight(node, startPos, startLoc, noIn, state)
 
         if not isNowAssign:
           if isStatementStart and this.lscAssignment_isConvertibleToImplicitConst(node, state):

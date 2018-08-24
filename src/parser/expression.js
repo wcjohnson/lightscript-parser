@@ -209,7 +209,8 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    // LSC: extension point
+    // LSC: extension points
+    this.parseMaybeAssign_parseRight(node, startPos, startLoc, noIn, state);
     return this.parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn, state);
   }
 
@@ -225,10 +226,14 @@ export default class ExpressionParser extends LValParser {
     : left;
   }
 
-  // LSC: extension point - parse RHS of an assignment and finish
-  parseMaybeAssign_finishAssign(node: N.Node, startPos, startLoc, noIn: ?boolean, state): N.Expression {
+  // LSC: extension point - parse RHS of an assignment
+  parseMaybeAssign_parseRight(node: N.Node, startPos, startLoc, noIn: ?boolean, state): void {
     this.next();
     node.right = this.parseMaybeAssign(noIn);
+  }
+
+  // LSC: extension point - Finish an assignment
+  parseMaybeAssign_finishAssign(node: N.Node, startPos, startLoc, noIn: ?boolean, state): N.Expression {
     return this.finishNode(node, "AssignmentExpression");
   }
 
