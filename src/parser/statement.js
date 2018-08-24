@@ -871,29 +871,7 @@ export default class StatementParser extends ExpressionParser {
     for (;;) {
       const decl = this.startNode();
       this.parseVarHead(decl);
-      if (this.eat(tt.eq)) {
-        decl.init = this.parseMaybeAssign(isFor);
-      } else {
-        if (
-          kind === tt._const &&
-          !(this.match(tt._in) || this.isContextual("of"))
-        ) {
-          // `const` with no initializer is allowed in TypeScript.
-          // It could be a declaration like `const x: number;`.
-          if (!this.hasPlugin("typescript")) {
-            this.unexpected();
-          }
-        } else if (
-          decl.id.type !== "Identifier" &&
-          !(isFor && (this.match(tt._in) || this.isContextual("of")))
-        ) {
-          this.raise(
-            this.state.lastTokEnd,
-            "Complex binding patterns require an initialization value",
-          );
-        }
-        decl.init = null;
-      }
+      this.parseVarInit(decl, isFor, kind); // LSC
       declarations.push(this.finishNode(decl, "VariableDeclarator"));
       if (!this.eat(tt.comma)) break;
     }
@@ -903,6 +881,34 @@ export default class StatementParser extends ExpressionParser {
   parseVarHead(decl: N.VariableDeclarator): void {
     decl.id = this.parseBindingAtom();
     this.checkLVal(decl.id, true, undefined, "variable declaration");
+  }
+
+  // LSC: Extension point
+  // XXX: possible Babylon upstream change
+  parseVarInit(decl: N.VariableDeclarator, isFor, kind): void {
+    if (this.eat(tt.eq)) {
+      decl.init = this.parseMaybeAssign(isFor);
+    } else {
+      if (
+        kind === tt._const &&
+        !(this.match(tt._in) || this.isContextual("of"))
+      ) {
+        // `const` with no initializer is allowed in TypeScript.
+        // It could be a declaration like `const x: number;`.
+        if (!this.hasPlugin("typescript")) {
+          this.unexpected();
+        }
+      } else if (
+        decl.id.type !== "Identifier" &&
+        !(isFor && (this.match(tt._in) || this.isContextual("of")))
+      ) {
+        this.raise(
+          this.state.lastTokEnd,
+          "Complex binding patterns require an initialization value",
+        );
+      }
+      decl.init = null;
+    }
   }
 
   // Parse a function declaration or literal (depending on the
