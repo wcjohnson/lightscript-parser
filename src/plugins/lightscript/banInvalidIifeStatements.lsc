@@ -1,0 +1,31 @@
+// Ban statements that are invalid in an IIFE when a state flag is set.
+//
+// These are `break`, `continue`, `return` statements which semantically
+// can't cross an IIFE boundary.
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType } from "../../tokenizer/types"
+
+banInvalidIifeStatements = new Plugin({
+  name: 'banInvalidIifeStatements'
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase:
+      constructor(options, input) ->
+        super(options, input)
+        this.state.banInvalidIifeStatements = false
+
+      parseStatementContent(declaration, topLevel) -> {
+        if this.state.banInvalidIifeStatements:
+          switch (this.state.type) {
+            case tt._break:
+            case tt._continue:
+            case tt._return:
+              this.unexpected(null, "Illegal `" + this.state.type.label + "` keyword in expression.")
+              break;
+          }
+
+        super.parseStatementContent(declaration, topLevel)
+      }
+  } // mixin
+})
+
+export default banInvalidIifeStatements

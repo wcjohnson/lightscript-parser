@@ -97,6 +97,7 @@ export registerPlugins(registerPlugin, Plugin) ->
 
 // Registration for plugins added by LightScript
 import tryCatch from './lightscript/tryCatch'
+import banInvalidIifeStatements from './lightscript/banInvalidIifeStatements'
 import transientState from './lightscript/transientState'
 import versatileTypeAnnotations from './lightscript/versatileTypeAnnotations'
 import tildeCall from './lightscript/tildeCall'
@@ -116,6 +117,7 @@ import awaitArrow_tokenizer from './lightscript/awaitArrow_tokenizer'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tryCatch)
+  registerPlugin(banInvalidIifeStatements)
   registerPlugin(transientState)
   registerPlugin(versatileTypeAnnotations)
   registerPlugin(tildeCall)
