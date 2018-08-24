@@ -1,0 +1,3 @@
+{
+  "throws": "Illegal await in a non-async function. (2:2)"
+}

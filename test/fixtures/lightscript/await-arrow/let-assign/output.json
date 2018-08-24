@@ -1,0 +1,190 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 26,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 18
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 26,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 18
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "NamedArrowDeclaration",
+        "start": 0,
+        "end": 26,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 18
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 1,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 1
+            },
+            "identifierName": "a"
+          },
+          "name": "a"
+        },
+        "generator": false,
+        "expression": false,
+        "async": true,
+        "params": [],
+        "skinny": true,
+        "body": {
+          "type": "BlockStatement",
+          "start": 4,
+          "end": 26,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 2,
+              "column": 18
+            }
+          },
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 10,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 18
+                }
+              },
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 14,
+                  "end": 26,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 6
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 18
+                    }
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start": 14,
+                    "end": 15,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 6
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 7
+                      },
+                      "identifierName": "x"
+                    },
+                    "name": "x"
+                  },
+                  "init": {
+                    "type": "AwaitExpression",
+                    "start": 16,
+                    "end": 26,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 18
+                      }
+                    },
+                    "argument": {
+                      "type": "CallExpression",
+                      "start": 19,
+                      "end": 26,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 11
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 18
+                        }
+                      },
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 19,
+                        "end": 24,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 11
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 16
+                          },
+                          "identifierName": "fetch"
+                        },
+                        "name": "fetch"
+                      },
+                      "arguments": []
+                    }
+                  }
+                }
+              ],
+              "kind": "let"
+            }
+          ],
+          "directives": [],
+          "extra": {
+            "curly": false
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
