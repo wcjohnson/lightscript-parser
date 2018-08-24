@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "NamedArrowDeclaration",
+        "type": "LscNamedArrowDeclaration",
         "start": 0,
         "end": 27,
         "loc": {
@@ -42,6 +43,8 @@
             "column": 18
           }
         },
+        "async": true,
+        "skinny": true,
         "id": {
           "type": "Identifier",
           "start": 0,
@@ -60,8 +63,6 @@
           "name": "a"
         },
         "generator": false,
-        "expression": false,
-        "async": true,
         "params": [
           {
             "type": "Identifier",
@@ -81,7 +82,6 @@
             "name": "x"
           }
         ],
-        "skinny": true,
         "body": {
           "type": "BlockStatement",
           "start": 5,
@@ -189,6 +189,9 @@
                       "name": "fetch"
                     },
                     "arguments": []
+                  },
+                  "extra": {
+                    "arrow": true
                   }
                 },
                 "isNowAssign": true

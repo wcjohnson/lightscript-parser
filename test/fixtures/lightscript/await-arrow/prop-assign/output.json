@@ -208,7 +208,8 @@
                   "extra": {
                     "arrow": true
                   }
-                }
+                },
+                "isNowAssign": false
               }
             }
           ],
