@@ -143,7 +143,7 @@ lscArrows = new Plugin({
             if (allowExpression and (body.type === "ExpressionStatement")) {
               node.body = body.expression;
             } else {
-              node.body = node;
+              node.body = body;
             }
           } else {
             node.body = this.parseInlineWhiteBlock(nodeAtArrow, allowExpression);
