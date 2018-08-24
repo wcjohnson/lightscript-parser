@@ -4,6 +4,7 @@
 // - Full decimals only (1.0 instead of 1., 0.5 instead of .5)
 // - LightScript ASI rules
 // - Commaless syntax
+// - Ban labeled expression statements
 
 import { Plugin } from '../core/plugin'
 import { types as tt } from "../../tokenizer/types"
@@ -382,6 +383,14 @@ lscCoreSyntax = new Plugin({
       expectListSeparator(loc): void ->
         if not (this.eat(tt.comma) or this.isLineBreak()):
           this.unexpected(loc, tt.comma)
+
+      // Illegalize labeled expression statements to resolve ambiguities
+      // in whiteblock parsing.
+      parseLabeledStatement(node, maybeName, expr) ->
+        result = super.parseLabeledStatement(node, maybeName, expr)
+        if result.body.type == "ExpressionStatement":
+          this.raise(result.label.start, "Invalid labeled expression")
+        result
   } // mixin
 })
 
