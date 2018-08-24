@@ -1,0 +1,148 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 23,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 16
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 23,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 16
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start": 0,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 16
+          }
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 9,
+          "end": 23,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 2
+            },
+            "end": {
+              "line": 2,
+              "column": 16
+            }
+          },
+          "param": {
+            "type": "Identifier",
+            "start": 15,
+            "end": 18,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 8
+              },
+              "end": {
+                "line": 2,
+                "column": 11
+              },
+              "identifierName": "err"
+            },
+            "name": "err"
+          },
+          "body": {
+            "type": "ExpressionStatement",
+            "start": 20,
+            "end": 23,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 13
+              },
+              "end": {
+                "line": 2,
+                "column": 16
+              }
+            },
+            "expression": {
+              "type": "Identifier",
+              "start": 20,
+              "end": 23,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 13
+                },
+                "end": {
+                  "line": 2,
+                  "column": 16
+                },
+                "identifierName": "err"
+              },
+              "name": "err"
+            }
+          }
+        },
+        "guardedHandlers": [],
+        "block": {
+          "type": "ExpressionStatement",
+          "start": 5,
+          "end": 6,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            }
+          },
+          "expression": {
+            "type": "Identifier",
+            "start": 5,
+            "end": 6,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 5
+              },
+              "end": {
+                "line": 1,
+                "column": 6
+              },
+              "identifierName": "x"
+            },
+            "name": "x"
+          }
+        },
+        "finalizer": null
+      }
+    ],
+    "directives": []
+  }
+}
