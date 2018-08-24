@@ -308,6 +308,14 @@ lscArrows = new Plugin({
           node
 
       parseArrowExpression(node, params, isAsync) ->
+        // Duplicate yield error from expression.js/parseArrowExpression
+        if (this.state.yieldInPossibleArrowParameters) {
+          this.raise(
+            this.state.yieldInPossibleArrowParameters.start,
+            "yield is not allowed in the parameters of an arrow function" +
+              " inside a generator",
+          );
+        }
         this.lscArrows_initFunction(node, isAsync or node.async)
         if (params) this.setArrowFunctionParameters(node, params)
         this.lscArrows_parseArrowFunctionBody(node, true)
