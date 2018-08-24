@@ -120,6 +120,9 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
         } else if (process.env.DUPLICATE_ON_FAILURE) {
           this.saveErrorOverride(this.options.throws);
           this.throwAnnotatedError(err);
+        } else if (process.env.OVERRIDE_ON_FAILURE) {
+          this.saveErrorOverride(err.message);
+          this.throwAnnotatedError(err);
         } else {
           err.message = `Expected error message: ${this.options.throws}. Got error message: ${err.message}`;
           this.throwAnnotatedError(err);
@@ -159,17 +162,17 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
         }
     }
   }mismatchExpected(expected, received, mismatch) {
-    if (process.env.SAVE_OVERRIDE) {
-      return this.saveExpected(received, "output.override.json");
+    if (process.env.OVERRIDE_ON_FAILURE || process.env.SAVE_OVERRIDE) {
+      this.saveExpected(received, "output.override.json");
+      return;
     } else if (process.env.DUPLICATE_ON_FAILURE) {
-      return this.saveExpected(expected, "output.override.json");
+      this.saveExpected(expected, "output.override.json");
     } else if (process.env.UPDATE_EXPECTED) {
-      return this.saveExpected(received, "output.json");
+      this.saveExpected(received, "output.json");
+      return;
     } else if (process.env.FIX_BY_BANNING_PLUGIN) {
-      return this.fixByBanningPlugin(expected, received, process.env.FIX_BY_BANNING_PLUGIN);
-    } else {
-      return this.throwAnnotatedError(new Error("Mismatch against expected output: " + mismatch));
-    }
+      this.fixByBanningPlugin(expected, received, process.env.FIX_BY_BANNING_PLUGIN);
+    }return this.throwAnnotatedError(new Error("Mismatch against expected output: " + mismatch));
   }saveExpected(ast, filename) {
     this.saveLocalArtifact(filename, stringifyAst(ast));
   }fixByBanningPlugin(expected, received, whichPlugin) {

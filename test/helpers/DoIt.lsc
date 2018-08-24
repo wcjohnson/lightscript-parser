@@ -102,6 +102,9 @@ class ParserTestable extends Testable:
         elif process.env.DUPLICATE_ON_FAILURE:
           this.saveErrorOverride(this.options.throws)
           this.throwAnnotatedError(err)
+        elif process.env.OVERRIDE_ON_FAILURE:
+          this.saveErrorOverride(err.message)
+          this.throwAnnotatedError(err)
         else:
           err.message = `Expected error message: ${this.options.throws}. Got error message: ${err.message}`
           this.throwAnnotatedError(err)
@@ -140,16 +143,18 @@ class ParserTestable extends Testable:
         this.throwAnnotatedError(new Error("Empty expected output -- use SAVE_EXPECTED=1 to create expected output."))
 
   mismatchExpected(expected, received, mismatch) ->
-    if process.env.SAVE_OVERRIDE:
+    if (process.env.OVERRIDE_ON_FAILURE) or (process.env.SAVE_OVERRIDE):
       this.saveExpected(received, "output.override.json")
+      return
     elif process.env.DUPLICATE_ON_FAILURE:
       this.saveExpected(expected, "output.override.json")
     elif process.env.UPDATE_EXPECTED:
       this.saveExpected(received, "output.json")
+      return
     elif process.env.FIX_BY_BANNING_PLUGIN:
       this.fixByBanningPlugin(expected, received, process.env.FIX_BY_BANNING_PLUGIN)
-    else:
-      this.throwAnnotatedError(new Error("Mismatch against expected output: " + mismatch))
+
+    this.throwAnnotatedError(new Error("Mismatch against expected output: " + mismatch))
 
   saveExpected(ast, filename): void ->
     this.saveLocalArtifact(filename, stringifyAst(ast))
