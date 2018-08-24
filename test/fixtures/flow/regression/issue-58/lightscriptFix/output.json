@@ -5527,7 +5527,7 @@
                   },
                   "name": "what"
                 },
-                "operator": "===",
+                "operator": "==",
                 "right": {
                   "type": "StringLiteral",
                   "start": 1814,

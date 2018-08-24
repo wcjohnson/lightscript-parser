@@ -1,0 +1,4 @@
+{
+  "banPlugins": ["lscArrows"],
+  "throws": "Non-simple parameter in strict mode (1:9)"
+}

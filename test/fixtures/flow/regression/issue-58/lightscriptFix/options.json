@@ -1,0 +1,3 @@
+{
+  "banPlugins": ["lscCoreSyntax", "lscAssignment", "modifiedLogicalOperators"]
+}

@@ -1,0 +1,4 @@
+{
+  "banPlugins": ["tryCatch"],
+  "throws": "Missing catch or finally clause (1:0)"
+}

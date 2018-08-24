@@ -1,0 +1,4 @@
+{
+  "banPlugins": ["lscArrows"],
+  "throws": "Unexpected token, expected \";\" (1:14)"
+}

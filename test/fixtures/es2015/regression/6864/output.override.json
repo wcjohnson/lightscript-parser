@@ -121,6 +121,7 @@
                       "column": 15
                     }
                   },
+                  "skinny": false,
                   "id": null,
                   "generator": false,
                   "async": false,
@@ -159,7 +160,8 @@
                       "identifierName": "a"
                     },
                     "name": "a"
-                  }
+                  },
+                  "expression": true
                 },
                 "extra": {
                   "parenthesized": true,
@@ -210,6 +212,7 @@
                       "column": 21
                     }
                   },
+                  "skinny": false,
                   "id": null,
                   "generator": false,
                   "async": true,
@@ -248,7 +251,8 @@
                       "identifierName": "a"
                     },
                     "name": "a"
-                  }
+                  },
+                  "expression": true
                 },
                 "extra": {
                   "parenthesized": true,
@@ -299,6 +303,7 @@
                       "column": 23
                     }
                   },
+                  "skinny": false,
                   "id": null,
                   "generator": false,
                   "async": true,
@@ -337,7 +342,8 @@
                       "identifierName": "a"
                     },
                     "name": "a"
-                  }
+                  },
+                  "expression": true
                 },
                 "extra": {
                   "parenthesized": true,
