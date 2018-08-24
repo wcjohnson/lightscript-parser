@@ -71,12 +71,13 @@
                 "column": 9
               }
             },
+            "skinny": false,
             "id": null,
             "generator": false,
             "async": false,
             "params": [],
             "body": {
-              "type": "BlockStatement",
+              "type": "ObjectExpression",
               "start": 7,
               "end": 9,
               "loc": {
@@ -89,12 +90,9 @@
                   "column": 9
                 }
               },
-              "body": [],
-              "directives": [],
-              "extra": {
-                "curly": true
-              }
+              "properties": []
             },
+            "expression": true,
             "extra": {
               "parenthesized": true,
               "parenStart": 0
@@ -161,12 +159,13 @@
                 "column": 9
               }
             },
+            "skinny": false,
             "id": null,
             "generator": false,
             "async": false,
             "params": [],
             "body": {
-              "type": "BlockStatement",
+              "type": "ObjectExpression",
               "start": 27,
               "end": 29,
               "loc": {
@@ -179,12 +178,9 @@
                   "column": 9
                 }
               },
-              "body": [],
-              "directives": [],
-              "extra": {
-                "curly": true
-              }
+              "properties": []
             },
+            "expression": true,
             "extra": {
               "parenthesized": true,
               "parenStart": 20

@@ -97,7 +97,8 @@
               "raw": "0"
             },
             "value": 0
-          }
+          },
+          "isNowAssign": false
         },
         "test": null,
         "update": null,

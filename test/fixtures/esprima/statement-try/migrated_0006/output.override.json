@@ -43,75 +43,6 @@
             "column": 65
           }
         },
-        "block": {
-          "type": "BlockStatement",
-          "start": 4,
-          "end": 17,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 4
-            },
-            "end": {
-              "line": 1,
-              "column": 17
-            }
-          },
-          "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 6,
-              "end": 15,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 6
-                },
-                "end": {
-                  "line": 1,
-                  "column": 15
-                }
-              },
-              "expression": {
-                "type": "CallExpression",
-                "start": 6,
-                "end": 14,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 6
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 14
-                  }
-                },
-                "callee": {
-                  "type": "Identifier",
-                  "start": 6,
-                  "end": 12,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 6
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 12
-                    },
-                    "identifierName": "doThat"
-                  },
-                  "name": "doThat"
-                },
-                "arguments": []
-              }
-            }
-          ],
-          "directives": [],
-          "extra": {
-            "curly": true
-          }
-        },
         "handler": {
           "type": "CatchClause",
           "start": 18,
@@ -125,6 +56,9 @@
               "line": 1,
               "column": 38
             }
+          },
+          "extra": {
+            "hasParens": true
           },
           "param": {
             "type": "Identifier",
@@ -232,6 +166,75 @@
           }
         },
         "guardedHandlers": [],
+        "block": {
+          "type": "BlockStatement",
+          "start": 4,
+          "end": 17,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            }
+          },
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 6,
+              "end": 15,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 15
+                }
+              },
+              "expression": {
+                "type": "CallExpression",
+                "start": 6,
+                "end": 14,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 14
+                  }
+                },
+                "callee": {
+                  "type": "Identifier",
+                  "start": 6,
+                  "end": 12,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 6
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "identifierName": "doThat"
+                  },
+                  "name": "doThat"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "directives": [],
+          "extra": {
+            "curly": true
+          }
+        },
         "finalizer": {
           "type": "BlockStatement",
           "start": 47,

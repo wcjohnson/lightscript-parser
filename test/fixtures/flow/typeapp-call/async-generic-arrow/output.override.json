@@ -46,7 +46,7 @@
         "expression": {
           "type": "ArrowFunctionExpression",
           "start": 9,
-          "end": 26,
+          "end": 27,
           "loc": {
             "start": {
               "line": 2,
@@ -54,7 +54,7 @@
             },
             "end": {
               "line": 2,
-              "column": 17
+              "column": 18
             }
           },
           "typeParameters": {
@@ -92,11 +92,12 @@
             ]
           },
           "params": [],
+          "skinny": false,
           "id": null,
           "generator": false,
           "async": true,
           "body": {
-            "type": "BlockStatement",
+            "type": "ObjectExpression",
             "start": 24,
             "end": 26,
             "loc": {
@@ -109,12 +110,9 @@
                 "column": 17
               }
             },
-            "body": [],
-            "directives": [],
-            "extra": {
-              "curly": true
-            }
-          }
+            "properties": []
+          },
+          "expression": true
         },
         "leadingComments": [
           {
@@ -247,11 +245,12 @@
               }
             }
           },
+          "skinny": false,
           "id": null,
           "generator": false,
           "async": true,
           "body": {
-            "type": "BlockStatement",
+            "type": "ObjectExpression",
             "start": 46,
             "end": 48,
             "loc": {
@@ -264,12 +263,9 @@
                 "column": 20
               }
             },
-            "body": [],
-            "directives": [],
-            "extra": {
-              "curly": true
-            }
-          }
+            "properties": []
+          },
+          "expression": true
         }
       }
     ],

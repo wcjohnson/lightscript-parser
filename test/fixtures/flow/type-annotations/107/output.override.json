@@ -89,6 +89,7 @@
                   "column": 35
                 }
               },
+              "skinny": false,
               "id": null,
               "generator": false,
               "async": false,
@@ -232,7 +233,7 @@
                 }
               ],
               "body": {
-                "type": "BlockStatement",
+                "type": "ObjectExpression",
                 "start": 33,
                 "end": 35,
                 "loc": {
@@ -245,12 +246,9 @@
                     "column": 35
                   }
                 },
-                "body": [],
-                "directives": [],
-                "extra": {
-                  "curly": true
-                }
-              }
+                "properties": []
+              },
+              "expression": true
             }
           }
         ],

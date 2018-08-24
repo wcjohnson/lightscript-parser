@@ -30,7 +30,7 @@
     "interpreter": null,
     "body": [
       {
-        "type": "ExpressionStatement",
+        "type": "VariableDeclaration",
         "start": 0,
         "end": 17,
         "loc": {
@@ -43,25 +43,15 @@
             "column": 17
           }
         },
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 0,
-          "end": 17,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 1,
-              "column": 17
-            }
-          },
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
+        "kind": "const",
+        "extra": {
+          "implicit": true
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
             "start": 0,
-            "end": 1,
+            "end": 17,
             "loc": {
               "start": {
                 "line": 1,
@@ -69,46 +59,45 @@
               },
               "end": {
                 "line": 1,
-                "column": 1
-              },
-              "identifierName": "x"
-            },
-            "name": "x"
-          },
-          "right": {
-            "type": "ObjectExpression",
-            "start": 4,
-            "end": 17,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 4
-              },
-              "end": {
-                "line": 1,
                 "column": 17
               }
             },
-            "properties": [
-              {
-                "type": "ObjectMethod",
-                "start": 6,
-                "end": 15,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 6
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 15
-                  }
+            "id": {
+              "type": "Identifier",
+              "start": 0,
+              "end": 1,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
                 },
-                "method": true,
-                "key": {
-                  "type": "Identifier",
+                "end": {
+                  "line": 1,
+                  "column": 1
+                },
+                "identifierName": "x"
+              },
+              "name": "x"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start": 4,
+              "end": 17,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 17
+                }
+              },
+              "properties": [
+                {
+                  "type": "ObjectMethod",
                   "start": 6,
-                  "end": 9,
+                  "end": 15,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -116,42 +105,58 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 9
-                    },
-                    "identifierName": "set"
-                  },
-                  "name": "set"
-                },
-                "computed": false,
-                "kind": "method",
-                "id": null,
-                "generator": false,
-                "async": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 12,
-                  "end": 15,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 12
-                    },
-                    "end": {
-                      "line": 1,
                       "column": 15
                     }
                   },
-                  "body": [],
-                  "directives": [],
-                  "extra": {
-                    "curly": true
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 6,
+                    "end": 9,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 6
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 9
+                      },
+                      "identifierName": "set"
+                    },
+                    "name": "set"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start": 12,
+                    "end": 15,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 15
+                      }
+                    },
+                    "body": [],
+                    "directives": [],
+                    "extra": {
+                      "curly": true
+                    }
                   }
                 }
-              }
-            ]
+              ]
+            }
           }
-        }
+        ]
       }
     ],
     "directives": []

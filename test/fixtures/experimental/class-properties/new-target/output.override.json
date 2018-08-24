@@ -343,6 +343,7 @@
                     ]
                   }
                 },
+                "isNowAssign": false,
                 "extra": {
                   "parenthesized": true,
                   "parenStart": 48
@@ -396,6 +397,7 @@
                     "column": 29
                   }
                 },
+                "skinny": false,
                 "id": null,
                 "generator": false,
                 "async": false,
@@ -448,7 +450,8 @@
                     },
                     "name": "target"
                   }
-                }
+                },
+                "expression": true
               }
             },
             {
@@ -487,7 +490,7 @@
               "value": {
                 "type": "ArrowFunctionExpression",
                 "start": 121,
-                "end": 145,
+                "end": 146,
                 "loc": {
                   "start": {
                     "line": 5,
@@ -495,9 +498,10 @@
                   },
                   "end": {
                     "line": 5,
-                    "column": 37
+                    "column": 38
                   }
                 },
+                "skinny": false,
                 "id": null,
                 "generator": false,
                 "async": false,
@@ -585,7 +589,7 @@
                   }
                 ],
                 "body": {
-                  "type": "BlockStatement",
+                  "type": "ObjectExpression",
                   "start": 143,
                   "end": 145,
                   "loc": {
@@ -598,12 +602,9 @@
                       "column": 37
                     }
                   },
-                  "body": [],
-                  "directives": [],
-                  "extra": {
-                    "curly": true
-                  }
-                }
+                  "properties": []
+                },
+                "expression": true
               }
             },
             {
@@ -873,6 +874,7 @@
                     ]
                   }
                 },
+                "isNowAssign": false,
                 "extra": {
                   "parenthesized": true,
                   "parenStart": 171
@@ -926,6 +928,7 @@
                     "column": 22
                   }
                 },
+                "skinny": false,
                 "id": null,
                 "generator": false,
                 "async": false,
@@ -978,7 +981,8 @@
                     },
                     "name": "target"
                   }
-                }
+                },
+                "expression": true
               }
             },
             {
@@ -1017,7 +1021,7 @@
               "value": {
                 "type": "ArrowFunctionExpression",
                 "start": 230,
-                "end": 254,
+                "end": 255,
                 "loc": {
                   "start": {
                     "line": 9,
@@ -1025,9 +1029,10 @@
                   },
                   "end": {
                     "line": 9,
-                    "column": 30
+                    "column": 31
                   }
                 },
+                "skinny": false,
                 "id": null,
                 "generator": false,
                 "async": false,
@@ -1115,7 +1120,7 @@
                   }
                 ],
                 "body": {
-                  "type": "BlockStatement",
+                  "type": "ObjectExpression",
                   "start": 252,
                   "end": 254,
                   "loc": {
@@ -1128,12 +1133,9 @@
                       "column": 30
                     }
                   },
-                  "body": [],
-                  "directives": [],
-                  "extra": {
-                    "curly": true
-                  }
-                }
+                  "properties": []
+                },
+                "expression": true
               }
             }
           ]

@@ -76,7 +76,7 @@
           },
           "body": [
             {
-              "type": "ExpressionStatement",
+              "type": "VariableDeclaration",
               "start": 11,
               "end": 20,
               "loc": {
@@ -89,25 +89,15 @@
                   "column": 20
                 }
               },
-              "expression": {
-                "type": "AssignmentExpression",
-                "start": 11,
-                "end": 20,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 11
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 20
-                  }
-                },
-                "operator": "=",
-                "left": {
-                  "type": "Identifier",
+              "kind": "const",
+              "extra": {
+                "implicit": true
+              },
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
                   "start": 11,
-                  "end": 14,
+                  "end": 20,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -115,30 +105,45 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 14
-                    },
-                    "identifierName": "foo"
-                  },
-                  "name": "foo"
-                },
-                "right": {
-                  "type": "Identifier",
-                  "start": 17,
-                  "end": 20,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 17
-                    },
-                    "end": {
-                      "line": 1,
                       "column": 20
-                    },
-                    "identifierName": "bar"
+                    }
                   },
-                  "name": "bar"
+                  "id": {
+                    "type": "Identifier",
+                    "start": 11,
+                    "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      },
+                      "identifierName": "foo"
+                    },
+                    "name": "foo"
+                  },
+                  "init": {
+                    "type": "Identifier",
+                    "start": 17,
+                    "end": 20,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 20
+                      },
+                      "identifierName": "bar"
+                    },
+                    "name": "bar"
+                  }
                 }
-              }
+              ]
             }
           ],
           "directives": [],

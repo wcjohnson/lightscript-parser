@@ -95,7 +95,7 @@
               "expression": {
                 "type": "ArrowFunctionExpression",
                 "start": 19,
-                "end": 42,
+                "end": 43,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -103,9 +103,10 @@
                   },
                   "end": {
                     "line": 2,
-                    "column": 25
+                    "column": 26
                   }
                 },
+                "skinny": false,
                 "id": null,
                 "generator": false,
                 "async": false,
@@ -113,7 +114,7 @@
                 "body": {
                   "type": "ArrowFunctionExpression",
                   "start": 25,
-                  "end": 42,
+                  "end": 43,
                   "loc": {
                     "start": {
                       "line": 2,
@@ -121,9 +122,10 @@
                     },
                     "end": {
                       "line": 2,
-                      "column": 25
+                      "column": 26
                     }
                   },
+                  "skinny": false,
                   "id": null,
                   "generator": false,
                   "async": false,
@@ -179,7 +181,7 @@
                     }
                   ],
                   "body": {
-                    "type": "BlockStatement",
+                    "type": "ObjectExpression",
                     "start": 40,
                     "end": 42,
                     "loc": {
@@ -192,13 +194,11 @@
                         "column": 25
                       }
                     },
-                    "body": [],
-                    "directives": [],
-                    "extra": {
-                      "curly": true
-                    }
-                  }
-                }
+                    "properties": []
+                  },
+                  "expression": true
+                },
+                "expression": true
               }
             }
           ],

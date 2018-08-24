@@ -626,7 +626,8 @@
                 "curly": true
               }
             }
-          }
+          },
+          "isNowAssign": false
         }
       }
     ],

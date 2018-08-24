@@ -224,12 +224,13 @@
                   "column": 33
                 }
               },
+              "skinny": false,
               "id": null,
               "generator": false,
               "async": false,
               "params": [],
               "body": {
-                "type": "BlockStatement",
+                "type": "ObjectExpression",
                 "start": 62,
                 "end": 64,
                 "loc": {
@@ -242,12 +243,9 @@
                     "column": 33
                   }
                 },
-                "body": [],
-                "directives": [],
-                "extra": {
-                  "curly": true
-                }
-              }
+                "properties": []
+              },
+              "expression": true
             }
           ]
         }

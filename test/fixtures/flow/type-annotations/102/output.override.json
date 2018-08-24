@@ -46,7 +46,7 @@
         "declaration": {
           "type": "ArrowFunctionExpression",
           "start": 15,
-          "end": 50,
+          "end": 51,
           "loc": {
             "start": {
               "line": 1,
@@ -54,7 +54,7 @@
             },
             "end": {
               "line": 1,
-              "column": 50
+              "column": 51
             }
           },
           "predicate": null,
@@ -137,6 +137,7 @@
               }
             }
           },
+          "skinny": false,
           "id": null,
           "generator": false,
           "async": false,
@@ -175,7 +176,7 @@
             }
           ],
           "body": {
-            "type": "BlockStatement",
+            "type": "ObjectExpression",
             "start": 48,
             "end": 50,
             "loc": {
@@ -188,12 +189,9 @@
                 "column": 50
               }
             },
-            "body": [],
-            "directives": [],
-            "extra": {
-              "curly": true
-            }
-          }
+            "properties": []
+          },
+          "expression": true
         }
       }
     ],

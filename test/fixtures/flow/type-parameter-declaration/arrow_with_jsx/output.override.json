@@ -57,6 +57,7 @@
               "column": 12
             }
           },
+          "skinny": false,
           "id": null,
           "generator": false,
           "async": false,
@@ -81,6 +82,7 @@
             },
             "value": 123
           },
+          "expression": true,
           "typeParameters": {
             "type": "TypeParameterDeclaration",
             "start": 0,
@@ -145,6 +147,7 @@
               "column": 13
             }
           },
+          "skinny": false,
           "id": null,
           "generator": false,
           "async": false,
@@ -187,6 +190,7 @@
             },
             "value": 123
           },
+          "expression": true,
           "typeParameters": {
             "type": "TypeParameterDeclaration",
             "start": 14,
@@ -251,6 +255,7 @@
               "column": 21
             }
           },
+          "skinny": false,
           "id": null,
           "generator": false,
           "async": false,
@@ -323,6 +328,7 @@
             },
             "value": 123
           },
+          "expression": true,
           "typeParameters": {
             "type": "TypeParameterDeclaration",
             "start": 29,
@@ -387,6 +393,7 @@
               "column": 25
             }
           },
+          "skinny": false,
           "id": null,
           "generator": false,
           "async": false,

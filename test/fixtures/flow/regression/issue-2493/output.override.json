@@ -120,6 +120,7 @@
                   }
                 }
               },
+              "skinny": false,
               "id": null,
               "generator": false,
               "async": false,

@@ -47,7 +47,7 @@
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 43,
+            "end": 44,
             "loc": {
               "start": {
                 "line": 1,
@@ -55,7 +55,7 @@
               },
               "end": {
                 "line": 3,
-                "column": 1
+                "column": 2
               }
             },
             "id": {
@@ -78,7 +78,7 @@
             "init": {
               "type": "ArrowFunctionExpression",
               "start": 10,
-              "end": 43,
+              "end": 44,
               "loc": {
                 "start": {
                   "line": 1,
@@ -86,9 +86,10 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 1
+                  "column": 2
                 }
               },
+              "skinny": false,
               "id": null,
               "generator": false,
               "async": false,
@@ -199,7 +200,7 @@
                 }
               ],
               "body": {
-                "type": "BlockStatement",
+                "type": "ObjectExpression",
                 "start": 37,
                 "end": 43,
                 "loc": {
@@ -212,12 +213,9 @@
                     "column": 1
                   }
                 },
-                "body": [],
-                "directives": [],
-                "extra": {
-                  "curly": true
-                }
-              }
+                "properties": []
+              },
+              "expression": true
             }
           }
         ],

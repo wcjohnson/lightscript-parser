@@ -106,6 +106,7 @@
                     "column": 32
                   }
                 },
+                "skinny": false,
                 "id": null,
                 "generator": false,
                 "async": false,
@@ -177,7 +178,8 @@
                     },
                     "name": "yield"
                   }
-                }
+                },
+                "expression": true
               }
             }
           ],

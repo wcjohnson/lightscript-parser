@@ -89,6 +89,7 @@
                   "column": 1
                 }
               },
+              "skinny": false,
               "id": null,
               "generator": false,
               "async": true,

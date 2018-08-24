@@ -57,6 +57,7 @@
               "column": 17
             }
           },
+          "skinny": false,
           "id": null,
           "generator": false,
           "async": false,

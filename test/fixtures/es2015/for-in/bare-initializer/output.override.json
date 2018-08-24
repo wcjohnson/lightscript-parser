@@ -147,7 +147,8 @@
               "raw": "0"
             },
             "value": 0
-          }
+          },
+          "isNowAssign": false
         },
         "right": {
           "type": "ObjectExpression",

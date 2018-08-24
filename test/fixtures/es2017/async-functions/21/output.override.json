@@ -128,7 +128,7 @@
                 "kind": "var"
               },
               {
-                "type": "ExpressionStatement",
+                "type": "VariableDeclaration",
                 "start": 25,
                 "end": 35,
                 "loc": {
@@ -141,25 +141,15 @@
                     "column": 35
                   }
                 },
-                "expression": {
-                  "type": "AssignmentExpression",
-                  "start": 25,
-                  "end": 35,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 25
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 35
-                    }
-                  },
-                  "operator": "=",
-                  "left": {
-                    "type": "Identifier",
+                "kind": "const",
+                "extra": {
+                  "implicit": true
+                },
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
                     "start": 25,
-                    "end": 30,
+                    "end": 35,
                     "loc": {
                       "start": {
                         "line": 1,
@@ -167,33 +157,48 @@
                       },
                       "end": {
                         "line": 1,
-                        "column": 30
-                      },
-                      "identifierName": "async"
-                    },
-                    "name": "async"
-                  },
-                  "right": {
-                    "type": "NumericLiteral",
-                    "start": 33,
-                    "end": 35,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 33
-                      },
-                      "end": {
-                        "line": 1,
                         "column": 35
                       }
                     },
-                    "extra": {
-                      "rawValue": 10,
-                      "raw": "10"
+                    "id": {
+                      "type": "Identifier",
+                      "start": 25,
+                      "end": 30,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 25
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 30
+                        },
+                        "identifierName": "async"
+                      },
+                      "name": "async"
                     },
-                    "value": 10
+                    "init": {
+                      "type": "NumericLiteral",
+                      "start": 33,
+                      "end": 35,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 33
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 35
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 10,
+                        "raw": "10"
+                      },
+                      "value": 10
+                    }
                   }
-                }
+                ]
               }
             ],
             "directives": [],
