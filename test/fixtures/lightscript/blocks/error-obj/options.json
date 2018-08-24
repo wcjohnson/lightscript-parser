@@ -1,0 +1,4 @@
+{
+  "includePlugins": ["decorators-legacy"],
+  "throws": "Expected an Indent or Statement (7:6)"
+}
