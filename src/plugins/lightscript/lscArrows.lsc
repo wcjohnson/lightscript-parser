@@ -4,6 +4,22 @@ import { Plugin } from '../core/plugin'
 import { types as tt, TokenType, registerToken, registerKeywordToken } from "../../tokenizer/register"
 import * as charCodes from "charcodes"
 
+hasBindingPattern(expr) ->
+  match expr.type:
+    | "ObjectPattern": expr
+    | "ArrayPattern": expr
+    | "AssignmentPattern": expr
+    | "ObjectExpression":
+      for elem prop in expr.properties:
+        if prop.type == "ObjectProperty":
+          v = prop.value~hasBindingPattern()
+          if v: return v
+    | "ArrayExpression":
+      for elem prop in expr.elements:
+        v = prop~hasBindingPattern()
+        if v: return v
+    | else: null
+
 lscArrows = new Plugin({
   name: 'lscArrows'
   dependencies: ['lscCoreSyntax']
@@ -207,6 +223,15 @@ lscArrows = new Plugin({
         wasGenerator = !!node.generator
         this.initFunction(node, isAsync or node.async)
         node.generator = wasGenerator
+      }
+
+      // Make sure we didn't carry any patterns over into our function call
+      // after failing to parse a named arrow.
+      lscArrows_validateCallArguments(args): void -> {
+        for elem arg in args:
+          patternNode = arg~hasBindingPattern()
+          if patternNode:
+            this.raise(patternNode.start, "Invalid binding pattern in call arguments.")
       }
 
       ///////////////////////
