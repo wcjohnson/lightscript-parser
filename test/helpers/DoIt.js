@@ -117,6 +117,9 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
         } else if (process.env.SAVE_THROWS) {
           this.saveThrows(err);
           this.throwAnnotatedError(err);
+        } else if (process.env.DUPLICATE_ON_FAILURE) {
+          this.saveErrorOverride(this.options.throws);
+          this.throwAnnotatedError(err);
         } else {
           err.message = `Expected error message: ${this.options.throws}. Got error message: ${err.message}`;
           this.throwAnnotatedError(err);
@@ -158,6 +161,8 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
   }mismatchExpected(expected, received, mismatch) {
     if (process.env.SAVE_OVERRIDE) {
       return this.saveExpected(received, "output.override.json");
+    } else if (process.env.DUPLICATE_ON_FAILURE) {
+      return this.saveExpected(expected, "output.override.json");
     } else if (process.env.UPDATE_EXPECTED) {
       return this.saveExpected(received, "output.json");
     } else if (process.env.FIX_BY_BANNING_PLUGIN) {
@@ -182,6 +187,8 @@ let ParserTestable = class ParserTestable extends _TestRunner.Testable {
       banPlugins: [whichPlugin]
     }));
     _fs2.default.writeFileSync(_path2.default.join(subtestPath, "output.json"), expectedString);
+    return this.saveLocalArtifact("options.override.json", JSON.stringify({ throws }));
+  }saveErrorOverride(throws) {
     return this.saveLocalArtifact("options.override.json", JSON.stringify({ throws }));
   }saveThrows(err) {
     const opts = this.readTestOptions() || {};

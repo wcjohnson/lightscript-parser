@@ -99,6 +99,9 @@ class ParserTestable extends Testable:
         elif process.env.SAVE_THROWS:
           this.saveThrows(err)
           this.throwAnnotatedError(err)
+        elif process.env.DUPLICATE_ON_FAILURE:
+          this.saveErrorOverride(this.options.throws)
+          this.throwAnnotatedError(err)
         else:
           err.message = `Expected error message: ${this.options.throws}. Got error message: ${err.message}`
           this.throwAnnotatedError(err)
@@ -139,6 +142,8 @@ class ParserTestable extends Testable:
   mismatchExpected(expected, received, mismatch) ->
     if process.env.SAVE_OVERRIDE:
       this.saveExpected(received, "output.override.json")
+    elif process.env.DUPLICATE_ON_FAILURE:
+      this.saveExpected(expected, "output.override.json")
     elif process.env.UPDATE_EXPECTED:
       this.saveExpected(received, "output.json")
     elif process.env.FIX_BY_BANNING_PLUGIN:
@@ -166,6 +171,10 @@ class ParserTestable extends Testable:
     }))
     fs.writeFileSync(path.join(subtestPath, "output.json"), expectedString)
     this.saveLocalArtifact("options.override.json", JSON.stringify({throws}))
+
+  saveErrorOverride(throws) ->
+    this.saveLocalArtifact("options.override.json", JSON.stringify({throws}))
+
 
   saveThrows(err): void ->
     const opts = this.readTestOptions() or {}
