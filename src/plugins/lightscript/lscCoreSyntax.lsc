@@ -391,6 +391,10 @@ lscCoreSyntax = new Plugin({
         if result.body.type == "ExpressionStatement":
           this.raise(result.label.start, "Invalid labeled expression")
         result
+
+      // Allow anonymous class bodies in functions (useful for implicit returns)
+      parseClassId(node, isStatement, optionalId) ->
+        super.parseClassId(node, isStatement, optionalId or (this.state.inFunction))
   } // mixin
 })
 
