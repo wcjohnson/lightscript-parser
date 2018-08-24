@@ -1,7 +1,0 @@
-{
-  "alternatives": {
-    "braceblock": {
-      "throws": "Unexpected token (1:9)"
-    }
-  }
-}
