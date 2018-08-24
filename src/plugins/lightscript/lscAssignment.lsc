@@ -46,8 +46,13 @@ lscAssignment = new Plugin({
       } // maybeParseTypeAnnotation
 
       lscAssignment_isConvertibleToImplicitConst(node, state): boolean ->
-        node.left.type != "MemberExpression" and
-        state.isStrictAssignment
+        // LHS must be a "Pattern"-type node but not a "MemberExpression":
+        // "Identifier", "ObjectPattern", "ArrayPattern"
+        (
+          node.left.type == "Identifier" or
+          node.left.type == "ObjectPattern" or
+          node.left.type == "ArrayPattern"
+        ) and state.isStrictAssignment
 
       lscAssignment_rewriteAsDeclarator(node) ->
         node.type = "VariableDeclarator"
