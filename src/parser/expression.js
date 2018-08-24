@@ -647,6 +647,11 @@ export default class ExpressionParser extends LValParser {
           node,
         );
       } else {
+        // LSC: validate here. We can't hook toReferencedList because
+        // it's called too often and will slow down the parser.
+        if (this.hasPlugin("lscArrows")) {
+          this.lscArrows_validateCallArguments(node.arguments);
+        }
         this.toReferencedList(node.arguments);
       }
       return node;
