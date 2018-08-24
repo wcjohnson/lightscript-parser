@@ -57,8 +57,7 @@ lscForIn = new Plugin({
 
         this.expect(tt._in);
 
-        const iterable = this.parseMaybeAssign(true);
-
+        const iterable = this.parseParenExpression();
         this.expectParenFreeBlockStart(node);
         this.state.nextBraceIsBlock = true;
         node.body = this.parseStatement(false);
