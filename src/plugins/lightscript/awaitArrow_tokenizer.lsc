@@ -1,0 +1,34 @@
+// In order to tokenize the await arrow, we have to get a crack at the token
+// stream before Flow, TypeScript, and JSX -- otherwise they will tokenize
+// the `<` differently.
+//
+// So, this is a plugin with very late low order priority that tokenizes
+// the arrow.
+//
+// Should only be loaded by the `awaitArrow` plugin.
+import { Plugin } from '../core/plugin'
+import * as charCodes from "charcodes"
+
+awaitArrow_tokenizer = new Plugin({
+  name: 'awaitArrow_tokenizer'
+  loadOrderPriority: 100000000 // load late
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      // Tokenize <-
+      // We have to override readToken, rather than readToken_lt_gt, so that
+      // we get an opportunity to intercept the `<` token before everyone
+      // else.
+      readToken(code): void -> {
+        if code == charCodes.lessThan:
+          next = this.input.charCodeAt(this.state.pos + 1)
+          if next == charCodes.dash:
+            return this.finishOp(this.tt_awaitArrow, 2)
+
+        super.readToken(code)
+      }
+    } // class
+  } // mixin
+})
+
+export default awaitArrow_tokenizer

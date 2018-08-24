@@ -1,0 +1,86 @@
+// Parse `<-`
+import { Plugin } from '../core/plugin'
+import { TokenType } from "../../tokenizer/register"
+
+awaitArrow = new Plugin({
+  name: 'awaitArrow'
+  dependencies: ['awaitArrow_tokenizer']
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      constructor(options, input) -> {
+        super(options, input)
+        this.tt_awaitArrow = new TokenType("<-", {
+          startsExpr: true
+          beforeExpr: true
+          isAssign: true
+        })
+      }
+
+      awaitArrow_parseAwaitArrow(left) -> {
+        node = this.startNode()
+        this.next()
+        awaitNode = this.parseAwait(node)
+        this.addExtra(node, "arrow", true)
+        awaitNode
+      }
+
+      ////////////////
+      // OVERRIDES
+      ////////////////
+
+      // Read <- as a type of strict assignment
+      matchStrictAssignment(): boolean -> {
+        this.match(this.tt_awaitArrow) or super.matchStrictAssignment()
+      }
+
+      // Parse await arrows as var initializers
+      parseVarInit(decl, isFor, kind): void -> {
+        if (not isFor) and (this.match(this.tt_awaitArrow)):
+          decl.init = this.awaitArrow_parseAwaitArrow(decl.id)
+        else:
+          super.parseVarInit(decl, isFor, kind)
+      }
+
+      // Parse await arrows in assignments
+      parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos, state) -> {
+        if this.match(this.tt_awaitArrow):
+          state.isAwaitArrow = true
+          // ASI, await arrow on its own line
+          if this.isLineBreak(): return left
+
+        super.parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos, state)
+      }
+
+      parseMaybeAssign_parseRight(node, startPos, startLoc, noIn, state): void -> {
+        if state.isAwaitArrow:
+          node.right = this.awaitArrow_parseAwaitArrow(node.left)
+        else:
+          super.parseMaybeAssign_parseRight(node, startPos, startLoc, noIn, state)
+      }
+
+      // Parse await arrows as expressions
+      parseExprAtom(refShorthandDefaultPos) -> {
+        if this.state.type == this.tt_awaitArrow:
+          node = this.startNode()
+          this.next()
+          this.parseAwait(node)
+        else:
+          super.parseExprAtom(refShorthandDefaultPos)
+      }
+
+      // Give a better error message when await appears outside of async
+      parseAwait(node) -> {
+        if this.state.inFunction:
+          if not this.state.inAsync:
+            this.unexpected(node.start, "Illegal await in a non-async function.")
+        elif not this.options.allowAwaitOutsideFunction:
+          this.unexpected(node.start, "Await is illegal outside functions.")
+
+        super.parseAwait(node)
+      }
+    } // class
+  } // mixin
+})
+
+export default awaitArrow
