@@ -88,6 +88,18 @@ export default class UtilParser extends Tokenizer {
     this.expect(tt.comma);
   }
 
+  // LSC: Extension point.
+  // Test whether the token under the cursor is an assignment
+  matchAssignment(): boolean {
+    return this.state.type.isAssign;
+  }
+
+  // LSC: Extension point.
+  // Test whether the token under the cursor is a non-updating assignment
+  matchStrictAssignment(): boolean {
+    return this.match(tt.eq);
+  }
+
   // Test whether a semicolon can be inserted at the current position.
 
   canInsertSemicolon(): boolean {

@@ -156,7 +156,7 @@ export default class ExpressionParser extends LValParser {
     if (afterLeftParse) {
       left = afterLeftParse.call(this, left, startPos, startLoc);
     }
-    if (this.state.type.isAssign) {
+    if (this.matchAssignment()) { // LSC: call extension point
       return this.parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos, state);
     } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
@@ -188,6 +188,7 @@ export default class ExpressionParser extends LValParser {
     if (operator === "||=" || operator === "&&=") {
       this.expectPlugin("logicalAssignment");
     }
+
     this.parseMaybeAssign_setLeft(node, left, state); // LSC: extension point
     refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
 
@@ -219,7 +220,7 @@ export default class ExpressionParser extends LValParser {
 
   // LSC: extension point - transform LHS of assignment into node.left
   parseMaybeAssign_setLeft(node: N.Node, left: N.Expression, state): void {
-    node.left = this.match(tt.eq)
+    node.left = this.matchStrictAssignment()
     ? this.toAssignable(left, undefined, "assignment expression")
     : left;
   }
