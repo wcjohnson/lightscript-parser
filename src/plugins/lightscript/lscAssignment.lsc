@@ -47,7 +47,7 @@ lscAssignment = new Plugin({
 
       lscAssignment_isConvertibleToImplicitConst(node, state): boolean ->
         node.left.type != "MemberExpression" and
-        node.operator == "="
+        state.isStrictAssignment
 
       lscAssignment_rewriteAsDeclarator(node) ->
         node.type = "VariableDeclarator"
@@ -103,6 +103,10 @@ lscAssignment = new Plugin({
         this.lscAssignment_maybeParseTypeAnnotation(isStatementStart, state)
 
         left
+
+      parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos, state) ->
+        state.isStrictAssignment = this.matchStrictAssignment()
+        super.parseMaybeAssign_parseAssign(left, startPos, startLoc, noIn, refShorthandDefaultPos, state)
 
       parseMaybeAssign_finishAssign(node, startPos, startLoc, noIn, state) ->
         { isStatementStart, isNowAssign, typeAnnotation } = state
