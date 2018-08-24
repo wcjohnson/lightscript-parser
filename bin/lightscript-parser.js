@@ -34,6 +34,7 @@ mgr.addPlugins([
   "lscArrows",
   "lscForIn",
   "awaitArrow",
+  "spreadLoop",
   "jsx",
   "flow",
 ]);

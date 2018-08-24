@@ -1,0 +1,100 @@
+// Parse `...for`
+import { Plugin } from '../core/plugin'
+import { TokenType, types as tt } from "../../tokenizer/register"
+import * as charCodes from "charcodes"
+import { isIdentifierChar } from "../../util/identifier"
+
+spreadLoop = new Plugin({
+  name: 'spreadLoop'
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      constructor(options, input) -> {
+        super(options, input)
+        this.tt_spreadLoop = new TokenType("...for")
+      }
+
+      spreadLoop_parseSpreadLoop(spreadElementType) -> {
+        const spreadElement = spreadElementType == null ? null : this.startNode();
+        const spreadLoop = this.startNode();
+        const loop = this.startNode();
+        spreadLoop.loop = this.parseForStatement(loop);
+        if (spreadElementType == null) return this.finishNode(spreadLoop, "SpreadLoop");
+        spreadElement.argument = this.finishNode(spreadLoop, "LscSpreadLoop");
+        return this.finishNode(spreadElement, spreadElementType);
+      }
+
+      // c/p parseExprAtom `[` case
+      spreadLoop_parseArray(refShorthandDefaultPos) -> {
+        const node = this.startNode();
+        this.next();
+        this.spreadLoop_parseArrayElements(node, refShorthandDefaultPos);
+        this.toReferencedList(node.elements);
+        return this.finishNode(node, "ArrayExpression");
+      }
+
+      // c/p parseExprList
+      spreadLoop_parseArrayElements(node, refShorthandDefaultPos): void -> {
+        const elts = [];
+        let first = true;
+
+        while (!this.eat(tt.bracketR)) {
+          if (first) {
+            now first = false;
+          } else {
+            this.expectListSeparator();
+            if (this.eat(tt.bracketR)) break;
+          }
+
+          if (this.match(this.tt_spreadLoop)) {
+            elts.push(this.spreadLoop_parseSpreadLoop("SpreadElement"));
+          } else {
+            elts.push(this.parseExprListItem(true, refShorthandDefaultPos));
+          }
+        }
+
+        node.elements = elts;
+      }
+
+      ////////////////
+      // OVERRIDES
+      ////////////////
+
+      // Tokenize `...for`
+      readToken_dot(): void -> {
+        // ...
+        const next = this.input.charCodeAt(this.state.pos + 1);
+        const next2 = this.input.charCodeAt(this.state.pos + 2);
+        if (next == charCodes.dot and next2 == charCodes.dot) {
+          // for
+          next3 = this.input.charCodeAt(this.state.pos + 3);
+          next4 = this.input.charCodeAt(this.state.pos + 4);
+          next5 = this.input.charCodeAt(this.state.pos + 5);
+          if (
+            next3 == 102 and
+            next4 == 111 and
+            next5 == 114 and
+            // Disambiguate between e.g. `for` and `forum`
+            (not isIdentifierChar(this.input.charCodeAt(this.state.pos + 6)))
+          ) {
+            this.state.pos += 6;
+            return this.finishToken(this.tt_spreadLoop, "for");
+          }
+        }
+        super.readToken_dot();
+      }
+
+      // Intercept array expression parsing.
+      // Sadly we can't just hook `parseExprListItem` because that is called
+      // in places where spread loops are illegal.
+      parseExprAtom(refShorthandDefaultPos) -> {
+        if this.state.type == tt.bracketL:
+          this.spreadLoop_parseArray(refShorthandDefaultPos)
+        else:
+          super.parseExprAtom(refShorthandDefaultPos)
+      }
+    } // class
+  } // mixin
+})
+
+export default spreadLoop

@@ -1,4 +1,4 @@
 {
   "_comment": "We enable all plugins to see which syntaxes LightScript breaks. We then re-test with disabled plugins to verify functionality of original Babel parser.",
-  "includePlugins": ["transientState", "tryCatch", "versatileTypeAnnotations", "disableBitwiseOperators", "tildeCall", "significantWhitespace", "modifiedLogicalOperators", "seqExprRequiresParen", "lscCoreSyntax", "lscIf", "lscIfExpression", "lscTryExpression", "lscAssignment", "lscArrows", "lscForIn", "awaitArrow"]
+  "includePlugins": ["transientState", "tryCatch", "versatileTypeAnnotations", "disableBitwiseOperators", "tildeCall", "significantWhitespace", "modifiedLogicalOperators", "seqExprRequiresParen", "lscCoreSyntax", "lscIf", "lscIfExpression", "lscTryExpression", "lscAssignment", "lscArrows", "lscForIn", "awaitArrow", "spreadLoop"]
 }

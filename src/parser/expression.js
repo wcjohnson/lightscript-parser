@@ -1366,9 +1366,18 @@ export default class ExpressionParser extends LValParser {
       if (first) {
         first = false;
       } else {
-        // XXX: LSC commaless
+        // LSC: commaless
         this.expectListSeparator();
         if (this.eat(tt.braceR)) break;
+      }
+
+      // LSC: spread loops
+      if (this.hasPlugin("spreadLoop") && this.match(this.tt_spreadLoop)) {
+        if (isPattern) {
+          this.unexpected(null, "Spread loops are illegal in patterns.");
+        }
+        node.properties.push(this.spreadLoop_parseSpreadLoop("SpreadElement"));
+        continue;
       }
 
       if (this.match(tt.at)) {
@@ -1866,7 +1875,7 @@ export default class ExpressionParser extends LValParser {
       if (first) {
         first = false;
       } else {
-        // XXX: LSC commaless
+        // LSC: commaless
         this.expectListSeparator();
         if (this.eat(close)) break;
       }
