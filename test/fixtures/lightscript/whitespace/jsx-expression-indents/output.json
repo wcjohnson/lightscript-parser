@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -70,7 +71,6 @@
                 "column": 4
               }
             },
-            "attributes": [],
             "name": {
               "type": "JSXIdentifier",
               "start": 1,
@@ -87,6 +87,7 @@
               },
               "name": "ul"
             },
+            "attributes": [],
             "selfClosing": false
           },
           "closingElement": {
@@ -135,7 +136,10 @@
                   "column": 2
                 }
               },
-              "extra": null,
+              "extra": {
+                "rawValue": "\n  ",
+                "raw": "\n  "
+              },
               "value": "\n  "
             },
             {
@@ -182,7 +186,7 @@
                       }
                     },
                     "argument": {
-                      "type": "SpreadLoop",
+                      "type": "LscSpreadLoop",
                       "start": 9,
                       "end": 61,
                       "loc": {
@@ -209,6 +213,7 @@
                             "column": 22
                           }
                         },
+                        "await": false,
                         "left": {
                           "type": "VariableDeclaration",
                           "start": 16,
@@ -334,7 +339,6 @@
                                       "column": 22
                                     }
                                   },
-                                  "attributes": [],
                                   "name": {
                                     "type": "JSXIdentifier",
                                     "start": 46,
@@ -351,6 +355,7 @@
                                     },
                                     "name": "SpecialThing"
                                   },
+                                  "attributes": [],
                                   "selfClosing": true
                                 },
                                 "closingElement": null,
@@ -383,7 +388,10 @@
                   "column": 0
                 }
               },
-              "extra": null,
+              "extra": {
+                "rawValue": "\n",
+                "raw": "\n"
+              },
               "value": "\n"
             }
           ]

@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "IfStatement",
@@ -88,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "SpreadProperty",
+                "type": "SpreadElement",
                 "start": 13,
                 "end": 36,
                 "loc": {
@@ -102,7 +103,7 @@
                   }
                 },
                 "argument": {
-                  "type": "SpreadLoop",
+                  "type": "LscSpreadLoop",
                   "start": 13,
                   "end": 36,
                   "loc": {
@@ -116,7 +117,7 @@
                     }
                   },
                   "loop": {
-                    "type": "ForInArrayStatement",
+                    "type": "LscForInArrayStatement",
                     "start": 13,
                     "end": 36,
                     "loc": {
