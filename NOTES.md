@@ -10,12 +10,13 @@ TODO:
   - [x] arrows
   - [x] `export` arrows
   - [x] Named arrows should be banned in paren-free and ternary consequent except in parens.
-  - [ ] `<-`
-  - [ ] Spread loops
+  - [x] `<-`
+  - [x] Spread loops
   - [ ] Bang calls
   - [ ] Better safecalls `?(` instead of `?.()`
   - [ ] Existentials
   - [ ] Syntactic placeholders
+  - [x] TypeScript + auto-const: make sure variable declarator is an id or pattern (typescript/cast/multiple-assert-and-assign)
 
 BREAKING CHANGES:
   - Removed scientific notation from dot property access (x.1e3 is no longer valid)
