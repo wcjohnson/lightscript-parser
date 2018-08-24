@@ -887,7 +887,8 @@ export default class ExpressionParser extends LValParser {
           const oldYield = this.state.yieldInPossibleArrowParameters;
           this.state.yieldInPossibleArrowParameters = null;
           const params = [this.parseIdentifier()];
-          this.expect(tt.arrow);
+          // XXX: LSC - use parseArrow for arrow parsing
+          this.parseArrow(node);
           // let foo = bar => {};
           this.parseArrowExpression(node, params, true);
           this.state.yieldInPossibleArrowParameters = oldYield;
