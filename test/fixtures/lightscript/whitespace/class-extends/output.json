@@ -1,0 +1,197 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 29,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 10
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 29,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 10
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 29,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 10
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start": 16,
+          "end": 17,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            },
+            "identifierName": "B"
+          },
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start": 17,
+          "end": 29,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 17
+            },
+            "end": {
+              "line": 2,
+              "column": 10
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 21,
+              "end": 29,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 10
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 21,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 3
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "skinny": true,
+              "body": {
+                "type": "BlockStatement",
+                "start": 25,
+                "end": 29,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 10
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 28,
+                    "end": 29,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 10
+                      }
+                    },
+                    "expression": {
+                      "type": "NumericLiteral",
+                      "start": 28,
+                      "end": 29,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 10
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  }
+                ],
+                "directives": [],
+                "extra": {
+                  "curly": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
