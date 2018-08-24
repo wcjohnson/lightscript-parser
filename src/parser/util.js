@@ -75,15 +75,15 @@ export default class UtilParser extends Tokenizer {
     if (!this.eatContextual(name)) this.unexpected(null, message);
   }
 
-  // XXX: LSC
-  // Match whether the token under cursor is a separator. In ordinary JS, this
-  // is just a comma.
+  // LSC: Extension point
+  // Match whether the token under cursor is a separator. In ordinary JS,
+  // this is just a comma.
   matchListSeparator(): boolean {
     this.match(tt.comma);
   }
 
-  // XXX: LSC
-  // Expect a separator
+  // LSC: Extension point
+  // Expect a list separator under the cursor.
   expectListSeparator(pos?: ?number): void {
     this.expect(tt.comma);
   }
