@@ -22,7 +22,7 @@ hasBindingPattern(expr) ->
 
 lscArrows = new Plugin({
   name: 'lscArrows'
-  dependencies: ['lscCoreSyntax']
+  dependencies: ['lscCoreSyntax', 'lscArrows_banAmbiguousArrows']
 
   load() ->
     // TODO: Change this system.
@@ -328,36 +328,6 @@ lscArrows = new Plugin({
         result = super.parseParenAndDistinguishExpression(canBeArrow)
         this.state.banAmbiguousArrows = oldBanAmbiguousArrows
         result
-
-      // Ban ambiguous arrows in ternaries.
-      // Sadly, Flow totally takes over `parseConditional`, so we have to
-      // c/p `parseMaybeConditional` which is safe.
-      parseMaybeConditional(noIn, refShorthandDefaultPos, refNeedsArrowPos) -> {
-        const startPos = this.state.start;
-        const startLoc = this.state.startLoc;
-        const potentialArrowAt = this.state.potentialArrowAt;
-        const expr = this.parseExprOps(noIn, refShorthandDefaultPos);
-
-        if (
-          expr.type === "ArrowFunctionExpression" &&
-          expr.start === potentialArrowAt
-        ) {
-          return expr;
-        }
-        if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
-
-        oldBanAmbiguousArrows = this.state.banAmbiguousArrows;
-        this.state.banAmbiguousArrows = true;
-        result = this.parseConditional(
-          expr,
-          noIn,
-          startPos,
-          startLoc,
-          refNeedsArrowPos,
-        );
-        this.state.banAmbiguousArrows = oldBanAmbiguousArrows;
-        return result;
-      }
 
       // Try to parse named arrow functions with type parameters, e.g.
       // f<T>(x) -> x

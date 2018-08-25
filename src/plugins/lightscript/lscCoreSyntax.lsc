@@ -21,6 +21,24 @@ lscCoreSyntax = new Plugin({
 
   mixin(ParserBase, opts) -> {
     return class extends ParserBase:
+      constructor(options, input) -> {
+        super(options, input)
+        // Tokens that can terminate an enclosing whiteblock when they
+        // would otherwise be unexpected.
+        this.state.whiteBlockTerminalTokens = [
+          tt.comma
+          tt.parenR
+          tt.bracketR
+          tt.braceR
+          tt._else
+          tt._catch
+          tt._finally
+          tt.eof
+        ]
+        // State flag that bans parsing of named arrows when it would cause
+        // unacceptable grammar ambiguities.
+        this.state.banAmbiguousArrows = false
+      }
       // Expect a token but don't consume it
       check(type, pos): boolean ->
         this.match(type) or this.unexpected(pos, type)
@@ -37,16 +55,7 @@ lscCoreSyntax = new Plugin({
 
       // Determine if the token under the cursor is a whiteblock ASI candidate
       matchesWhiteBlockASIToken(): boolean ->
-        this.match(tt.comma) ||
-        this.match(tt.parenR) ||
-        this.match(tt.bracketR) ||
-        this.match(tt.braceR) ||
-        this.match(tt.colon) ||
-        this.match(tt._else) ||
-        this.match(tt._catch) ||
-        this.match(tt._finally) ||
-        (this.state.extraWhiteblockTerminator && this.match(this.state.extraWhiteblockTerminator)) ||
-        this.match(tt.eof)
+        this.state.whiteBlockTerminalTokens.indexOf(this.state.type) > -1
 
       // Throw if, after parsing a paren-free test expression, we don't land
       // on something that looks like a consequent block.
@@ -395,6 +404,45 @@ lscCoreSyntax = new Plugin({
       // Allow anonymous class bodies in functions (useful for implicit returns)
       parseClassId(node, isStatement, optionalId) ->
         super.parseClassId(node, isStatement, optionalId or (this.state.inFunction))
+
+      // Parser state changes for arrow parsing and block parsing are required
+      // when parsing ternaries.
+      //
+      // Sadly, Flow totally takes over `parseConditional`, so we have to
+      // c/p `parseMaybeConditional` which is safe.
+      parseMaybeConditional(noIn, refShorthandDefaultPos, refNeedsArrowPos) -> {
+        const startPos = this.state.start;
+        const startLoc = this.state.startLoc;
+        const potentialArrowAt = this.state.potentialArrowAt;
+        const expr = this.parseExprOps(noIn, refShorthandDefaultPos);
+
+        if (
+          expr.type === "ArrowFunctionExpression" &&
+          expr.start === potentialArrowAt
+        ) {
+          return expr;
+        }
+        if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
+
+        // XXX: parseConditional should really be broken up into
+        // parseConditionalTest, parseConditionalConsequent, parseConditionalAlternate
+        // and we really only need to ban ambiguities in the consequent --
+        // but the flow plugin is too complex to allow this to be easily done.
+        oldBanAmbiguousArrows = this.state.banAmbiguousArrows;
+        oldWhiteBlockTerminalTokens = this.state.whiteBlockTerminalTokens;
+        this.state.whiteBlockTerminalTokens = oldWhiteBlockTerminalTokens.concat([tt.colon]);
+        this.state.banAmbiguousArrows = true;
+        result = this.parseConditional(
+          expr,
+          noIn,
+          startPos,
+          startLoc,
+          refNeedsArrowPos,
+        );
+        this.state.banAmbiguousArrows = oldBanAmbiguousArrows;
+        this.state.whiteBlockTerminalTokens = oldWhiteBlockTerminalTokens;
+        return result;
+      }
   } // mixin
 })
 

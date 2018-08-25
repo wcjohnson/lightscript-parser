@@ -369,8 +369,8 @@ export default class StatementParser extends ExpressionParser {
   parseDoStatement(node: N.DoWhileStatement): N.DoWhileStatement {
     this.next();
 
-    // XXX: LSC
-    let isWhiteBlock, indentLevel, oldExtraWhiteblockTerminator;
+    // LSC: whiteblock do/while
+    let isWhiteBlock, indentLevel, oldWhiteBlockTerminalTokens;
     if (this.hasPlugin("lscCoreSyntax")) {
       // Capture indent level of do block
       if (this.match(tt.colon)) {
@@ -379,8 +379,9 @@ export default class StatementParser extends ExpressionParser {
       }
       // Enable object-block ambiguity parsing for the body
       this.state.nextBraceIsBlock = true;
-      oldExtraWhiteblockTerminator = this.state.extraWhiteblockTerminator
-      this.state.extraWhiteblockTerminator = tt._while
+      // Enable early whiteblock termination on `while`
+      oldWhiteBlockTerminalTokens = this.state.whiteBlockTerminalTokens;
+      this.state.whiteBlockTerminalTokens = oldWhiteBlockTerminalTokens.concat([tt._while]);
     }
 
     this.state.labels.push(loopLabel);
@@ -388,9 +389,9 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels.pop();
 
     if (this.hasPlugin("lscCoreSyntax")) {
-      this.state.extraWhiteblockTerminator = oldExtraWhiteblockTerminator;
+      this.state.whiteBlockTerminalTokens = oldWhiteBlockTerminalTokens;
       if (isWhiteBlock && this.state.indentLevel !== indentLevel) {
-        this.unexpected(null, "Mismatched indent.")
+        this.unexpected(null, "Mismatched indent.");
       }
     }
 

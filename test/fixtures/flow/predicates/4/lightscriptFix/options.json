@@ -1,4 +1,0 @@
-{
-  "throws": "Unexpected token, expected \";\" (1:18)",
-  "banPlugins": ["lscCoreSyntax"]
-}

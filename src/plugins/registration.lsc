@@ -111,6 +111,7 @@ import lscIfExpression from './lightscript/lscIfExpression'
 import lscTryExpression from './lightscript/lscTryExpression'
 import lscAssignment from './lightscript/lscAssignment'
 import lscArrows from './lightscript/lscArrows'
+import lscArrows_banAmbiguousArrows from './lightscript/lscArrows_banAmbiguousArrows'
 import lscForIn from './lightscript/lscForIn'
 import awaitArrow from './lightscript/awaitArrow'
 import awaitArrow_tokenizer from './lightscript/awaitArrow_tokenizer'
@@ -132,6 +133,7 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(lscTryExpression)
   registerPlugin(lscAssignment)
   registerPlugin(lscArrows)
+  registerPlugin(lscArrows_banAmbiguousArrows)
   registerPlugin(lscForIn)
   registerPlugin(awaitArrow)
   registerPlugin(awaitArrow_tokenizer)

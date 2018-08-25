@@ -1,0 +1,24 @@
+// Forbid arrow parsing in ambiguous contexts.
+// This must load after Flow and TypeScript so it can intercept ambiguous
+//
+// Should only be loaded by the `lscArrows` plugin.
+import { Plugin } from '../core/plugin'
+import { types as tt } from "../../tokenizer/types"
+
+lscArrows_banAmbiguousArrows = new Plugin({
+  name: 'lscArrows_banAmbiguousArrows'
+  loadOrderPriority: 100000000 // load late
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      parseArrow(node) -> {
+        if this.match(tt.colon) and this.state.banAmbiguousArrows:
+          null
+        else:
+          super.parseArrow(node)
+      }
+    } // class
+  } // mixin
+})
+
+export default lscArrows_banAmbiguousArrows
