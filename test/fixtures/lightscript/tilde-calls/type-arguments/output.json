@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 15,
+  "end": 9,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 15
+      "column": 9
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 15,
+    "end": 9,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 15
+        "column": 9
       }
     },
     "sourceType": "script",
@@ -32,7 +32,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 15,
+        "end": 9,
         "loc": {
           "start": {
             "line": 1,
@@ -40,13 +40,13 @@
           },
           "end": {
             "line": 1,
-            "column": 15
+            "column": 9
           }
         },
         "expression": {
           "type": "LscTildeCallExpression",
           "start": 0,
-          "end": 15,
+          "end": 9,
           "loc": {
             "start": {
               "line": 1,
@@ -54,7 +54,7 @@
             },
             "end": {
               "line": 1,
-              "column": 15
+              "column": 9
             }
           },
           "left": {
@@ -75,38 +75,77 @@
             "name": "a"
           },
           "callee": {
-            "type": "MemberExpression",
-            "start": 6,
-            "end": 13,
+            "type": "Identifier",
+            "start": 2,
+            "end": 3,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 6
+                "column": 2
               },
               "end": {
                 "line": 1,
-                "column": 13
+                "column": 3
+              },
+              "identifierName": "b"
+            },
+            "name": "b"
+          },
+          "typeArguments": {
+            "type": "TypeParameterInstantiation",
+            "start": 3,
+            "end": 6,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 3
+              },
+              "end": {
+                "line": 1,
+                "column": 6
               }
             },
-            "object": {
-              "type": "ThisExpression",
-              "start": 2,
-              "end": 6,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 2
+            "params": [
+              {
+                "type": "GenericTypeAnnotation",
+                "start": 4,
+                "end": 5,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 5
+                  }
                 },
-                "end": {
-                  "line": 1,
-                  "column": 6
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 4,
+                  "end": 5,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "identifierName": "C"
+                  },
+                  "name": "C"
                 }
               }
-            },
-            "property": {
+            ]
+          },
+          "arguments": [
+            {
               "type": "Identifier",
               "start": 7,
-              "end": 13,
+              "end": 8,
               "loc": {
                 "start": {
                   "line": 1,
@@ -114,15 +153,13 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 13
+                  "column": 8
                 },
-                "identifierName": "method"
+                "identifierName": "d"
               },
-              "name": "method"
-            },
-            "computed": false
-          },
-          "arguments": []
+              "name": "d"
+            }
+          ]
         }
       }
     ],

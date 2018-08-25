@@ -75,7 +75,7 @@
             }
           },
           "expression": {
-            "type": "CallExpression",
+            "type": "LscTildeCallExpression",
             "start": 6,
             "end": 12,
             "loc": {
@@ -87,6 +87,22 @@
                 "line": 1,
                 "column": 12
               }
+            },
+            "left": {
+              "type": "ObjectExpression",
+              "start": 6,
+              "end": 8,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 8
+                }
+              },
+              "properties": []
             },
             "callee": {
               "type": "Identifier",
@@ -105,25 +121,7 @@
               },
               "name": "y"
             },
-            "arguments": [
-              {
-                "type": "ObjectExpression",
-                "start": 6,
-                "end": 8,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 6
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 8
-                  }
-                },
-                "properties": []
-              }
-            ],
-            "tilde": true
+            "arguments": []
           }
         },
         "alternate": null

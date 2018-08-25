@@ -72,7 +72,7 @@
               }
             },
             "object": {
-              "type": "CallExpression",
+              "type": "LscTildeCallExpression",
               "start": 0,
               "end": 5,
               "loc": {
@@ -84,6 +84,23 @@
                   "line": 1,
                   "column": 5
                 }
+              },
+              "left": {
+                "type": "Identifier",
+                "start": 0,
+                "end": 1,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 1
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
               },
               "callee": {
                 "type": "Identifier",
@@ -102,26 +119,7 @@
                 },
                 "name": "b"
               },
-              "arguments": [
-                {
-                  "type": "Identifier",
-                  "start": 0,
-                  "end": 1,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 0
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 1
-                    },
-                    "identifierName": "a"
-                  },
-                  "name": "a"
-                }
-              ],
-              "tilde": true
+              "arguments": []
             },
             "property": {
               "type": "Identifier",
