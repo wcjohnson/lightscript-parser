@@ -29,6 +29,8 @@ BREAKING CHANGES:
 
 OTHER CHANGES:
   - Anonymous arrow flow types are banned in methods. This was always true in LSC but not explicity documented.
+  - Faster Parser: lookahead when parsing decimals, and lookahead when parsing named arrows have been eliminated
+  - Correct optionality for ~ calls: `a?~b()`, `a~b?()` and `a?~b?()` are all legal and working.
 
 MISC IDEAS:
   - Pattern matching: remove implicit dependency on runtime. require an import of the runtime; fail if not present. add compiler option to overrule and pull runtime from a specified global var.
