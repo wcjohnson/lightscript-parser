@@ -117,6 +117,8 @@ import awaitArrow from './lightscript/awaitArrow'
 import awaitArrow_tokenizer from './lightscript/awaitArrow_tokenizer'
 import spreadLoop from './lightscript/spreadLoop'
 import questionSubscripts from './lightscript/questionSubscripts'
+import bangCall from './lightscript/bangCall'
+import bangCall_subscripts from './lightscript/bangCall_subscripts'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tryCatch)
@@ -140,3 +142,5 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(awaitArrow_tokenizer)
   registerPlugin(spreadLoop)
   registerPlugin(questionSubscripts)
+  registerPlugin(bangCall)
+  registerPlugin(bangCall_subscripts)

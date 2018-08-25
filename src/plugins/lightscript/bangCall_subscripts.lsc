@@ -1,0 +1,25 @@
+// In order to parse bang calls, we have to intercept the subscripts before
+// TypeScript gets to them, because they have their own `!` subscript.
+import { Plugin } from '../core/plugin'
+import * as charCodes from "charcodes"
+
+bangCall_subscripts = new Plugin({
+  name: 'bangCall_subscripts'
+  loadOrderPriority: 100000000 // load late
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      parseSubscript(base, startPos, startLoc, noCalls, state) -> {
+        if (not noCalls) and this.bangCall_isAdjacentBang():
+          node = this.startNodeAt(startPos, startLoc)
+          node.callee = base
+          if not this.bangCall_parseArgs(node): state.stop = true
+          this.finishNode(node, "CallExpression")
+        else:
+          super.parseSubscript(base, startPos, startLoc, noCalls, state)
+      }
+    } // class
+  } // mixin
+})
+
+export default bangCall_subscripts

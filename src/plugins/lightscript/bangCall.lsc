@@ -1,0 +1,152 @@
+// Parse `!` calls
+import { Plugin } from '../core/plugin'
+import { TokenType, types as tt } from "../../tokenizer/register"
+
+bangCall = new Plugin({
+  name: 'bangCall'
+  dependencies: ['bangCall_subscripts']
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      constructor(options, input) -> {
+        super(options, input)
+        // Indent level at which a bang call's subscripting chain
+        // should be unwound.
+        this.state.bangUnwindLevel = null
+        // Whiteblock level of current bang call.
+        this.state.bangWhiteBlockLevel = null
+      }
+
+      bangCall_isAdjacentBang(): boolean -> {
+        this.match(tt.bang) and this.isAdjacent()
+      }
+
+      bangCall_couldParseArg(): boolean -> {
+        this.tokenStartsExpression()
+      }
+
+      bangCall_couldBeginAdjacentBangSubscript(): boolean -> {
+        this.match(tt.bracketL) ||
+        this.match(tt.dot) ||
+        (this.tt_tildeCall && this.match(this.tt_tildeCall)) ||
+        this.match(tt.questionDot) ||
+        this.match(tt.question) ||
+        this.match(tt.bang)
+      }
+
+      // Determine if parseSubscripts should unwind and decline to parse
+      // further subscripts during a bang call.
+      //
+      // Subscripts must be indented once from the bang call's first arg.
+      bangCall_shouldUnwindBangSubscript(): boolean -> {
+        this.isLineBreak() and
+        (this.state.bangWhiteBlockLevel == this.state.whiteBlockIndentLevel) and
+        (this.state.indentLevel <= this.state.bangUnwindLevel)
+      }
+
+      bangCall_parseArg() -> {
+        this.parseExprListItem(false, undefined, undefined, undefined)
+      }
+
+      // Parse bang call args onto the given node. Returns true
+      // if the bang call can be further subscripted.
+      bangCall_parseArgs(node): boolean -> {
+        node.arguments = [];
+        this.addExtra(node, "bang", true);
+        const bangIndentLevel = this.state.indentLevel, bangLine = this.state.curLine;
+        let argIndentLevel = null;
+
+        this.next(); // Absorb `!` token
+
+        // ASI if outdent, early-out if no first arg presnet
+        if (
+          (this.isLineBreak() && this.state.indentLevel <= bangIndentLevel) ||
+          !this.bangCall_couldParseArg()
+        ) {
+          return true;
+        }
+
+        // Disambiguate no-whitespace-after-! situations.
+        if (this.state.lastTokEnd === this.state.start) {
+          // If next token could initiate a subscript, treat as no-arg bang call with
+          // subscript.
+          if (this.bangCall_couldBeginAdjacentBangSubscript()) {
+            return true;
+          }
+
+          // Otherwise parse error.
+          if (this.state.type.startsExpr) {
+            this.unexpected(null, "Whitespace required between `!` and first argument.");
+          }
+        }
+
+        // Collect state
+        const oldBangUnwindLevel = this.state.bangUnwindLevel;
+        this.state.bangUnwindLevel = bangIndentLevel + 1;
+
+        const oldBangWhiteBlockLevel = this.state.bangWhiteBlockLevel;
+        this.state.bangWhiteBlockLevel = this.state.whiteBlockIndentLevel;
+
+        // Read args
+        let first = true;
+        while (true) {
+          // First argument on a different line from the `!` establishes indent level
+          if (this.state.curLine !== bangLine && argIndentLevel === null) {
+            this.state.bangUnwindLevel = now argIndentLevel = this.state.indentLevel;
+          }
+
+          // Comma-separated arg and first arg skip ASI/whitespace checks
+          if (first || this.eat(tt.comma)) {
+            node.arguments.push(this.bangCall_parseArg());
+            now first = false;
+          } else {
+            // ASI: unwind if not at proper indent level
+            if (this.isLineBreak()) {
+              if (
+                this.state.indentLevel <= bangIndentLevel ||
+                (argIndentLevel !== null && this.state.indentLevel !== argIndentLevel)
+              ) {
+                break;
+              }
+            }
+
+            node.arguments.push(this.bangCall_parseArg());
+          }
+
+          if (this.isLineBreak()) {
+            // Arg is on next line; comma optional
+            if (this.match(tt.comma)) {
+              this.unexpected(null, "Comma must be on the same line as the preceding argument when using `!`");
+            }
+
+            if (!this.bangCall_couldParseArg()) break;
+          } else {
+            // Arg is on same line as preceding; comma required
+            if (!this.match(tt.comma)) break;
+          }
+        }
+
+        this.state.bangUnwindLevel = oldBangUnwindLevel;
+        this.state.bangWhiteBlockLevel = oldBangWhiteBlockLevel;
+
+        this.toReferencedList(node.arguments);
+
+        // Subscripts can only appear on a new line.
+        return (!this.isLineBreak());
+      }
+
+      ////////////////
+      // OVERRIDES
+      ////////////////
+
+      parseCallish(node) -> {
+        if this.match(tt.bang):
+          this.bangCall_parseArgs(node)
+        else:
+          super.parseCallish(node)
+      }
+    } // class
+  } // mixin
+})
+
+export default bangCall

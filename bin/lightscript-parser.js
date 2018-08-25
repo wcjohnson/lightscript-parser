@@ -37,6 +37,7 @@ mgr.addPlugins([
   "spreadLoop",
   "questionSubscripts",
   "optionalChaining",
+  "bangCall",
   "jsx",
   "flow",
 ]);
