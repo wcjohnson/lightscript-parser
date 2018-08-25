@@ -342,7 +342,7 @@ lscCoreSyntax = new Plugin({
 
       // Enforce full decimal syntax (0.0 rather than .0)
       parseExprAtom(refShorthandDefaultPos) ->
-        if this.match(tt.dot) and this.lookahead().type === tt.num:
+        if this.match(tt.dot) and this.state.numberFollowsDot:
           this.unexpected(null, "Decimal numbers must be prefixed with a `0` in LightScript (eg; `0.1`).")
         super.parseExprAtom(refShorthandDefaultPos)
 

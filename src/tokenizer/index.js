@@ -408,8 +408,16 @@ export default class Tokenizer extends LocationParser {
   readToken_dot(): void {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
-    // XXX: LSC - no dotted numbers
-    if (!this.hasPlugin("lscCoreSyntax")) {
+    // LSC: no dotted numbers
+    if (this.hasPlugin("lscCoreSyntax")) {
+      // Store this in the state vector to avoid an expensive parser
+      // lookahead everytime LSC sees a dot.
+      if (next >= charCodes.digit0 && next <= charCodes.digit9) {
+        this.state.numberFollowsDot = true
+      } else {
+        this.state.numberFollowsDot = false
+      }
+    } else {
       if (next >= charCodes.digit0 && next <= charCodes.digit9) {
         this.readNumber(true);
         return;
