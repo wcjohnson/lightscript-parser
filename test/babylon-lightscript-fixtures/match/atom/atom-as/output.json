@@ -1,0 +1,207 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 27,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 18
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 18
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "MatchStatement",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 18
+          }
+        },
+        "discriminant": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "x"
+          },
+          "name": "x"
+        },
+        "cases": [
+          {
+            "type": "MatchCase",
+            "start": 11,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 2
+              },
+              "end": {
+                "line": 2,
+                "column": 18
+              }
+            },
+            "atoms": [
+              {
+                "type": "Identifier",
+                "start": 13,
+                "end": 17,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 8
+                  },
+                  "identifierName": "Atom"
+                },
+                "name": "Atom"
+              }
+            ],
+            "binding": {
+              "type": "ObjectPattern",
+              "start": 21,
+              "end": 24,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 12
+                },
+                "end": {
+                  "line": 2,
+                  "column": 15
+                }
+              },
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start": 22,
+                  "end": 23,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 14
+                    }
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 22,
+                    "end": 23,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 14
+                      },
+                      "identifierName": "y"
+                    },
+                    "name": "y"
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "start": 22,
+                    "end": 23,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 14
+                      },
+                      "identifierName": "y"
+                    },
+                    "name": "y"
+                  },
+                  "extra": {
+                    "shorthand": true
+                  }
+                }
+              ]
+            },
+            "assertive": false,
+            "consequent": {
+              "type": "ExpressionStatement",
+              "start": 26,
+              "end": 27,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 17
+                },
+                "end": {
+                  "line": 2,
+                  "column": 18
+                }
+              },
+              "expression": {
+                "type": "Identifier",
+                "start": 26,
+                "end": 27,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 18
+                  },
+                  "identifierName": "y"
+                },
+                "name": "y"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

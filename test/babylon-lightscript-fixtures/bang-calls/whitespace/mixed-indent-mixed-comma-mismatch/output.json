@@ -1,0 +1,186 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 31,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 5
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 31,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 5,
+        "column": 5
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 25,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 7
+          }
+        },
+        "expression": {
+          "type": "CallExpression",
+          "start": 0,
+          "end": 25,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 4,
+              "column": 7
+            }
+          },
+          "callee": {
+            "type": "Identifier",
+            "start": 0,
+            "end": 1,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start": 3,
+              "end": 4,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 3
+                },
+                "end": {
+                  "line": 1,
+                  "column": 4
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            },
+            {
+              "type": "Identifier",
+              "start": 8,
+              "end": 9,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 3
+                },
+                "identifierName": "c"
+              },
+              "name": "c"
+            },
+            {
+              "type": "Identifier",
+              "start": 15,
+              "end": 16,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 4
+                },
+                "end": {
+                  "line": 3,
+                  "column": 5
+                },
+                "identifierName": "d"
+              },
+              "name": "d"
+            },
+            {
+              "type": "Identifier",
+              "start": 24,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 6
+                },
+                "end": {
+                  "line": 4,
+                  "column": 7
+                },
+                "identifierName": "e"
+              },
+              "name": "e"
+            }
+          ],
+          "extra": {
+            "bang": true
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 30,
+        "end": 31,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 4
+          },
+          "end": {
+            "line": 5,
+            "column": 5
+          }
+        },
+        "expression": {
+          "type": "Identifier",
+          "start": 30,
+          "end": 31,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 4
+            },
+            "end": {
+              "line": 5,
+              "column": 5
+            },
+            "identifierName": "f"
+          },
+          "name": "f"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

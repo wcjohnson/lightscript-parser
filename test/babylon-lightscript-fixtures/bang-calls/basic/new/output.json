@@ -1,0 +1,106 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 24,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 7
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 24,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 7
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ThrowStatement",
+        "start": 0,
+        "end": 24,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 7
+          }
+        },
+        "argument": {
+          "type": "NewExpression",
+          "start": 6,
+          "end": 24,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 2,
+              "column": 7
+            }
+          },
+          "callee": {
+            "type": "Identifier",
+            "start": 10,
+            "end": 15,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 10
+              },
+              "end": {
+                "line": 1,
+                "column": 15
+              },
+              "identifierName": "Error"
+            },
+            "name": "Error"
+          },
+          "arguments": [
+            {
+              "type": "StringLiteral",
+              "start": 19,
+              "end": 24,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 7
+                }
+              },
+              "extra": {
+                "rawValue": "msg",
+                "raw": "\"msg\""
+              },
+              "value": "msg"
+            }
+          ],
+          "extra": {
+            "bang": true
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

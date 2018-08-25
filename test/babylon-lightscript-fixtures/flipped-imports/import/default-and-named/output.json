@@ -1,0 +1,204 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 34,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 34
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 34,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 34
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 17,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 17
+              },
+              "end": {
+                "line": 1,
+                "column": 20
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 17,
+              "end": 20,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 17
+                },
+                "end": {
+                  "line": 1,
+                  "column": 20
+                },
+                "identifierName": "foo"
+              },
+              "name": "foo"
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start": 24,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 24
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 24,
+              "end": 27,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 24
+                },
+                "end": {
+                  "line": 1,
+                  "column": 27
+                },
+                "identifierName": "bar"
+              },
+              "name": "bar"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start": 24,
+              "end": 27,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 24
+                },
+                "end": {
+                  "line": 1,
+                  "column": 27
+                },
+                "identifierName": "bar"
+              },
+              "name": "bar"
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start": 29,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 29
+              },
+              "end": {
+                "line": 1,
+                "column": 32
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 29,
+              "end": 32,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 29
+                },
+                "end": {
+                  "line": 1,
+                  "column": 32
+                },
+                "identifierName": "baz"
+              },
+              "name": "baz"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start": 29,
+              "end": 32,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 29
+                },
+                "end": {
+                  "line": 1,
+                  "column": 32
+                },
+                "identifierName": "baz"
+              },
+              "name": "baz"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 7,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            }
+          },
+          "extra": {
+            "rawValue": "module",
+            "raw": "'module'"
+          },
+          "value": "module"
+        },
+        "importKind": "value"
+      }
+    ],
+    "directives": []
+  }
+}

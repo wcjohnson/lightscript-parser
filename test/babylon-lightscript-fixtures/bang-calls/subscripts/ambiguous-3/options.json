@@ -1,0 +1,11 @@
+{
+  "alternatives": {
+    "default": {
+      "throws": "Indentation required. (3:0)"
+    },
+    "noEnforceSubscriptIndentation": {
+      "excludePlugins": ["enforceSubscriptIndentation"],
+      "expected": "expected.noEnforceSubscriptIndentation.json"
+    }
+  }
+}

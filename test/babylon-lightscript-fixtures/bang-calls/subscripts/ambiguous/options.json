@@ -1,0 +1,11 @@
+{
+  "alternatives": {
+    "default": {
+      "expected": "expected.default.json"
+    },
+    "noEnforceSubscriptIndentation": {
+      "excludePlugins": ["enforceSubscriptIndentation"],
+      "expected": "expected.noEnforceSubscriptIndentation.json"
+    }
+  }
+}

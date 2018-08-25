@@ -1,0 +1,12 @@
+{
+  "alternatives": {
+    "changePlaceholder": {
+      "allPlugins": true,
+      "excludePlugins": ["estree"],
+      "expected": "expected.changePlaceholder.json",
+      "parserOpts": {
+        "placeholder": "P"
+      }
+    }
+  }
+}

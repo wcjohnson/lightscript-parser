@@ -1,0 +1,449 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 108,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 99
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 108,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 99
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "MatchStatement",
+        "start": 0,
+        "end": 108,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 99
+          }
+        },
+        "discriminant": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "x"
+          },
+          "name": "x"
+        },
+        "cases": [
+          {
+            "type": "MatchCase",
+            "start": 11,
+            "end": 108,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 2
+              },
+              "end": {
+                "line": 2,
+                "column": 99
+              }
+            },
+            "outerGuard": {
+              "type": "Identifier",
+              "start": 16,
+              "end": 23,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 7
+                },
+                "end": {
+                  "line": 2,
+                  "column": 14
+                },
+                "identifierName": "preFlag"
+              },
+              "name": "preFlag"
+            },
+            "atoms": [
+              {
+                "type": "LogicalExpression",
+                "start": 29,
+                "end": 55,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 46
+                  }
+                },
+                "left": {
+                  "type": "CallExpression",
+                  "start": 29,
+                  "end": 40,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 31
+                    }
+                  },
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 30,
+                    "end": 38,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 21
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 29
+                      },
+                      "identifierName": "isWidget"
+                    },
+                    "name": "isWidget"
+                  },
+                  "arguments": [
+                    {
+                      "type": "MatchPlaceholderExpression",
+                      "start": 28,
+                      "end": 29,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 19
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 20
+                        }
+                      }
+                    }
+                  ],
+                  "tilde": true
+                },
+                "operator": "&&",
+                "right": {
+                  "type": "CallExpression",
+                  "start": 45,
+                  "end": 55,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 36
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 46
+                    }
+                  },
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 46,
+                    "end": 53,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 37
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 44
+                      },
+                      "identifierName": "isCheap"
+                    },
+                    "name": "isCheap"
+                  },
+                  "arguments": [
+                    {
+                      "type": "MatchPlaceholderExpression",
+                      "start": 44,
+                      "end": 45,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 35
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 36
+                        }
+                      }
+                    }
+                  ],
+                  "tilde": true
+                }
+              },
+              {
+                "type": "UnaryExpression",
+                "start": 57,
+                "end": 71,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 48
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 62
+                  }
+                },
+                "operator": "!",
+                "prefix": true,
+                "argument": {
+                  "type": "CallExpression",
+                  "start": 61,
+                  "end": 71,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 52
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 62
+                    }
+                  },
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 62,
+                    "end": 69,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 53
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 60
+                      },
+                      "identifierName": "isShirt"
+                    },
+                    "name": "isShirt"
+                  },
+                  "arguments": [
+                    {
+                      "type": "MatchPlaceholderExpression",
+                      "start": 60,
+                      "end": 61,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 51
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 52
+                        }
+                      }
+                    }
+                  ],
+                  "tilde": true
+                },
+                "extra": {
+                  "parenthesizedArgument": false
+                }
+              }
+            ],
+            "binding": {
+              "type": "ObjectPattern",
+              "start": 77,
+              "end": 86,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 68
+                },
+                "end": {
+                  "line": 2,
+                  "column": 77
+                }
+              },
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start": 79,
+                  "end": 84,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 70
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 75
+                    }
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 79,
+                    "end": 84,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 70
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 75
+                      },
+                      "identifierName": "price"
+                    },
+                    "name": "price"
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "start": 79,
+                    "end": 84,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 70
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 75
+                      },
+                      "identifierName": "price"
+                    },
+                    "name": "price"
+                  },
+                  "extra": {
+                    "shorthand": true
+                  }
+                }
+              ]
+            },
+            "assertive": true,
+            "innerGuard": {
+              "type": "BinaryExpression",
+              "start": 90,
+              "end": 101,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 81
+                },
+                "end": {
+                  "line": 2,
+                  "column": 92
+                }
+              },
+              "left": {
+                "type": "Identifier",
+                "start": 90,
+                "end": 95,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 81
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 86
+                  },
+                  "identifierName": "price"
+                },
+                "name": "price"
+              },
+              "operator": ">",
+              "right": {
+                "type": "NumericLiteral",
+                "start": 98,
+                "end": 101,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 89
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 92
+                  }
+                },
+                "extra": {
+                  "rawValue": 2,
+                  "raw": "2.0"
+                },
+                "value": 2
+              }
+            },
+            "consequent": {
+              "type": "ExpressionStatement",
+              "start": 103,
+              "end": 108,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 94
+                },
+                "end": {
+                  "line": 2,
+                  "column": 99
+                }
+              },
+              "expression": {
+                "type": "StringLiteral",
+                "start": 103,
+                "end": 108,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 94
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 99
+                  }
+                },
+                "extra": {
+                  "rawValue": "yup",
+                  "raw": "\"yup\""
+                },
+                "value": "yup"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

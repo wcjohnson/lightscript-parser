@@ -1,0 +1,2 @@
+f() -/>
+  console.log! <- x
