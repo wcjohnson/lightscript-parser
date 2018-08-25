@@ -1,9 +1,0 @@
-{
-  "plugins": ["bangCall"],
-  "alternatives": {
-    "default": {
-      "allPlugins": true,
-      "excludePlugins": ["estree"]
-    }
-  }
-}
