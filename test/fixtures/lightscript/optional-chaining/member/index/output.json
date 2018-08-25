@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -43,7 +44,7 @@
           }
         },
         "expression": {
-          "type": "MemberExpression",
+          "type": "OptionalMemberExpression",
           "start": 0,
           "end": 4,
           "loc": {
@@ -94,6 +95,9 @@
             "value": 0
           },
           "computed": true,
+          "extra": {
+            "dotNumeric": true
+          },
           "optional": true
         }
       }

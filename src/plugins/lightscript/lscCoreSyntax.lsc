@@ -253,6 +253,17 @@ lscCoreSyntax = new Plugin({
               throw objParseError
       } // parseObjectBlockAmbiguity
 
+      // Since naked decimals are disabled in LightScript, it is safe to parse
+      // questionDot even when a number appears afterward.
+      readToken_question(): void -> {
+        next = this.input.charCodeAt(this.state.pos + 1)
+        if next == charCodes.dot:
+          this.state.pos += 2
+          this.finishToken(tt.questionDot)
+        else:
+          super.readToken_question()
+      }
+
       // Hooking parseBlock and parseStatement enables whiteblocks just about everywhere
       parseBlock(allowDirectives) ->
         if this.match(tt.colon):

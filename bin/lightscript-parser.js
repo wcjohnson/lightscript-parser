@@ -35,6 +35,8 @@ mgr.addPlugins([
   "lscForIn",
   "awaitArrow",
   "spreadLoop",
+  "questionSubscripts",
+  "optionalChaining",
   "jsx",
   "flow",
 ]);

@@ -573,15 +573,20 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "OptionalCallExpression");
       } else {
         node.object = base;
-        node.property = this.parseIdentifier(true);
-        node.computed = false;
+        // LSC: parse optional numeric property access
+        if (this.hasPlugin("lscCoreSyntax") && this.match(tt.num)) {
+          this.parseNumericPropertyAccess(node);
+        } else {
+          node.property = this.parseIdentifier(true);
+          node.computed = false;
+        }
         node.optional = true;
         return this.finishNode(node, "OptionalMemberExpression");
       }
     } else if (this.eat(tt.dot)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
-      // XXX: LSC - Parse numeric property access
+      // LSC: Parse numeric property access
       if (this.hasPlugin("lscCoreSyntax") && this.match(tt.num)) {
         this.parseNumericPropertyAccess(node);
       } else {

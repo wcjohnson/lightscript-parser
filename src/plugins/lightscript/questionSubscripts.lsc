@@ -1,0 +1,82 @@
+// Whitespace-sensitive parsing for `?(`
+import { Plugin } from '../core/plugin'
+import { types as tt } from "../../tokenizer/types"
+
+questionSubscripts = new Plugin({
+  name: 'questionSubscripts'
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      questionSubscripts_parseSafeCall(lhs, startPos, startLoc, state) -> {
+        node = this.startNodeAt(startPos, startLoc)
+        node.callee = lhs
+        node.optional = true
+        this.expect(tt.parenL)
+        node.arguments = this.parseCallExpressionArguments(tt.parenR, false)
+        this.toReferencedList(node.arguments)
+        state.optionalChainMember = true
+        this.addExtra(node, "dotted", false)
+        return this.finishOptionalCallExpression(node)
+      }
+
+      questionSubscripts_parseSafeMember(lhs, startPos, startLoc, noCalls, state) -> {
+        node = this.startNodeAt(startPos, startLoc)
+        node.object = lhs
+        this.expect(tt.bracketL)
+        node.property = this.parseExpression()
+        node.computed = true
+        node.optional = true
+        this.expect(tt.bracketR)
+        state.optionalChainMember = true
+        this.addExtra(node, "dotted", false)
+        return this.finishNode(node, "OptionalMemberExpression")
+      }
+
+      questionSubscripts_isPossibleSafeCall() -> {
+        this.match(tt.parenL)
+      }
+
+      questionSubscripts_isPossibleMember() -> {
+        this.match(tt.bracketL)
+      }
+
+      questionSubscripts_parse(lhs, startPos, startLoc, noCalls, parseSubscriptState) -> {
+        const questionPos = this.state.pos;
+        const questionLine = this.state.curLine;
+        const state = this.state.clone();
+
+        this.expect(tt.question);
+
+        if this.isAdjacent():
+          if (not noCalls) and this.questionSubscripts_isPossibleSafeCall():
+            try:
+              return this.questionSubscripts_parseSafeCall(lhs, startPos, startLoc, parseSubscriptState)
+            catch err:
+              null
+          elif this.questionSubscripts_isPossibleMember():
+            try:
+              return this.questionSubscripts_parseSafeMember(lhs, startPos, startLoc, noCalls, parseSubscriptState)
+            catch err:
+              null
+
+        // Not a safe expr, must be a ternary
+        this.state = state
+        parseSubscriptState.stop = true
+        return lhs
+      }
+
+      parseSubscript(lhs, startPos, startLoc, noCalls, state) -> {
+        if (
+          this.match(tt.question) and
+          this.isAdjacent() and
+          this.hasPlugin("optionalChaining")
+        ):
+          this.questionSubscripts_parse(lhs, startPos, startLoc, noCalls, state)
+        else:
+          super.parseSubscript(lhs, startPos, startLoc, noCalls, state)
+      }
+    } // class
+  } // mixin
+})
+
+export default questionSubscripts
