@@ -4,58 +4,33 @@ import * as charCodes from "charcodes"
 
 tildeCall = new Plugin({
   name: 'tildeCall'
-  load() ->
-    // Create token type
-    registerToken('tildeCall', new TokenType("~>"))
 
   mixin(ParserBase, opts) -> {
-    clazz = class extends ParserBase {
-      // Modify tokenizer to intercept `~`
-      getTokenFromCode(code) ->
-        if code == charCodes.tilde:
-          if this.input.charCodeAt(this.state.pos + 1) == charCodes.greaterThan:
-            this.state.pos += 2
-            return this.finishToken(tt.tildeCall, "~>")
+    return class extends ParserBase {
+      constructor(options, input) -> {
+        super(options, input)
+        this.tt_tildeCall = new TokenType("~>")
+      }
 
-          if this.hasPlugin("disableBitwiseOperators"):
-            ++this.state.pos
-            return this.finishToken(tt.tildeCall, "~")
-
-        super.getTokenFromCode(code)
-
-      // Hook subscript parsing chain to catch `~` token
-      parseSubscript(base, startPos, startLoc, noCalls, state) ->
-        if (not noCalls) and this.match(tt.tildeCall):
-          node = this.startNodeAt(startPos, startLoc)
-          next = this.tildeCallParse(node, base)
-          if next:
-            return next
-          else:
-            state.stop = true
-            return node
-
-        super.parseSubscript(base, startPos, startLoc, noCalls, state)
-
-      // Parse callees for tilde-calls
-      tildeCallParseCallee() ->
-        if this.match(tt._this):
+      tildeCall_parseCallee() -> {
+        // Allow `this` or ordinary identifiers only
+        callee = if this.match(tt._this):
           this.parseExprAtom()
         else:
           this.parseIdentifier() // parseIdentifierOrPlaceholder() for match
+        // Don't allow further calls as subscripts in the callee
+        this.parseSubscripts(callee, this.state.start, this.state.startLoc, true)
+      }
 
-      // Parse `a~b(...)` or `a~>b(...)` subscript. Returns truthy iff
-      // the call is further subscriptable.
-      tildeCallParse(node, firstArg) ->
+      // Parse `a~b(...)` or `a~>b(...)`
+      tildeCall_parse(node, firstArg) -> {
         this.next()
+        node.callee = this.tildeCall_parseCallee()
 
-        // allow `this`, Identifier or MemberExpression, but not calls
-        const callee = this.tildeCallParseCallee()
-        node.callee = this.parseSubscripts(callee, this.state.start, this.state.startLoc, true)
-
-        // Allow safe tilde calls (a~b?(c))
+        // Allow safe-callee tilde calls `a~b?(c)`
         if (
-          this.hasPlugin("safeCallExpression") &&
-          this.state.lastTokEnd === (this.state.pos - 1) &&
+          this.hasPlugin("optionalChaining") &&
+          this.isAdjacent() &&
           this.eat(tt.question)
         ) {
           node.optional = true;
@@ -81,8 +56,40 @@ tildeCall = new Plugin({
           node.tilde = true;
           return this.finishNode(node, "CallExpression");
         }
+      } // tildeCall_parse
+
+      /////////////////////
+      // OVERRIDES
+      /////////////////////
+
+      // Modify tokenizer to intercept `~`
+      getTokenFromCode(code) -> {
+        if code == charCodes.tilde:
+          if this.input.charCodeAt(this.state.pos + 1) == charCodes.greaterThan:
+            this.state.pos += 2
+            return this.finishToken(this.tt_tildeCall, "~>")
+
+          if this.hasPlugin("disableBitwiseOperators"):
+            ++this.state.pos
+            return this.finishToken(this.tt_tildeCall, "~")
+
+        super.getTokenFromCode(code)
+      }
+
+      // Hook subscript parsing chain to catch `~` token
+      parseSubscript(base, startPos, startLoc, noCalls, state) -> {
+        if (not noCalls) and this.match(this.tt_tildeCall):
+          node = this.startNodeAt(startPos, startLoc)
+          next = this.tildeCall_parse(node, base)
+          if next:
+            return next
+          else:
+            state.stop = true
+            return node
+
+        super.parseSubscript(base, startPos, startLoc, noCalls, state)
+      }
     } // class
-    return clazz
   } // mixin
 })
 
