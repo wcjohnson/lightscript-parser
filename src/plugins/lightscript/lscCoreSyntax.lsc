@@ -70,6 +70,56 @@ lscCoreSyntax = new Plugin({
           this.unexpected(null, "Paren-free test expressions must be followed by braces or a colon.");
         }
 
+      lsc_parseParenExpression(node) -> {
+        if this.isLineBreak():
+          this.unexpected(this.state.lastTokEnd, "Illegal newline.")
+
+        oldBanAmbiguousArrows = this.state.banAmbiguousArrows
+        this.state.banAmbiguousArrows = true
+
+        // There might actually be a paren in a "paren-free" test expression
+        // We have to disambiguate:
+        // e.g. `if (x) -1` or `if (x < 1) and y: -1`
+        if (this.match(tt.parenL)) {
+          const state = this.state.clone();
+
+          // first, try paren-free style
+          try {
+            const val = this.parseExpression();
+            this.expectParenFreeBlockStart(node);
+            if (val.extra && val.extra.parenthesized) {
+              // Remove accidentally added paren extra data. If this
+              // leaves the extra object empty, quash that as well.
+              // TODO: Factor this out. Also used in statement.js/parseDoWhile
+              delete val.extra.parenthesized;
+              delete val.extra.parenStart;
+              if (Object.keys(val.extra).length == 0) { delete val.extra; }
+            }
+            return val;
+          } catch (_err) {
+            // fall-through
+          }
+
+          // Could have been an un-parenthesized SeqExpr
+          if (this.hasPlugin("seqExprRequiresParen") && this.match(tt.comma)) {
+            this.unexpected();
+          }
+
+          // otherwise, try traditional parseParenExpression
+          this.state = state;
+          this.state.banAmbiguousArrows = false;
+          inner_result = super.parseParenExpression();
+          this.state.banAmbiguousArrows = oldBanAmbiguousArrows;
+          return inner_result;
+        } // if this.match(tt.parenL)
+
+        // No paren, so the expression is a plain paren-free test
+        expr = this.parseExpression()
+        this.expectParenFreeBlockStart(node)
+        this.state.banAmbiguousArrows = oldBanAmbiguousArrows
+        expr
+      } // lsc_parseParenExpression
+
       // In whitespace-sensitive parsing, it is often useful to look back to
       // an opening construct that is at the same indent level as a later
       // closing construct. The block stack enables this pattern.
@@ -232,55 +282,8 @@ lscCoreSyntax = new Plugin({
         super.canInsertSemicolon()
 
       // Hooking parseParenExpression enables paren-free for if,switch,while,with
-      parseParenExpression() -> {
-        if this.isLineBreak():
-          this.unexpected(this.state.lastTokEnd, "Illegal newline.")
-
-        oldBanAmbiguousArrows = this.state.banAmbiguousArrows
-        this.state.banAmbiguousArrows = true
-
-        // There might actually be a paren in a "paren-free" test expression
-        // We have to disambiguate:
-        // e.g. `if (x) -1` or `if (x < 1) and y: -1`
-        if (this.match(tt.parenL)) {
-          const state = this.state.clone();
-
-          // first, try paren-free style
-          try {
-            const val = this.parseExpression();
-            this.expectParenFreeBlockStart();
-            if (val.extra && val.extra.parenthesized) {
-              // Remove accidentally added paren extra data. If this
-              // leaves the extra object empty, quash that as well.
-              // TODO: Factor this out. Also used in statement.js/parseDoWhile
-              delete val.extra.parenthesized;
-              delete val.extra.parenStart;
-              if (Object.keys(val.extra).length == 0) { delete val.extra; }
-            }
-            return val;
-          } catch (_err) {
-            // fall-through
-          }
-
-          // Could have been an un-parenthesized SeqExpr
-          if (this.hasPlugin("seqExprRequiresParen") && this.match(tt.comma)) {
-            this.unexpected();
-          }
-
-          // otherwise, try traditional parseParenExpression
-          this.state = state;
-          this.state.banAmbiguousArrows = false;
-          inner_result = super.parseParenExpression();
-          this.state.banAmbiguousArrows = oldBanAmbiguousArrows;
-          return inner_result;
-        } // if this.match(tt.parenL)
-
-        // No paren, so the expression is a plain paren-free test
-        expr = this.parseExpression()
-        this.expectParenFreeBlockStart()
-        this.state.banAmbiguousArrows = oldBanAmbiguousArrows
-        expr
-      } // parseParenExpression
+      parseParenExpression() ->
+        this.lsc_parseParenExpression(null)
 
       // Hook subscript parsing
       parseSubscript(base, startPos, startLoc, noCalls, state) ->
