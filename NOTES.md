@@ -17,6 +17,7 @@ TODO:
   - [ ] Existentials
   - [ ] Syntactic placeholders
   - [x] TypeScript + auto-const: make sure variable declarator is an id or pattern (typescript/cast/multiple-assert-and-assign)
+  - [ ] Fix all GH bugs
 
 BREAKING CHANGES:
   - Removed scientific notation from dot property access (x.1e3 is no longer valid)

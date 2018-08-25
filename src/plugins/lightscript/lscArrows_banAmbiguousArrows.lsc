@@ -12,6 +12,8 @@ lscArrows_banAmbiguousArrows = new Plugin({
   mixin(ParserBase, opts) -> {
     return class extends ParserBase {
       parseArrow(node) -> {
+        // Prevent Flow/TypeScript from parsing a type annotation in situations
+        // where ambiguous arrows are banned.
         if this.match(tt.colon) and this.state.banAmbiguousArrows:
           null
         else:
