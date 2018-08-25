@@ -776,6 +776,14 @@ export default class ExpressionParser extends LValParser {
     return elts;
   }
 
+  // LSC: Extension point for parsing things that look like calls.
+  // Returns true if the call can be further subscripted.
+  parseCallish(node): boolean {
+    this.expect(tt.parenL);
+    node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+    return true;
+  }
+
   shouldParseAsyncArrow(): boolean {
     return this.match(tt.arrow);
   }

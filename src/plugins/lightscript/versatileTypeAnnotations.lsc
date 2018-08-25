@@ -15,6 +15,17 @@ versatileTypeAnnotations = new Plugin({
         catch err:
           return err
 
+      vta_matchCallExpressionTypeArguments() ->
+        this.isRelational("<")
+
+      vta_parseCallExpressionTypeArguments(node) ->
+        if this.hasPlugin("flow"):
+          node.typeArguments = this.flowParseTypeParameterInstantiation()
+        elif this.hasPlugin("typescript"):
+          node.typeParameters = this.tsParseTypeArguments()
+        else:
+          null
+
       // Apply a type annotation that follows a node.
       // Move node's end point up to match.
       vta_applySubsequentTypeAnnotation(node, typeAnnotation): void ->

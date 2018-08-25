@@ -9,6 +9,13 @@ questionSubscripts = new Plugin({
     return class extends ParserBase {
       questionSubscripts_parseSafeCall(lhs, startPos, startLoc, state) -> {
         node = this.startNodeAt(startPos, startLoc)
+
+        // TODO: factor this out somehow
+        // tildeCall should be able to declare loadAfter: questionSubscripts
+        // and then hook by overriding
+        if this.hasPlugin("tildeCall") and this.match(this.tt_tildeCall):
+          return this.tildeCall_parse(node, lhs, startPos, startLoc, state, true)
+
         node.callee = lhs
         node.optional = true
         this.expect(tt.parenL)
@@ -33,7 +40,8 @@ questionSubscripts = new Plugin({
       }
 
       questionSubscripts_isPossibleSafeCall() -> {
-        this.match(tt.parenL)
+        this.match(tt.parenL) or
+        (this.hasPlugin("tildeCall") and this.match(this.tt_tildeCall))
       }
 
       questionSubscripts_isPossibleMember() -> {

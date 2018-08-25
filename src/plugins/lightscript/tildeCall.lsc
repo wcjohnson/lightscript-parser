@@ -2,8 +2,16 @@ import { Plugin } from '../core/plugin'
 import { types as tt, TokenType, registerToken } from "../../tokenizer/register"
 import * as charCodes from "charcodes"
 
+isOptionalNode(node) ->
+  match node.type:
+    | "OptionalMemberExpression": true
+    | "OptionalCallExpression": true
+    | "LscOptionalTildeCallExpression": true
+    | else: false
+
 tildeCall = new Plugin({
   name: 'tildeCall'
+  dependencies: ['versatileTypeAnnotations']
 
   mixin(ParserBase, opts) -> {
     return class extends ParserBase {
@@ -12,50 +20,57 @@ tildeCall = new Plugin({
         this.tt_tildeCall = new TokenType("~>")
       }
 
-      tildeCall_parseCallee() -> {
+      tildeCall_parseCallee(node) -> {
         // Allow `this` or ordinary identifiers only
         callee = if this.match(tt._this):
           this.parseExprAtom()
         else:
           this.parseIdentifier() // parseIdentifierOrPlaceholder() for match
         // Don't allow further calls as subscripts in the callee
-        this.parseSubscripts(callee, this.state.start, this.state.startLoc, true)
+        node.callee = this.parseSubscripts(callee, this.state.start, this.state.startLoc, true)
+        // Check for type args
+        if(
+          this.vta_hasTypePlugin() and
+          this.isAdjacent() and
+          this.vta_matchCallExpressionTypeArguments()
+        ):
+          this.vta_parseCallExpressionTypeArguments(node)
       }
 
       // Parse `a~b(...)` or `a~>b(...)`
-      tildeCall_parse(node, firstArg) -> {
+      tildeCall_parse(node, left, startPos, startLoc, state, leftIsOptional) -> {
+        // Consume `~` token
         this.next()
-        node.callee = this.tildeCall_parseCallee()
+        node.left = left
+
+        this.tildeCall_parseCallee(node)
 
         // Allow safe-callee tilde calls `a~b?(c)`
-        if (
+        calleeIsOptional = (
           this.hasPlugin("optionalChaining") &&
           this.isAdjacent() &&
           this.eat(tt.question)
-        ) {
-          node.optional = true;
-        }
+        )
 
-        // Allow bang tilde calls
-        if (this.hasPlugin("bangCall") && this.isAdjacentBang()) {
-          const next = this.parseBangCall(node, "CallExpression");
-          node.arguments.unshift(firstArg);
-          node.tilde = true;
-          if (next) {
-            return next;
-          } else {
-            return false;
-          }
-        } else {
-          if (node.optional && this.state.lastTokEnd !== (this.state.pos - 1)) {
-            this.unexpected(null, "Whitespace is forbidden after `?` in an optional call.");
-          }
-          this.expect(tt.parenL);
-          node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-          node.arguments.unshift(firstArg);
-          node.tilde = true;
-          return this.finishNode(node, "CallExpression");
-        }
+        // Invocation must be adjacent to the callee
+        if not this.isAdjacent():
+          this.unexpected(null, "Illegal whitespace between call and argument list.")
+
+        // Parse the call
+        if not this.parseCallish(node):
+          state.stop = true // no more subscripting
+
+        // Determine optionality
+        if calleeIsOptional: node.calleeOptional = true
+        if leftIsOptional: node.leftOptional = true
+        if (
+          calleeIsOptional or leftIsOptional or
+          left~isOptionalNode() or
+          node.callee~isOptionalNode()
+        ):
+          this.finishNode(node, "LscOptionalTildeCallExpression")
+        else:
+          this.finishNode(node, "LscTildeCallExpression")
       } // tildeCall_parse
 
       /////////////////////
@@ -80,12 +95,7 @@ tildeCall = new Plugin({
       parseSubscript(base, startPos, startLoc, noCalls, state) -> {
         if (not noCalls) and this.match(this.tt_tildeCall):
           node = this.startNodeAt(startPos, startLoc)
-          next = this.tildeCall_parse(node, base)
-          if next:
-            return next
-          else:
-            state.stop = true
-            return node
+          return this.tildeCall_parse(node, base, startPos, startLoc, state)
 
         super.parseSubscript(base, startPos, startLoc, noCalls, state)
       }
