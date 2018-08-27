@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -43,7 +44,7 @@
           }
         },
         "expression": {
-          "type": "CallExpression",
+          "type": "LscTildeCallExpression",
           "start": 0,
           "end": 6,
           "loc": {
@@ -55,6 +56,23 @@
               "line": 1,
               "column": 6
             }
+          },
+          "left": {
+            "type": "Identifier",
+            "start": 0,
+            "end": 1,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
           },
           "callee": {
             "type": "Identifier",
@@ -76,23 +94,6 @@
           "arguments": [
             {
               "type": "Identifier",
-              "start": 0,
-              "end": 1,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 0
-                },
-                "end": {
-                  "line": 1,
-                  "column": 1
-                },
-                "identifierName": "a"
-              },
-              "name": "a"
-            },
-            {
-              "type": "Identifier",
               "start": 5,
               "end": 6,
               "loc": {
@@ -111,8 +112,7 @@
           ],
           "extra": {
             "bang": true
-          },
-          "tilde": true
+          }
         }
       }
     ],

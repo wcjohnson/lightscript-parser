@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -43,7 +44,7 @@
           }
         },
         "expression": {
-          "type": "CallExpression",
+          "type": "OptionalCallExpression",
           "start": 0,
           "end": 5,
           "loc": {
@@ -73,7 +74,6 @@
             },
             "name": "a"
           },
-          "optional": true,
           "arguments": [
             {
               "type": "Identifier",
@@ -95,7 +95,8 @@
           ],
           "extra": {
             "bang": true
-          }
+          },
+          "optional": true
         }
       }
     ],

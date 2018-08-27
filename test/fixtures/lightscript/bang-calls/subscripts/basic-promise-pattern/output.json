@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -165,9 +166,9 @@
                       "column": 5
                     }
                   },
+                  "skinny": true,
                   "id": null,
                   "generator": false,
-                  "expression": false,
                   "async": false,
                   "params": [
                     {
@@ -188,7 +189,6 @@
                       "name": "b"
                     }
                   ],
-                  "skinny": true,
                   "body": {
                     "type": "BlockStatement",
                     "start": 15,
@@ -282,9 +282,9 @@
                   "column": 5
                 }
               },
+              "skinny": true,
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {
@@ -305,7 +305,6 @@
                   "name": "d"
                 }
               ],
-              "skinny": true,
               "body": {
                 "type": "BlockStatement",
                 "start": 36,

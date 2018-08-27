@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -73,6 +74,7 @@
             },
             "name": "Error"
           },
+          "typeArguments": null,
           "arguments": []
         }
       },
@@ -122,9 +124,6 @@
               "identifierName": "aBangCall"
             },
             "name": "aBangCall"
-          },
-          "extra": {
-            "parenthesizedArgument": false
           }
         }
       }

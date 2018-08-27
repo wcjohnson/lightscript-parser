@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -75,7 +76,7 @@
           },
           "arguments": [
             {
-              "type": "NamedArrowExpression",
+              "type": "LscNamedArrowExpression",
               "start": 3,
               "end": 13,
               "loc": {
@@ -88,6 +89,7 @@
                   "column": 3
                 }
               },
+              "skinny": true,
               "id": {
                 "type": "Identifier",
                 "start": 3,
@@ -106,10 +108,8 @@
                 "name": "b"
               },
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
-              "skinny": true,
               "body": {
                 "type": "BlockStatement",
                 "start": 7,
