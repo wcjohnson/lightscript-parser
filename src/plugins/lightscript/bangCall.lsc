@@ -4,7 +4,7 @@ import { TokenType, types as tt } from "../../tokenizer/register"
 
 bangCall = new Plugin({
   name: 'bangCall'
-  dependencies: ['bangCall_subscripts']
+  dependencies: ['bangCall_subscripts', 'significantWhitespace']
 
   mixin(ParserBase, opts) -> {
     return class extends ParserBase {
@@ -132,7 +132,13 @@ bangCall = new Plugin({
         this.toReferencedList(node.arguments);
 
         // Subscripts can only appear on a new line.
-        return (!this.isLineBreak());
+        return (this.isLineBreak());
+      }
+
+      bangCall_parse(node, callee, state) {
+        node.callee = callee
+        if not this.bangCall_parseArgs(node): state.stop = true
+        this.finishNode(node, "CallExpression")
       }
 
       ////////////////
@@ -144,6 +150,14 @@ bangCall = new Plugin({
           this.bangCall_parseArgs(node)
         else:
           super.parseCallish(node)
+      }
+
+      parseNewArguments(node): void -> {
+        if (this.bangCall_isAdjacentBang()) {
+          this.bangCall_parseArgs(node)
+        } else {
+          super.parseNewArguments(node)
+        }
       }
     } // class
   } // mixin

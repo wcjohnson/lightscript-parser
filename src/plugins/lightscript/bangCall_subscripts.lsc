@@ -10,11 +10,12 @@ bangCall_subscripts = new Plugin({
   mixin(ParserBase, opts) -> {
     return class extends ParserBase {
       parseSubscript(base, startPos, startLoc, noCalls, state) -> {
-        if (not noCalls) and this.bangCall_isAdjacentBang():
+        if this.bangCall_shouldUnwindBangSubscript():
+          state.stop = true
+          base
+        elif (not noCalls) and this.bangCall_isAdjacentBang():
           node = this.startNodeAt(startPos, startLoc)
-          node.callee = base
-          if not this.bangCall_parseArgs(node): state.stop = true
-          this.finishNode(node, "CallExpression")
+          this.bangCall_parse(node, base, state)
         else:
           super.parseSubscript(base, startPos, startLoc, noCalls, state)
       }

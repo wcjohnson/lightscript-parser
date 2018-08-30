@@ -16,6 +16,13 @@ questionSubscripts = new Plugin({
         if this.hasPlugin("tildeCall") and this.match(this.tt_tildeCall):
           return this.tildeCall_parse(node, lhs, startPos, startLoc, state, true)
 
+        if this.hasPlugin("bangCall") and this.match(tt.bang):
+          this.bangCall_parse(node, lhs, state)
+          // optionality
+          node.optional = true
+          state.optionalChainMember = true
+          return this.finishOptionalCallExpression(node)
+
         node.callee = lhs
         node.optional = true
         this.expect(tt.parenL)
@@ -41,7 +48,8 @@ questionSubscripts = new Plugin({
 
       questionSubscripts_isPossibleSafeCall() -> {
         this.match(tt.parenL) or
-        (this.hasPlugin("tildeCall") and this.match(this.tt_tildeCall))
+        (this.hasPlugin("tildeCall") and this.match(this.tt_tildeCall)) or
+        (this.hasPlugin("bangCall") and this.match(tt.bang))
       }
 
       questionSubscripts_isPossibleMember() -> {
