@@ -44,8 +44,17 @@ bangCall = new Plugin({
         (this.state.indentLevel <= this.state.bangUnwindLevel)
       }
 
+      // c/p expression.js parseExprListItem
+      // We can't call it directly because we want to disallow flow typecasts here
+      // Also treat the shorthand default pos as null
       bangCall_parseArg() -> {
-        this.parseExprListItem(false, undefined, undefined, undefined)
+        let elt;
+        if (this.match(tt.ellipsis)) {
+          now elt = this.parseSpread();
+        } else {
+          now elt = this.parseMaybeAssign(false);
+        }
+        return elt;
       }
 
       // Parse bang call args onto the given node. Returns true
