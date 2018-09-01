@@ -577,7 +577,7 @@ export default class ExpressionParser extends LValParser {
         if (this.hasPlugin("lscCoreSyntax") && this.match(tt.num)) {
           this.parseNumericPropertyAccess(node);
         } else {
-          node.property = this.parseIdentifier(true);
+          node.property = this.parseIdentifierOrPlaceholder(true); // LSC: syntactic placeholders
           node.computed = false;
         }
         node.optional = true;
@@ -590,7 +590,7 @@ export default class ExpressionParser extends LValParser {
       if (this.hasPlugin("lscCoreSyntax") && this.match(tt.num)) {
         this.parseNumericPropertyAccess(node);
       } else {
-        node.property = this.parseMaybePrivateName();
+        node.property = this.parseMaybePrivateNameOrPlaceholder();
         node.computed = false;
       }
       if (state.optionalChainMember) {
@@ -883,7 +883,7 @@ export default class ExpressionParser extends LValParser {
 
         const containsEsc = this.state.containsEsc;
         const allowYield = this.shouldAllowYieldIdentifier();
-        const id = this.parseIdentifier(allowAwait || allowYield);
+        const id = this.parseIdentifierOrPlaceholder(allowAwait || allowYield); // LSC: syntactic placeholders
 
         if (id.name === "await") {
           if (
@@ -904,7 +904,7 @@ export default class ExpressionParser extends LValParser {
         } else if (canBeArrow && id.name === "async" && this.match(tt.name)) {
           const oldYield = this.state.yieldInPossibleArrowParameters;
           this.state.yieldInPossibleArrowParameters = null;
-          const params = [this.parseIdentifier()];
+          const params = [this.parseIdentifierOrPlaceholder()];
           // XXX: LSC - use parseArrow for arrow parsing
           this.parseArrow(node);
           // let foo = bar => {};
@@ -1038,6 +1038,11 @@ export default class ExpressionParser extends LValParser {
     } else {
       return this.parseIdentifier(true);
     }
+  }
+
+  // LSC: Extension point for syntactic placeholders
+  parseMaybePrivateNameOrPlaceholder() {
+    return this.parseMaybePrivateName();
   }
 
   parseFunctionExpression(): N.FunctionExpression | N.MetaProperty {
@@ -1934,6 +1939,13 @@ export default class ExpressionParser extends LValParser {
       );
     }
     return elt;
+  }
+
+  // LSC: Extension point - parse an identifier or a placeholder. Placeholders
+  // are permitted only in certain places and at those places we shunt to
+  // the placeholder plugin.
+  parseIdentifierOrPlaceholder(liberal?: boolean) {
+    return this.parseIdentifier(liberal);
   }
 
   // Parse the next token as an identifier. If `liberal` is true (used

@@ -119,6 +119,7 @@ import spreadLoop from './lightscript/spreadLoop'
 import questionSubscripts from './lightscript/questionSubscripts'
 import bangCall from './lightscript/bangCall'
 import bangCall_subscripts from './lightscript/bangCall_subscripts'
+import syntacticPlaceholders from './lightscript/syntacticPlaceholders'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tryCatch)
@@ -144,3 +145,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(questionSubscripts)
   registerPlugin(bangCall)
   registerPlugin(bangCall_subscripts)
+  registerPlugin(syntacticPlaceholders)

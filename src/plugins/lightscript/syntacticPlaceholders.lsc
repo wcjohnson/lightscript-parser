@@ -1,0 +1,42 @@
+import { Plugin } from '../core/plugin'
+
+syntacticPlaceholders = new Plugin({
+  name: 'syntacticPlaceholders'
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      constructor(options, input) -> {
+        super(options, input)
+        // Calculate regex for matching placeholders
+        ph = options.placeholder or "_"
+        quotedPh = (ph + "").replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")
+        this.phRegex = new RegExp("^" + quotedPh + "([0-9]*)$")
+      }
+
+      // Fixup an id node produced by parseIdentifier et al
+      syntacticPlaceholders_fixupIdNode(node) -> {
+        if node.type != "Identifier": return node
+
+        matches = this.phRegex.exec(node.name)
+        if matches:
+          if matches[1]: node.index = parseInt(matches[1])
+          this.finishNode(node, "LscPlaceholderExpression")
+        else:
+          node
+      }
+
+      parseIdentifierOrPlaceholder(liberal?: boolean) -> {
+        this.syntacticPlaceholders_fixupIdNode(
+          super.parseIdentifierOrPlaceholder(liberal)
+        )
+      }
+
+      parseMaybePrivateNameOrPlaceholder() -> {
+        this.syntacticPlaceholders_fixupIdNode(
+          super.parseMaybePrivateNameOrPlaceholder()
+        )
+      }
+    } // class
+  } // mixin
+})
+
+export default syntacticPlaceholders
