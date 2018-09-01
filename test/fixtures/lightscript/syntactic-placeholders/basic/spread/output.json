@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
@@ -56,12 +57,11 @@
               "column": 9
             }
           },
+          "skinny": true,
           "id": null,
           "generator": false,
-          "expression": true,
           "async": false,
           "params": [],
-          "skinny": true,
           "body": {
             "type": "ArrayExpression",
             "start": 3,
@@ -92,7 +92,7 @@
                   }
                 },
                 "argument": {
-                  "type": "PlaceholderExpression",
+                  "type": "LscPlaceholderExpression",
                   "start": 7,
                   "end": 8,
                   "loc": {
@@ -103,12 +103,15 @@
                     "end": {
                       "line": 1,
                       "column": 8
-                    }
-                  }
+                    },
+                    "identifierName": "_"
+                  },
+                  "name": "_"
                 }
               }
             ]
-          }
+          },
+          "expression": true
         }
       }
     ],

@@ -1,8 +1,0 @@
-{
-  "alternatives": {
-    "all": {
-      "allPlugins": true,
-      "excludePlugins": ["estree"]
-    }
-  }
-}
