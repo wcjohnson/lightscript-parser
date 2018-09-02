@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -79,7 +80,7 @@
               "name": "a"
             },
             "init": {
-              "type": "MatchExpression",
+              "type": "LscMatchExpression",
               "start": 4,
               "end": 39,
               "loc": {
@@ -111,7 +112,7 @@
               },
               "cases": [
                 {
-                  "type": "MatchCase",
+                  "type": "LscMatchCase",
                   "start": 15,
                   "end": 39,
                   "loc": {

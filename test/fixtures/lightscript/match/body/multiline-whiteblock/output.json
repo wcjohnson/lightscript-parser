@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "MatchStatement",
+        "type": "LscMatchStatement",
         "start": 0,
         "end": 45,
         "loc": {
@@ -61,7 +62,7 @@
         },
         "cases": [
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 11,
             "end": 33,
             "loc": {
@@ -215,7 +216,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 36,
             "end": 45,
             "loc": {
@@ -229,7 +230,7 @@
               }
             },
             "outerGuard": {
-              "type": "MatchElse",
+              "type": "LscMatchElse",
               "start": 38,
               "end": 42,
               "loc": {

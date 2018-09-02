@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "MatchStatement",
+        "type": "LscMatchStatement",
         "start": 0,
         "end": 374,
         "loc": {
@@ -61,7 +62,7 @@
         },
         "cases": [
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 11,
             "end": 33,
             "loc": {
@@ -104,8 +105,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 20,
@@ -123,6 +122,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 20,
@@ -159,8 +160,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 23,
@@ -178,6 +177,8 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 23,
@@ -269,7 +270,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 36,
             "end": 66,
             "loc": {
@@ -312,8 +313,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 45,
@@ -331,6 +330,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 45,
@@ -367,8 +368,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 48,
@@ -386,6 +385,8 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "AssignmentPattern",
                     "start": 48,
@@ -548,7 +549,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 69,
             "end": 107,
             "loc": {
@@ -591,8 +592,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 78,
@@ -610,6 +609,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 78,
@@ -632,7 +633,7 @@
                   }
                 },
                 {
-                  "type": "RestProperty",
+                  "type": "RestElement",
                   "start": 81,
                   "end": 85,
                   "loc": {
@@ -821,7 +822,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 110,
             "end": 199,
             "loc": {
@@ -864,8 +865,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 123,
@@ -883,6 +882,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": false,
                   "value": {
                     "type": "ObjectPattern",
                     "start": 126,
@@ -913,8 +914,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": true,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 134,
@@ -932,6 +931,8 @@
                           },
                           "name": "b"
                         },
+                        "computed": false,
+                        "shorthand": true,
                         "value": {
                           "type": "Identifier",
                           "start": 134,
@@ -968,8 +969,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": true,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 142,
@@ -987,6 +986,8 @@
                           },
                           "name": "d"
                         },
+                        "computed": false,
+                        "shorthand": true,
                         "value": {
                           "type": "AssignmentPattern",
                           "start": 142,
@@ -1061,8 +1062,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 160,
@@ -1080,6 +1079,8 @@
                     },
                     "name": "f"
                   },
+                  "computed": false,
+                  "shorthand": false,
                   "value": {
                     "type": "ObjectPattern",
                     "start": 163,
@@ -1096,7 +1097,7 @@
                     },
                     "properties": [
                       {
-                        "type": "RestProperty",
+                        "type": "RestElement",
                         "start": 165,
                         "end": 169,
                         "loc": {
@@ -1309,7 +1310,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 202,
             "end": 228,
             "loc": {
@@ -1371,8 +1372,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 215,
@@ -1390,6 +1389,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 215,
@@ -1426,8 +1427,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 218,
@@ -1445,6 +1444,8 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 218,
@@ -1536,7 +1537,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 231,
             "end": 265,
             "loc": {
@@ -1598,8 +1599,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 244,
@@ -1617,6 +1616,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 244,
@@ -1653,8 +1654,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 247,
@@ -1672,6 +1671,8 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "AssignmentPattern",
                     "start": 247,
@@ -1834,7 +1835,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 268,
             "end": 310,
             "loc": {
@@ -1896,8 +1897,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 281,
@@ -1915,6 +1914,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 281,
@@ -1937,7 +1938,7 @@
                   }
                 },
                 {
-                  "type": "RestProperty",
+                  "type": "RestElement",
                   "start": 284,
                   "end": 288,
                   "loc": {
@@ -2126,7 +2127,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 313,
             "end": 374,
             "loc": {
@@ -2188,8 +2189,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 325,
@@ -2207,6 +2206,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": false,
                   "value": {
                     "type": "ObjectPattern",
                     "start": 327,
@@ -2237,8 +2238,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": true,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 328,
@@ -2256,6 +2255,8 @@
                           },
                           "name": "b"
                         },
+                        "computed": false,
+                        "shorthand": true,
                         "value": {
                           "type": "Identifier",
                           "start": 328,
@@ -2292,8 +2293,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": true,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 330,
@@ -2311,6 +2310,8 @@
                           },
                           "name": "d"
                         },
+                        "computed": false,
+                        "shorthand": true,
                         "value": {
                           "type": "AssignmentPattern",
                           "start": 330,
@@ -2385,8 +2386,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 339,
@@ -2404,6 +2403,8 @@
                     },
                     "name": "f"
                   },
+                  "computed": false,
+                  "shorthand": false,
                   "value": {
                     "type": "ObjectPattern",
                     "start": 341,
@@ -2420,7 +2421,7 @@
                     },
                     "properties": [
                       {
-                        "type": "RestProperty",
+                        "type": "RestElement",
                         "start": 343,
                         "end": 347,
                         "loc": {

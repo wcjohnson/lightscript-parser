@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -79,7 +80,7 @@
               "name": "a"
             },
             "init": {
-              "type": "MatchExpression",
+              "type": "LscMatchExpression",
               "start": 4,
               "end": 101,
               "loc": {
@@ -111,7 +112,7 @@
               },
               "cases": [
                 {
-                  "type": "MatchCase",
+                  "type": "LscMatchCase",
                   "start": 15,
                   "end": 26,
                   "loc": {
@@ -201,7 +202,7 @@
                   }
                 },
                 {
-                  "type": "MatchCase",
+                  "type": "LscMatchCase",
                   "start": 29,
                   "end": 46,
                   "loc": {
@@ -291,7 +292,7 @@
                   }
                 },
                 {
-                  "type": "MatchCase",
+                  "type": "LscMatchCase",
                   "start": 49,
                   "end": 81,
                   "loc": {
@@ -353,8 +354,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": true,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 60,
@@ -372,6 +371,8 @@
                           },
                           "name": "b"
                         },
+                        "computed": false,
+                        "shorthand": true,
                         "value": {
                           "type": "Identifier",
                           "start": 60,
@@ -483,7 +484,7 @@
                   }
                 },
                 {
-                  "type": "MatchCase",
+                  "type": "LscMatchCase",
                   "start": 84,
                   "end": 101,
                   "loc": {

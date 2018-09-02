@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "MatchStatement",
+        "type": "LscMatchStatement",
         "start": 0,
         "end": 156,
         "loc": {
@@ -61,7 +62,7 @@
         },
         "cases": [
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 11,
             "end": 127,
             "loc": {
@@ -143,7 +144,7 @@
               },
               "body": [
                 {
-                  "type": "MatchStatement",
+                  "type": "LscMatchStatement",
                   "start": 27,
                   "end": 127,
                   "loc": {
@@ -175,7 +176,7 @@
                   },
                   "cases": [
                     {
-                      "type": "MatchCase",
+                      "type": "LscMatchCase",
                       "start": 42,
                       "end": 64,
                       "loc": {
@@ -278,7 +279,7 @@
                       }
                     },
                     {
-                      "type": "MatchCase",
+                      "type": "LscMatchCase",
                       "start": 71,
                       "end": 101,
                       "loc": {
@@ -381,7 +382,7 @@
                       }
                     },
                     {
-                      "type": "MatchCase",
+                      "type": "LscMatchCase",
                       "start": 108,
                       "end": 127,
                       "loc": {
@@ -395,7 +396,7 @@
                         }
                       },
                       "outerGuard": {
-                        "type": "MatchElse",
+                        "type": "LscMatchElse",
                         "start": 110,
                         "end": 114,
                         "loc": {
@@ -455,7 +456,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 130,
             "end": 156,
             "loc": {
@@ -469,7 +470,7 @@
               }
             },
             "outerGuard": {
-              "type": "MatchElse",
+              "type": "LscMatchElse",
               "start": 132,
               "end": 136,
               "loc": {

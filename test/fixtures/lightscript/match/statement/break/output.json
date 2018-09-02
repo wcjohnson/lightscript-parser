@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "WhileStatement",
@@ -74,7 +75,7 @@
           },
           "body": [
             {
-              "type": "MatchStatement",
+              "type": "LscMatchStatement",
               "start": 15,
               "end": 38,
               "loc": {
@@ -106,7 +107,7 @@
               },
               "cases": [
                 {
-                  "type": "MatchCase",
+                  "type": "LscMatchCase",
                   "start": 28,
                   "end": 38,
                   "loc": {

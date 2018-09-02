@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "MatchStatement",
+        "type": "LscMatchStatement",
         "start": 0,
         "end": 392,
         "loc": {
@@ -61,7 +62,7 @@
         },
         "cases": [
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 11,
             "end": 33,
             "loc": {
@@ -193,7 +194,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 36,
             "end": 66,
             "loc": {
@@ -396,7 +397,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 69,
             "end": 100,
             "loc": {
@@ -577,7 +578,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 103,
             "end": 215,
             "loc": {
@@ -986,7 +987,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 218,
             "end": 244,
             "loc": {
@@ -1137,7 +1138,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 247,
             "end": 281,
             "loc": {
@@ -1359,7 +1360,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 284,
             "end": 319,
             "loc": {
@@ -1559,7 +1560,7 @@
             }
           },
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 322,
             "end": 392,
             "loc": {

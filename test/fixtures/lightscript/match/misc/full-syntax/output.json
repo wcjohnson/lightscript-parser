@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "MatchStatement",
+        "type": "LscMatchStatement",
         "start": 0,
         "end": 108,
         "loc": {
@@ -61,7 +62,7 @@
         },
         "cases": [
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 11,
             "end": 108,
             "loc": {
@@ -107,7 +108,7 @@
                   }
                 },
                 "left": {
-                  "type": "CallExpression",
+                  "type": "LscTildeCallExpression",
                   "start": 29,
                   "end": 40,
                   "loc": {
@@ -118,6 +119,21 @@
                     "end": {
                       "line": 2,
                       "column": 31
+                    }
+                  },
+                  "left": {
+                    "type": "LscMatchPlaceholderExpression",
+                    "start": 28,
+                    "end": 29,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 20
+                      }
                     }
                   },
                   "callee": {
@@ -137,28 +153,11 @@
                     },
                     "name": "isWidget"
                   },
-                  "arguments": [
-                    {
-                      "type": "MatchPlaceholderExpression",
-                      "start": 28,
-                      "end": 29,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 19
-                        },
-                        "end": {
-                          "line": 2,
-                          "column": 20
-                        }
-                      }
-                    }
-                  ],
-                  "tilde": true
+                  "arguments": []
                 },
                 "operator": "&&",
                 "right": {
-                  "type": "CallExpression",
+                  "type": "LscTildeCallExpression",
                   "start": 45,
                   "end": 55,
                   "loc": {
@@ -169,6 +168,21 @@
                     "end": {
                       "line": 2,
                       "column": 46
+                    }
+                  },
+                  "left": {
+                    "type": "LscMatchPlaceholderExpression",
+                    "start": 44,
+                    "end": 45,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 35
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 36
+                      }
                     }
                   },
                   "callee": {
@@ -188,24 +202,7 @@
                     },
                     "name": "isCheap"
                   },
-                  "arguments": [
-                    {
-                      "type": "MatchPlaceholderExpression",
-                      "start": 44,
-                      "end": 45,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 35
-                        },
-                        "end": {
-                          "line": 2,
-                          "column": 36
-                        }
-                      }
-                    }
-                  ],
-                  "tilde": true
+                  "arguments": []
                 }
               },
               {
@@ -225,7 +222,7 @@
                 "operator": "!",
                 "prefix": true,
                 "argument": {
-                  "type": "CallExpression",
+                  "type": "LscTildeCallExpression",
                   "start": 61,
                   "end": 71,
                   "loc": {
@@ -236,6 +233,21 @@
                     "end": {
                       "line": 2,
                       "column": 62
+                    }
+                  },
+                  "left": {
+                    "type": "LscMatchPlaceholderExpression",
+                    "start": 60,
+                    "end": 61,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 51
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 52
+                      }
                     }
                   },
                   "callee": {
@@ -255,27 +267,7 @@
                     },
                     "name": "isShirt"
                   },
-                  "arguments": [
-                    {
-                      "type": "MatchPlaceholderExpression",
-                      "start": 60,
-                      "end": 61,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 51
-                        },
-                        "end": {
-                          "line": 2,
-                          "column": 52
-                        }
-                      }
-                    }
-                  ],
-                  "tilde": true
-                },
-                "extra": {
-                  "parenthesizedArgument": false
+                  "arguments": []
                 }
               }
             ],
@@ -309,8 +301,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 79,
@@ -328,6 +318,8 @@
                     },
                     "name": "price"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 79,

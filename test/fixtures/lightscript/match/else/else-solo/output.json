@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "MatchStatement",
+        "type": "LscMatchStatement",
         "start": 0,
         "end": 37,
         "loc": {
@@ -61,7 +62,7 @@
         },
         "cases": [
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 11,
             "end": 37,
             "loc": {
@@ -75,7 +76,7 @@
               }
             },
             "outerGuard": {
-              "type": "MatchElse",
+              "type": "LscMatchElse",
               "start": 13,
               "end": 17,
               "loc": {

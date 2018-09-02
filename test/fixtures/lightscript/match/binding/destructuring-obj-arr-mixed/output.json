@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "MatchStatement",
+        "type": "LscMatchStatement",
         "start": 0,
         "end": 164,
         "loc": {
@@ -61,7 +62,7 @@
         },
         "cases": [
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 11,
             "end": 164,
             "loc": {
@@ -104,8 +105,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 24,
@@ -123,6 +122,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": false,
                   "value": {
                     "type": "ArrayPattern",
                     "start": 27,
@@ -185,8 +186,6 @@
                               }
                             },
                             "method": false,
-                            "shorthand": true,
-                            "computed": false,
                             "key": {
                               "type": "Identifier",
                               "start": 53,
@@ -204,6 +203,8 @@
                               },
                               "name": "d"
                             },
+                            "computed": false,
+                            "shorthand": true,
                             "value": {
                               "type": "Identifier",
                               "start": 53,
@@ -240,8 +241,6 @@
                               }
                             },
                             "method": false,
-                            "shorthand": true,
-                            "computed": false,
                             "key": {
                               "type": "Identifier",
                               "start": 63,
@@ -259,6 +258,8 @@
                               },
                               "name": "e"
                             },
+                            "computed": false,
+                            "shorthand": true,
                             "value": {
                               "type": "AssignmentPattern",
                               "start": 63,
@@ -316,7 +317,7 @@
                             }
                           },
                           {
-                            "type": "RestProperty",
+                            "type": "RestElement",
                             "start": 77,
                             "end": 81,
                             "loc": {
@@ -384,8 +385,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 108,
@@ -403,6 +402,8 @@
                     },
                     "name": "h"
                   },
+                  "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "AssignmentPattern",
                     "start": 108,
@@ -460,7 +461,7 @@
                   }
                 },
                 {
-                  "type": "RestProperty",
+                  "type": "RestElement",
                   "start": 120,
                   "end": 124,
                   "loc": {
@@ -493,6 +494,7 @@
                 }
               ]
             },
+            "assertive": true,
             "consequent": {
               "type": "BlockStatement",
               "start": 128,

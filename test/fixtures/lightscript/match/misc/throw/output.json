@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -79,7 +80,7 @@
               "name": "y"
             },
             "init": {
-              "type": "MatchExpression",
+              "type": "LscMatchExpression",
               "start": 4,
               "end": 51,
               "loc": {
@@ -111,7 +112,7 @@
               },
               "cases": [
                 {
-                  "type": "MatchCase",
+                  "type": "LscMatchCase",
                   "start": 15,
                   "end": 25,
                   "loc": {
@@ -176,7 +177,7 @@
                   }
                 },
                 {
-                  "type": "MatchCase",
+                  "type": "LscMatchCase",
                   "start": 28,
                   "end": 51,
                   "loc": {
@@ -190,7 +191,7 @@
                     }
                   },
                   "outerGuard": {
-                    "type": "MatchElse",
+                    "type": "LscMatchElse",
                     "start": 30,
                     "end": 34,
                     "loc": {
@@ -249,6 +250,7 @@
                         },
                         "name": "Error"
                       },
+                      "typeArguments": null,
                       "arguments": []
                     }
                   }

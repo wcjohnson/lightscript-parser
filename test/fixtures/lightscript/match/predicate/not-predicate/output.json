@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
-        "type": "MatchStatement",
+        "type": "LscMatchStatement",
         "start": 0,
         "end": 32,
         "loc": {
@@ -61,7 +62,7 @@
         },
         "cases": [
           {
-            "type": "MatchCase",
+            "type": "LscMatchCase",
             "start": 11,
             "end": 32,
             "loc": {
@@ -92,7 +93,7 @@
                 "operator": "!",
                 "prefix": true,
                 "argument": {
-                  "type": "CallExpression",
+                  "type": "LscTildeCallExpression",
                   "start": 17,
                   "end": 29,
                   "loc": {
@@ -103,6 +104,21 @@
                     "end": {
                       "line": 2,
                       "column": 20
+                    }
+                  },
+                  "left": {
+                    "type": "LscMatchPlaceholderExpression",
+                    "start": 16,
+                    "end": 17,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 7
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 8
+                      }
                     }
                   },
                   "callee": {
@@ -122,27 +138,7 @@
                     },
                     "name": "predicate"
                   },
-                  "arguments": [
-                    {
-                      "type": "MatchPlaceholderExpression",
-                      "start": 16,
-                      "end": 17,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 7
-                        },
-                        "end": {
-                          "line": 2,
-                          "column": 8
-                        }
-                      }
-                    }
-                  ],
-                  "tilde": true
-                },
-                "extra": {
-                  "parenthesizedArgument": false
+                  "arguments": []
                 }
               }
             ],
