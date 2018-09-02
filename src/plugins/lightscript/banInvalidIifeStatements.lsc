@@ -13,6 +13,24 @@ banInvalidIifeStatements = new Plugin({
         super(options, input)
         this.state.banInvalidIifeStatements = false
 
+      banInvalidIifeStatements() -> {
+        restoreVector = {
+          banInvalidIifeStatements: this.state.banInvalidIifeStatements
+          labels: this.state.labels
+        }
+        this.state.banInvalidIifeStatements = true
+        this.state.labels = []
+        restoreVector
+      }
+
+      unbanInvalidIifeStatements(restoreVector) -> {
+        Object.assign(this.state, restoreVector)
+      }
+
+      ///////////////
+      // OVERRIDES
+      ///////////////
+
       parseStatementContent(declaration, topLevel) -> {
         if this.state.banInvalidIifeStatements:
           switch (this.state.type) {

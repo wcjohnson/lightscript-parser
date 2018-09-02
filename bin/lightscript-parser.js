@@ -38,7 +38,8 @@ mgr.addPlugins([
   "questionSubscripts",
   "optionalChaining",
   "bangCall",
-  "syntacticPlaceholders"
+  "syntacticPlaceholders",
+  "match",
   "jsx",
   "flow",
 ]);

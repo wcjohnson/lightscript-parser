@@ -1,0 +1,245 @@
+// Parse `!` calls
+import { Plugin } from '../core/plugin'
+import { types as tt, TokenType, registerKeywordToken } from "../../tokenizer/register"
+
+findLeftmostInvalidMatchAtom(atom) -> {
+  // Allowed match atoms:
+  // - Strings, booleans, number literals, null literal
+  // - Identifiers
+  // - NOT (atom), (atom) OR (atom), (atom) AND (atom)
+  // - +/-(atom)
+  // - Tilde call predicates
+  match atom.type:
+    | "StringLiteral", "NumericLiteral", "BooleanLiteral", "RegExpLiteral", "TemplateLiteral", "NullLiteral": null
+    | "Identifier": null
+    | "LscTildeCallExpression": null
+    | "LogicalExpression":
+      findLeftmostInvalidMatchAtom(atom.left) or
+      findLeftmostInvalidMatchAtom(atom.right)
+    | "UnaryExpression":
+      match atom.operator:
+        | "!", "+", "-": findLeftmostInvalidMatchAtom(atom.argument)
+        | else: atom
+    | "MemberExpression":
+      findLeftmostInvalidMatchAtom(atom.object) or
+      findLeftmostInvalidMatchAtom(atom.property)
+    | else: atom
+}
+
+matchPlugin = new Plugin({
+  name: 'match'
+  dependencies: ['banInvalidIifeStatements', 'disableBitwiseOperators', 'significantWhitespace']
+
+  load() -> {
+    // TODO: eliminate dependency on load()
+    // Keywords should be on `this.keywords` somehow
+    registerKeywordToken("match", new TokenType("match", {
+      keyword: true
+      beforeExpr: true
+      startsExpr: true
+    }))
+  } // load
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      constructor(options, input) -> {
+        super(options, input)
+        this.state.inMatchCaseTest = false
+        this.state.inMatchCaseAtom = false
+      }
+
+      match_parseExpression(node) -> {
+        this.match_parse(node, true)
+      }
+
+      match_parseStatement(node) -> {
+        this.match_parse(node, false)
+      }
+
+      match_parse(node, isExpression) -> {
+        if (this.state.inMatchCaseTest) this.unexpected(null, "`match` is illegal in a match case test");
+        this.expect(tt._match);
+
+        node.discriminant = this.parseParenExpression();
+        this.match_parseCases(node, isExpression);
+
+        return this.finishNode(node, isExpression ? "LscMatchExpression" : "LscMatchStatement");
+      }
+
+      match_parseCases(node, isExpression) -> {
+        const isColon = this.hasPlugin("lscCoreSyntax") and this.match(tt.colon);
+        let isEnd;
+        if (isColon) {
+          const indentLevel = this.state.indentLevel;
+          this.next();
+          now isEnd = () => this.state.indentLevel <= indentLevel || this.match(tt.eof);
+        } else {
+          this.expect(tt.braceL);
+          now isEnd = () => this.eat(tt.braceR);
+        }
+
+        node.cases = [];
+        const caseIndentLevel = this.state.indentLevel;
+        let hasUsedElse = false;
+        while (!isEnd()) {
+          if (hasUsedElse) {
+            this.unexpected(null, "`else` must be last case.");
+          }
+          if (isColon && this.state.indentLevel !== caseIndentLevel) {
+            this.unexpected(null, "Mismatched indent.");
+          }
+
+          const matchCase = this.match_parseCase(isExpression);
+          if (matchCase.outerGuard && matchCase.outerGuard.type === "LscMatchElse") {
+            now hasUsedElse = true;
+          }
+          node.cases.push(matchCase);
+        }
+
+        if (!node.cases.length) {
+          this.unexpected(null, tt.bitwiseOR);
+        }
+      }
+
+      match_parseCase(isExpression) -> {
+        const node = this.startNode();
+
+        this.expect(tt.bitwiseOR);
+        if (this.isLineBreak()) this.unexpected(this.state.lastTokEnd, "Illegal newline.");
+
+        this.match_parseCaseTest(node);
+        this.match_parseCaseConsequent(node, isExpression);
+
+        return this.finishNode(node, "LscMatchCase");
+      }
+
+      match_parseCaseConsequent(node, isExpression): void -> {
+        if (isExpression) {
+          // disallow return/continue/break
+          restoreVector = this.banInvalidIifeStatements()
+          node.consequent = this.parseBlock(false);
+          this.unbanInvalidIifeStatements(restoreVector)
+        } else {
+          node.consequent = this.parseBlock(false);
+        }
+      }
+
+      match_parseCaseTest(node): void -> {
+        // can't be nested so no need to read/restore old value
+        this.state.inMatchCaseTest = true;
+
+        if (this.match(tt._else)) {
+          const elseNode = this.startNode();
+          this.next();
+          node.outerGuard = this.finishNode(elseNode, "LscMatchElse");
+          this.match_parseCaseBinding(node, true);
+        } else {
+          if (this.match_parseCaseOuterGuard(node)) {
+            this.match_parseCaseAtoms(node);
+            this.match_parseCaseBinding(node, false);
+            this.match_parseCaseInnerGuard(node);
+          }
+        }
+
+        this.state.inMatchCaseTest = false;
+      }
+
+      match_parseCaseBinding(node, isElse): void -> {
+        if (node.binding) this.unexpected(this.state.lastTokStart, "Cannot destructure twice.");
+        if (this.eatContextual("as")) {
+          node.binding = this.match_parseBindingAtom(true);
+          node.assertive = false;
+        } else if (!isElse && this.eat(tt._with)) {
+          node.binding = this.match_parseBindingAtom();
+          node.assertive = true;
+        }
+      }
+
+      match_parseBindingAtom(allowNonPattern) -> {
+        if (!allowNonPattern && !this.match(tt.braceL) && !this.match(tt.bracketL)) {
+          this.unexpected(null, "Expected an array or object destructuring pattern.");
+        }
+        return this.parseBindingAtom();
+      }
+
+      match_parseCaseOuterGuard(node): boolean -> {
+        if (!this.eat(tt._if)) return true;
+        node.outerGuard = this.parseExpression();
+        if (this.match(tt.colon)) {
+          return false;
+        } else {
+          // OK to parse a regex after `when`
+          this.state.exprAllowed = true;
+          this.eatContextual("when");
+          return true;
+        }
+      }
+
+      match_parseCaseInnerGuard(node): void -> {
+        if (!this.eat(tt._if)) return;
+        node.innerGuard = this.parseParenExpression();
+      }
+
+      match_parseCaseAtoms(node): void -> {
+        if (this.match(tt._if) || this.match(tt._with) || this.isContextual("as")) {
+          return;
+        }
+
+        const atoms = [];
+        while (true) {
+          this.state.inMatchCaseAtom = true
+          atoms.push(this.match_validateAtom(this.parseExprOps()));
+          this.state.inMatchCaseAtom = false
+          if (!this.eat(tt.comma)) break;
+        }
+
+        node.atoms = atoms;
+      }
+
+      match_validateAtom(atom) -> {
+        leftmost = findLeftmostInvalidMatchAtom(atom)
+        if leftmost:
+          this.unexpected(leftmost.start, "Illegal expression in match atom.")
+        else:
+          atom
+      }
+
+      ///////////////
+      // OVERRIDES
+      ///////////////
+
+      isKeyword(word: string): boolean -> {
+        if word == 'match': true else: super.isKeyword(word)
+      }
+
+      parseStatementContent(declaration, topLevel) -> {
+        if this.state.type == tt._match:
+          this.match_parseStatement(this.startNode())
+        else:
+          super.parseStatementContent(declaration, topLevel)
+      }
+
+      parseExprAtom(refShorthandDefaultPos) -> {
+        if this.state.type == tt._match:
+          this.match_parseExpression(this.startNode())
+        elif this.state.type == this.tt_tildeCall and this.state.inMatchCaseAtom:
+          // Special case: in a match case atom, allow the discriminant to be
+          // predicated with `~`
+          node = this.startNodeAt(this.state.lastTokEnd, this.state.lastTokEndLoc)
+          this.finishNodeAt(node, "LscMatchPlaceholderExpression", this.state.start, this.state.startLoc)
+        else:
+          super.parseExprAtom(refShorthandDefaultPos)
+      }
+
+      parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn) {
+        // Prevent bitwise-OR parsing between match cases
+        if this.isLineBreak() and this.match(tt.bitwiseOR):
+          return left
+
+        super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn)
+      }
+    } // class
+  } // mixin
+})
+
+export default matchPlugin

@@ -120,6 +120,7 @@ import questionSubscripts from './lightscript/questionSubscripts'
 import bangCall from './lightscript/bangCall'
 import bangCall_subscripts from './lightscript/bangCall_subscripts'
 import syntacticPlaceholders from './lightscript/syntacticPlaceholders'
+import matchPlugin from './lightscript/match'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tryCatch)
@@ -146,3 +147,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(bangCall)
   registerPlugin(bangCall_subscripts)
   registerPlugin(syntacticPlaceholders)
+  registerPlugin(matchPlugin)
