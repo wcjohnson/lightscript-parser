@@ -40,6 +40,7 @@ mgr.addPlugins([
   "bangCall",
   "syntacticPlaceholders",
   "match",
+  "flippedImports",
   "jsx",
   "flow",
 ]);

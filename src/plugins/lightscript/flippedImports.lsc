@@ -1,0 +1,26 @@
+import { Plugin } from '../core/plugin'
+import { types as tt } from "../../tokenizer/register"
+
+flippedImports = new Plugin({
+  name: 'flippedImports'
+
+  mixin(ParserBase, opts) -> {
+    return class extends ParserBase {
+      // c/p statement.js
+      parseImport(node) -> {
+        if not this.match(tt.string):
+          return super.parseImport(node)
+
+        node.specifiers = []
+        node.source = this.parseExprAtom()
+
+        if this.eat(tt.colon): this.parseImportSpecifiers(node)
+
+        this.semicolon()
+        this.finishNode(node, "ImportDeclaration")
+      }
+    } // class
+  } // mixin
+})
+
+export default flippedImports

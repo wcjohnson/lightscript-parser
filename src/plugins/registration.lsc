@@ -121,6 +121,7 @@ import bangCall from './lightscript/bangCall'
 import bangCall_subscripts from './lightscript/bangCall_subscripts'
 import syntacticPlaceholders from './lightscript/syntacticPlaceholders'
 import matchPlugin from './lightscript/match'
+import flippedImports from './lightscript/flippedImports'
 
 registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(tryCatch)
@@ -148,3 +149,4 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(bangCall_subscripts)
   registerPlugin(syntacticPlaceholders)
   registerPlugin(matchPlugin)
+  registerPlugin(flippedImports)
