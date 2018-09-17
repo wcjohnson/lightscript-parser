@@ -327,7 +327,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.expression = this.jsxParseEmptyExpression();
       } else if (this.hasPlugin("spreadLoop") && this.match(this.tt_spreadLoop)) {
         // LSC: spread loops
-        node.expression = this.spreadLoop_parseSpreadLoop();
+        node.expression = this.spreadLoop_parseSpreadLoop(null);
       } else {
         node.expression = this.parseExpression();
       }

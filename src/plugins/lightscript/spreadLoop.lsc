@@ -19,7 +19,7 @@ spreadLoop = new Plugin({
         const spreadLoop = this.startNode();
         const loop = this.startNode();
         spreadLoop.loop = this.parseForStatement(loop);
-        if (spreadElementType == null) return this.finishNode(spreadLoop, "SpreadLoop");
+        if (spreadElementType == null) return this.finishNode(spreadLoop, "LscSpreadLoop");
         spreadElement.argument = this.finishNode(spreadLoop, "LscSpreadLoop");
         return this.finishNode(spreadElement, spreadElementType);
       }
