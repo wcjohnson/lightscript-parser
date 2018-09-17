@@ -844,9 +844,17 @@ export default class StatementParser extends ExpressionParser {
       node.await = !!forAwait;
     }
     node.left = init;
-    node.right = this.parseExpression();
+    // LSC: ban ambiguous arrows here
+    if (this.hasPlugin("lscCoreSyntax")) {
+      const oldBanAmbiguousArrows = this.state.banAmbiguousArrows
+      this.state.banAmbiguousArrows = true
+      node.right = this.parseExpression();
+      this.state.banAmbiguousArrows = oldBanAmbiguousArrows
+    } else {
+      node.right = this.parseExpression();
+    }
 
-    // XXX: LSC
+    // LSC: paren-free
     if (this.hasPlugin("lscCoreSyntax")) {
       this.expectParenFreeBlockStart(node);
       this.state.nextBraceIsBlock = true;
