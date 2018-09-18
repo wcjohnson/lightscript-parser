@@ -124,12 +124,14 @@ lscArrows = new Plugin({
         const oldInAsync = this.state.inAsync;
         const oldInGen = this.state.inGenerator;
         const oldInFunc = this.state.inFunction;
+        const oldBanInvalidIifeStatements = this.state.banInvalidIifeStatements;
         const oldLabels = this.state.labels;
         this.state.inParameters = false;
         this.state.maybeInArrowParameters = false;
         this.state.inAsync = node.async;
         this.state.inGenerator = node.generator;
         this.state.inFunction = true;
+        this.state.banInvalidIifeStatements = false;
         this.state.labels = [];
 
         const indentLevel = this.state.indentLevel;
@@ -157,6 +159,7 @@ lscArrows = new Plugin({
         }
 
         this.state.inFunction = oldInFunc;
+        this.state.banInvalidIifeStatements = oldBanInvalidIifeStatements;
         this.state.inGenerator = oldInGen;
         this.state.labels = oldLabels;
         this.state.inAsync = oldInAsync;

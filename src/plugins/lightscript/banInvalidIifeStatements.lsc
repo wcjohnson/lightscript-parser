@@ -43,6 +43,37 @@ banInvalidIifeStatements = new Plugin({
 
         super.parseStatementContent(declaration, topLevel)
       }
+
+      parseMethod(node, isGenerator, isAsync, isConstructor, type) -> {
+        oldBanInvalidIifeStatements = this.state.banInvalidIifeStatements
+        this.state.banInvalidIifeStatements = false
+        result = super.parseMethod(node, isGenerator, isAsync, isConstructor, type)
+        this.state.banInvalidIifeStatements = oldBanInvalidIifeStatements
+        result
+      }
+
+      parseArrowExpression(node, params, isAsync) -> {
+        oldBanInvalidIifeStatements = this.state.banInvalidIifeStatements
+        this.state.banInvalidIifeStatements = false
+        result = super.parseArrowExpression(node, params, isAsync)
+        this.state.banInvalidIifeStatements = oldBanInvalidIifeStatements
+        result
+      }
+
+      parseFunctionBody(node, allowExpression): void -> {
+        oldBanInvalidIifeStatements = this.state.banInvalidIifeStatements
+        this.state.banInvalidIifeStatements = false
+        super.parseFunctionBody(node, allowExpression)
+        this.state.banInvalidIifeStatements = oldBanInvalidIifeStatements
+      }
+
+      parseFunction(node, isStatement, allowExpressionBody, isAsync, optionalId) -> {
+        oldBanInvalidIifeStatements = this.state.banInvalidIifeStatements
+        this.state.banInvalidIifeStatements = false
+        result = super.parseFunction(node, isStatement, allowExpressionBody, isAsync, optionalId)
+        this.state.banInvalidIifeStatements = oldBanInvalidIifeStatements
+        result
+      }
   } // mixin
 })
 
