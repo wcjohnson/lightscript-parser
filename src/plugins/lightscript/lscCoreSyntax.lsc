@@ -95,6 +95,7 @@ lscCoreSyntax = new Plugin({
               delete val.extra.parenStart;
               if (Object.keys(val.extra).length == 0) { delete val.extra; }
             }
+            this.state.banAmbiguousArrows = oldBanAmbiguousArrows
             return val;
           } catch (_err) {
             // fall-through
