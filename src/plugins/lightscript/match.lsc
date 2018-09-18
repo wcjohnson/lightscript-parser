@@ -164,7 +164,10 @@ matchPlugin = new Plugin({
 
       match_parseCaseOuterGuard(node): boolean -> {
         if (!this.eat(tt._if)) return true;
+        oldBanAmbiguousArrows = this.state.banAmbiguousArrows;
+        this.state.banAmbiguousArrows = true;
         node.outerGuard = this.parseExpression();
+        this.state.banAmbiguousArrows = oldBanAmbiguousArrows;
         if (this.match(tt.colon)) {
           return false;
         } else {
