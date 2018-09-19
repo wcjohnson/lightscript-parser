@@ -17,12 +17,26 @@ awaitArrow = new Plugin({
         })
       }
 
-      awaitArrow_parseAwaitArrow(left) -> {
+      awaitArrow_checkAwaitLegal(awaitPos): void -> {
+        if this.state.inFunction:
+          if not this.state.inAsync:
+            this.unexpected(awaitPos, "Illegal await in a non-async function.")
+        elif not this.options.allowAwaitOutsideFunction:
+          this.unexpected(awaitPos, "Await is illegal outside functions.")
+      }
+
+      awaitArrow_parseAwaitArrowAssign(left) -> {
         node = this.startNode()
         this.next()
         awaitNode = this.parseAwait(node)
         this.addExtra(node, "arrow", true)
         awaitNode
+      }
+
+      awaitArrow_parseAwaitArrowAtom() -> {
+        node = this.startNode()
+        this.next()
+        this.parseAwait(node)
       }
 
       ////////////////
@@ -37,7 +51,7 @@ awaitArrow = new Plugin({
       // Parse await arrows as var initializers
       parseVarInit(decl, isFor, kind): void -> {
         if (not isFor) and (this.match(this.tt_awaitArrow)):
-          decl.init = this.awaitArrow_parseAwaitArrow(decl.id)
+          decl.init = this.awaitArrow_parseAwaitArrowAssign(decl.id)
         else:
           super.parseVarInit(decl, isFor, kind)
       }
@@ -54,7 +68,7 @@ awaitArrow = new Plugin({
 
       parseMaybeAssign_parseRight(node, startPos, startLoc, noIn, state): void -> {
         if state.isAwaitArrow:
-          node.right = this.awaitArrow_parseAwaitArrow(node.left)
+          node.right = this.awaitArrow_parseAwaitArrowAssign(node.left)
         else:
           super.parseMaybeAssign_parseRight(node, startPos, startLoc, noIn, state)
       }
@@ -62,21 +76,14 @@ awaitArrow = new Plugin({
       // Parse await arrows as expressions
       parseExprAtom(refShorthandDefaultPos) -> {
         if this.state.type == this.tt_awaitArrow:
-          node = this.startNode()
-          this.next()
-          this.parseAwait(node)
+          this.awaitArrow_parseAwaitArrowAtom()
         else:
           super.parseExprAtom(refShorthandDefaultPos)
       }
 
       // Give a better error message when await appears outside of async
       parseAwait(node) -> {
-        if this.state.inFunction:
-          if not this.state.inAsync:
-            this.unexpected(node.start, "Illegal await in a non-async function.")
-        elif not this.options.allowAwaitOutsideFunction:
-          this.unexpected(node.start, "Await is illegal outside functions.")
-
+        this.awaitArrow_checkAwaitLegal(node.start)
         super.parseAwait(node)
       }
     } // class
