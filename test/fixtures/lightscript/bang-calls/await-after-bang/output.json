@@ -188,6 +188,9 @@
                         "identifierName": "x"
                       },
                       "name": "x"
+                    },
+                    "extra": {
+                      "arrow": true
                     }
                   }
                 ],

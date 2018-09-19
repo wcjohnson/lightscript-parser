@@ -26,17 +26,15 @@ awaitArrow = new Plugin({
       }
 
       awaitArrow_parseAwaitArrowAssign(left) -> {
-        node = this.startNode()
-        this.next()
-        awaitNode = this.parseAwait(node)
-        this.addExtra(node, "arrow", true)
-        awaitNode
+        this.awaitArrow_parseAwaitArrowAtom()
       }
 
       awaitArrow_parseAwaitArrowAtom() -> {
         node = this.startNode()
         this.next()
-        this.parseAwait(node)
+        awaitNode = this.parseAwait(node)
+        this.addExtra(awaitNode, "arrow", true)
+        awaitNode
       }
 
       ////////////////
