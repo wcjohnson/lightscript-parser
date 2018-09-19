@@ -1,0 +1,3 @@
+{
+  "throws": "Destructuring is not allowed with safe await. (2:15)"
+}

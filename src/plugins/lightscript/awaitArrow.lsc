@@ -25,16 +25,38 @@ awaitArrow = new Plugin({
           this.unexpected(awaitPos, "Await is illegal outside functions.")
       }
 
+      awaitArrow_parseSafeAwait(node) -> {
+        // Await arrow has already been eaten; error appears at arrow pos
+        this.awaitArrow_checkAwaitLegal(this.state.lastTokStart)
+        node.argument = this.parseMaybeUnary()
+        this.finishNode(node, "LscSafeAwaitExpression")
+      }
+
+      awaitArrow_parseAwaitArrow(left, forbidDestructuring) -> {
+        node = this.startNode()
+        arrowType = this.state.value
+        arrowPos = this.state.pos
+        this.next()
+        if arrowType == "<!-":
+          if(
+            forbidDestructuring and
+            left and
+            ((left.type == "ObjectPattern") or (left.type == "ArrayPattern"))
+          ):
+            this.unexpected(arrowPos - 3, "Destructuring is not allowed with safe await.")
+          this.awaitArrow_parseSafeAwait(node)
+        else:
+          awaitNode = this.parseAwait(node)
+          this.addExtra(awaitNode, "arrow", true)
+          awaitNode
+      }
+
       awaitArrow_parseAwaitArrowAssign(left) -> {
-        this.awaitArrow_parseAwaitArrowAtom()
+        this.awaitArrow_parseAwaitArrow(left, true)
       }
 
       awaitArrow_parseAwaitArrowAtom() -> {
-        node = this.startNode()
-        this.next()
-        awaitNode = this.parseAwait(node)
-        this.addExtra(awaitNode, "arrow", true)
-        awaitNode
+        this.awaitArrow_parseAwaitArrow(null)
       }
 
       ////////////////

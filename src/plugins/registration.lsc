@@ -143,6 +143,7 @@ registerNewPlugins(registerPlugin, Plugin) ->
   registerPlugin(lscForIn)
   registerPlugin(awaitArrow)
   registerPlugin(awaitArrow_tokenizer)
+  registerPlugin(new Plugin({ name: 'safeAwaitArrow', dependencies: ['awaitArrow'] }))
   registerPlugin(spreadLoop)
   registerPlugin(questionSubscripts)
   registerPlugin(bangCall)

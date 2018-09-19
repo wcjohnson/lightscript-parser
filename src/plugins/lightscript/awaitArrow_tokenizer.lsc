@@ -24,6 +24,15 @@ awaitArrow_tokenizer = new Plugin({
           next = this.input.charCodeAt(this.state.pos + 1)
           if next == charCodes.dash:
             return this.finishOp(this.tt_awaitArrow, 2)
+          elif (
+            this.hasPlugin("safeAwaitArrow") and
+            next == charCodes.exclamationMark and
+            this.input.charCodeAt(this.state.pos + 2) == charCodes.dash
+          ):
+            // Distinguish from XML-style comment
+            if this.input.charCodeAt(this.state.pos + 3) != charCodes.dash:
+              return this.finishOp(this.tt_awaitArrow, 3)
+
 
         super.readToken(code)
       }
