@@ -11,6 +11,7 @@ findLeftmostInvalidMatchAtom(atom) -> {
   // - Tilde call predicates
   match atom.type:
     | "StringLiteral", "NumericLiteral", "BooleanLiteral", "RegExpLiteral", "TemplateLiteral", "NullLiteral": null
+    | "Literal": null // estree
     | "Identifier": null
     | "LscTildeCallExpression": null
     | "LogicalExpression":
