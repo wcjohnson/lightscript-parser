@@ -44,6 +44,7 @@
     "access": "public"
   },
   "scripts": {
+    "preversion": "run-s test",
     "commitizen": "commitizen",
     "commit": "git-cz",
     "clean": "rimraf lib coverage .nyc_output",
