@@ -42,7 +42,7 @@
     "parser": "./bin/babel-parser.js"
   },
   "publishConfig": {
-    "tag": "next"
+    "access": "public"
   },
   "scripts": {
     "commitizen": "commitizen",
