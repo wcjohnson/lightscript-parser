@@ -18,14 +18,6 @@
     source-map "^0.5.0"
     trim-right "^1.0.1"
 
-"@babel/helper-fixtures@7.0.0-rc.1":
-  version "7.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@babel/helper-fixtures/-/helper-fixtures-7.0.0-rc.1.tgz#f975e89314454fdc942151c21abf18151f2db277"
-  dependencies:
-    lodash "^4.17.10"
-    semver "^5.3.0"
-    try-resolve "^1.0.0"
-
 "@babel/helper-function-name@7.0.0-rc.1":
   version "7.0.0-rc.1"
   resolved "https://registry.yarnpkg.com/@babel/helper-function-name/-/helper-function-name-7.0.0-rc.1.tgz#20b2cc836a53c669f297c8d309fc553385c5cdde"
@@ -4260,10 +4252,6 @@ tr46@^1.0.1:
 trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
-
-try-resolve@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/try-resolve/-/try-resolve-1.0.1.tgz#cfde6fabd72d63e5797cfaab873abbe8e700e912"
 
 tunnel-agent@^0.6.0:
   version "0.6.0"

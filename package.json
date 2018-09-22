@@ -1,7 +1,7 @@
 {
   "name": "@lightscript/parser",
   "version": "4.0.0-alpha.1",
-  "description": "A LightScript parser",
+  "description": "Parser for the LightScript language.",
   "homepage": "https://lightscript.org/",
   "license": "MIT",
   "keywords": [
@@ -19,7 +19,6 @@
     "node": ">=6.0.0"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "7.0.0-rc.1",
     "@oigroup/babel-preset-lightscript": "^3.1.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
@@ -39,7 +38,7 @@
     "unicode-11.0.0": "^0.7.7"
   },
   "bin": {
-    "parser": "./bin/babel-parser.js"
+    "lightscript-parser": "./bin/lightscript-parser.js"
   },
   "publishConfig": {
     "access": "public"
