@@ -11,35 +11,56 @@ stableSort(arr, comparator) ->
   for (let index = 0; index < len; index++) arr[index] = entries[index][1]
   arr
 
-export class PluginManager:
+export class PluginList:
   constructor() ->
     this.requestedPlugins = []
     this.namedPluginOptions = {}
-    this.actualPlugins = []
 
-  addPlugin(name, opts): void ->
+  _addPlugin(name, opts): void -> {
     this.requestedPlugins.push(pluginForName(name))
     // Merge options in the event of dupe
     curOpts = this.namedPluginOptions[name]
     if curOpts:
       Object.assign(curOpts, opts)
-    else:
-      this.namedPluginOptions[name] = opts or {}
+    elif opts:
+      this.namedPluginOptions[name] = Object.assign({}, opts)
+  }
 
-  addPlugins(babelPluginsList): void ->
-    for elem e in (babelPluginsList or []):
-      if Array.isArray(e): this.addPlugin(e[0], e[1]) else: this.addPlugin(e)
+  addPlugin(plugin, opts): void ->
+    if opts:
+      this._addPlugin(plugin, opts)
+    elif Array.isArray(plugin):
+      this._addPlugin(plugin[0], plugin[1])
+    else:
+      this._addPlugin(plugin)
+
+  addPlugins(plugins): void ->
+    for elem p in plugins: this.addPlugin(p)
 
   // Ban all named plugins, including banning plugins that depend upon them.
   banPlugins(list): void ->
     bannedPlugins = [...for elem name in list: pluginForName(name).dependents()]
     this.requestedPlugins = this.requestedPlugins.filter(x -> bannedPlugins.indexOf(x) == -1)
 
+  toBabelPluginList() ->
+    [...for elem p in this.requestedPlugins:
+      pluginName = p.getName()
+      if this.namedPluginOptions[pluginName]:
+        [ [pluginName, this.namedPluginOptions[pluginName]] ]
+      else:
+        [pluginName]
+    ]
+
+export class PluginManager extends PluginList:
+  constructor() ->
+    super()
+    this.actualPlugins = []
+
   resolveActualPlugins() ->
     loadOrderEntriesByName = {}
     // Duped load order: fully unwound dependencies for each plugin, concatenated in idealized load order
     dupedLoadOrder = [...for elem p in this.requestedPlugins: p.unwoundDependencies() ]
-    //console.log("dupedLoadOrder", dupedLoadOrder)
+
     // Deduped load order: only one entry for each plugin, when it first appears
     dedupedLoadOrder = [...for elem p in dupedLoadOrder:
       pluginName = p.getName()
@@ -47,12 +68,12 @@ export class PluginManager:
         loadOrderEntriesByName[pluginName] = p
         [p]
     ]
-    //console.log("dedupedLoadOrder", dedupedLoadOrder)
+
     // Now sort by plugin load order priority
     stableSort(dedupedLoadOrder, (a, b) -> a.getLoadOrderPriority() - b.getLoadOrderPriority())
 
     this.actualPlugins = dedupedLoadOrder
-    //console.log("requestedPlugins", this.requestedPlugins, "actualPlugins", this.actualPlugins)
+
 
   actualPluginNames() -> [...for elem p in this.actualPlugins: [p.getName()]]
 

@@ -5,11 +5,10 @@ import {
   hasPlugin,
   validatePlugins,
   mixinPluginNames,
-  mixinPlugins,
-  type PluginList,
+  mixinPlugins
 } from "./plugin-utils";
 import Parser from "./parser";
-import { getParser as lscGetParser, Plugin, PluginManager } from './plugins/core'
+import { getParser as lscGetParser, Plugin, PluginManager, PluginList } from './plugins/core'
 
 import { types as tokTypes } from "./tokenizer/types";
 import "./tokenizer/context";
@@ -52,34 +51,4 @@ export function parseExpression(input: string, options?: Options): Expression {
 }
 
 export { tokTypes };
-export { Plugin, PluginManager };
-
-function getParser(options: ?Options, input: string): Parser {
-  let cls = Parser;
-  if (options && options.plugins) {
-    validatePlugins(options.plugins);
-    cls = getParserClass(options.plugins);
-  }
-
-  return new cls(options, input);
-}
-
-const parserClassCache: { [key: string]: Class<Parser> } = {};
-
-/** Get a Parser class with plugins applied. */
-function getParserClass(pluginsFromOptions: PluginList): Class<Parser> {
-  const pluginList = mixinPluginNames.filter(name =>
-    hasPlugin(pluginsFromOptions, name),
-  );
-
-  const key = pluginList.join("/");
-  let cls = parserClassCache[key];
-  if (!cls) {
-    cls = Parser;
-    for (const plugin of pluginList) {
-      cls = mixinPlugins[plugin](cls);
-    }
-    parserClassCache[key] = cls;
-  }
-  return cls;
-}
+export { Plugin, PluginManager, PluginList };

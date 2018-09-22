@@ -1,6 +1,6 @@
 // New getParser implementation
 import Parser from '../../parser'
-import { PluginManager } from './manager'
+import { PluginManager, PluginList } from './manager'
 import { Plugin } from './plugin'
 import { registerPlugin } from './registry'
 import { registerPlugins } from '../registration'
@@ -30,7 +30,7 @@ export function getParser(options, input) {
   return new cls(options, input);
 }
 
-export { Plugin, PluginManager }
+export { Plugin, PluginManager, PluginList }
 
 // Register all available plugins.
 registerPlugins(registerPlugin, Plugin)
