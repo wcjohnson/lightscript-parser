@@ -197,8 +197,17 @@ lscArrows = new Plugin({
         node = this.startNodeAtNode(name)
         this.lscArrows_initFunction(node, node.async)
         node.id = name
-        this.parseFunctionParams(node)
-        if not this.parseArrow(node): this.unexpected(null, tt.arrow)
+
+        // If we don't make it to the body of the arrow, this was probably
+        // a JS export default from, or something. Flag the error so we
+        // can give the user a more sensible message.
+        try:
+          this.parseFunctionParams(node)
+          if not this.parseArrow(node): this.unexpected(null, tt.arrow)
+        catch err:
+          err._couldntParseArrow = true
+          throw err
+
         this.lscArrows_parseArrowFunctionBody(node, true)
         this.finishNode(node, "LscNamedArrowExpression")
       }
@@ -371,8 +380,9 @@ lscArrows = new Plugin({
 
       // Allow e.g. `export f() -> x`
       parseExport(node) -> {
+        let decl
         if this.match(tt.name):
-          decl = this.lscArrows_tryParseNamedArrowWithTypeParameters()
+          now decl = this.lscArrows_tryParseNamedArrowWithTypeParameters()
           if not (decl instanceof Error):
             decl.type = "LscNamedArrowDeclaration"
             node.specifiers = []
@@ -381,7 +391,16 @@ lscArrows = new Plugin({
             this.checkExport(node, true)
             return this.finishNode(node, "ExportNamedDeclaration")
 
-        super.parseExport(node)
+        try:
+          super.parseExport(node)
+        catch exportError:
+          if decl and (decl instanceof SyntaxError):
+            if decl._couldntParseArrow:
+              throw exportError
+            else:
+              throw decl
+          else:
+            throw exportError
       }
 
   } // mixin
