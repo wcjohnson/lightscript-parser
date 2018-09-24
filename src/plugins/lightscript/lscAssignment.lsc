@@ -74,6 +74,7 @@ lscAssignment = new Plugin({
           decl.init = this.parseMaybeAssign()
           node.declarations = [this.finishNode(decl, "VariableDeclarator")]
           node.kind = "const"
+          this.addExtra(node, "implicit", true)
           this.semicolon()
           return this.finishNode(node, "VariableDeclaration")
         catch err:

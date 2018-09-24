@@ -143,7 +143,10 @@
               }
             }
           ],
-          "kind": "const"
+          "kind": "const",
+          "extra": {
+            "implicit": true
+          }
         },
         "exportKind": "value"
       }
