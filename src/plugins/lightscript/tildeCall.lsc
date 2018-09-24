@@ -21,8 +21,8 @@ tildeCall = new Plugin({
       }
 
       tildeCall_parseCallee(node) -> {
-        // Allow `this` or ordinary identifiers only
-        callee = if this.match(tt._this):
+        // Allow `this`, `()` or ordinary identifiers only
+        callee = if this.match(tt._this) or this.match(tt.parenL):
           this.parseExprAtom()
         else:
           this.parseIdentifier() // parseIdentifierOrPlaceholder() for match
