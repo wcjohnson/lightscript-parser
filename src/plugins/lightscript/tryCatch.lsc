@@ -28,9 +28,11 @@ tryCatch = new Plugin({
         node.guardedHandlers = [];
 
         // Parse the guts
+        restore = if isExpression: this.banInvalidIifeStatements()
         this.tryCatch_parseTryBlock(node, indentLevel, isBrace, isExpression);
         this.tryCatch_parseCatchBlock(node, indentLevel, isBrace, isExpression);
         this.tryCatch_parseFinallyBlock(node, indentLevel, isBrace, isExpression);
+        if restore: this.unbanInvalidIifeStatements(restore)
 
         // Restore whiteblock state
         if (this.hasPlugin("lscCoreSyntax") && !isBrace) this.popWhiteBlockState();
