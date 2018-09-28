@@ -254,6 +254,11 @@ lscCoreSyntax = new Plugin({
               throw objParseError
       } // parseObjectBlockAmbiguity
 
+      lsc_shouldAllowAnonymousClass(): boolean -> {
+        this.state.inFunction or
+        this.state.banInvalidIifeStatements // Pseudo-functional context
+      }
+
       // Since naked decimals are disabled in LightScript, it is safe to parse
       // questionDot even when a number appears afterward.
       readToken_question(): void -> {
@@ -418,7 +423,7 @@ lscCoreSyntax = new Plugin({
 
       // Allow anonymous class bodies in functions (useful for implicit returns)
       parseClassId(node, isStatement, optionalId) ->
-        super.parseClassId(node, isStatement, optionalId or (this.state.inFunction))
+        super.parseClassId(node, isStatement, optionalId or this.lsc_shouldAllowAnonymousClass())
 
       // Parser state changes for arrow parsing and block parsing are required
       // when parsing ternaries.
