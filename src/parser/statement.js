@@ -204,10 +204,11 @@ export default class StatementParser extends ExpressionParser {
     const maybeName = this.state.value;
     const expr = this.parseStatement_parseExpression(); // XXX: LSC
 
+    // LSC: Defer eating the `:` token until `parseLabeledStatement`
     if (
       starttype === tt.name &&
       expr.type === "Identifier" &&
-      this.eat(tt.colon)
+      this.match(tt.colon)
     ) {
       return this.parseLabeledStatement(node, maybeName, expr);
     } else {
@@ -670,6 +671,9 @@ export default class StatementParser extends ExpressionParser {
     maybeName: string,
     expr: N.Identifier,
   ): N.LabeledStatement {
+    // LSC: eating the `:` token is deferred from `parseStatement`
+    this.next();
+
     for (const label of this.state.labels) {
       if (label.name === maybeName) {
         this.raise(expr.start, `Label '${maybeName}' is already declared`);
