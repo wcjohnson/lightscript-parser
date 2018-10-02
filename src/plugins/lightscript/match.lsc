@@ -36,7 +36,7 @@ matchPlugin = new Plugin({
     // TODO: eliminate dependency on load()
     // Keywords should be on `this.keywords` somehow
     registerKeywordToken("match", new TokenType("match", {
-      keyword: true
+      keyword: "match"
       beforeExpr: true
       startsExpr: true
     }))

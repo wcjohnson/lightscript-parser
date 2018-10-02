@@ -13,7 +13,7 @@ lscAssignment = new Plugin({
 
   load() ->
     registerKeywordToken("now", new TokenType("now", {
-      keyword: true
+      keyword: "now"
       beforeExpr: true
     }))
 

@@ -10,7 +10,7 @@ lscIf = new Plugin({
 
   load() ->
     registerKeywordToken("elif", new TokenType("elif", {
-      keyword: true
+      keyword: "elif"
       beforeExpr: true
     }))
 

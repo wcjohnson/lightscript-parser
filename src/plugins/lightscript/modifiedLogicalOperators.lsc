@@ -10,10 +10,12 @@ modifiedLogicalOperators = new Plugin({
   load(): void ->
     // TODO: Make these their own binop tokens with same precedence, etc
     // as logical AND.
+    tt.logicalAND.keyword = "and"
     registerKeywordToken('and', tt.logicalAND)
+    tt.logicalOR.keyword = "or"
     registerKeywordToken('or', tt.logicalOR)
     registerKeywordToken('not', new TokenType("not", {
-      keyword: true
+      keyword: "not"
       beforeExpr: true
       prefix: true
       startsExpr: true
