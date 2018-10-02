@@ -1,7 +1,7 @@
 // Parsing for LightScript named arrows and skinny arrows
 
 import { Plugin } from '../core/plugin'
-import { types as tt, TokenType, registerToken, registerKeywordToken } from "../../tokenizer/register"
+import { types as tt, TokenType, registerToken } from "../../tokenizer/register"
 import * as charCodes from "charcodes"
 
 hasBindingPattern(expr) ->

@@ -1,7 +1,7 @@
 // Parsing for enhanced `for`-`in` loops
 
 import { Plugin } from '../core/plugin'
-import { types as tt, TokenType, registerToken, registerKeywordToken } from "../../tokenizer/register"
+import { types as tt, TokenType, registerToken } from "../../tokenizer/register"
 
 MATCHING_ITER_VARS = {
   "idx": "elem",
