@@ -114,13 +114,16 @@ tryCatch = new Plugin({
       } // tryCatch_parseFinallyBlock
 
       tryCatch_finishNode(node, isExpression) ->
+        let nodeType = if isExpression: "LscTryExpression" else: "TryStatement"
         if (not node.handler) and (not node.finalizer):
           if this.hasPlugin("lscCoreSyntax"):
             node.coalesce = true
+            // Don't emit invalid ESTree `TryStatement` node; instead emit LscTryStatement
+            if not isExpression: now nodeType = "LscTryStatement"
           else:
             this.raise(node.start, "Missing catch or finally clause")
 
-        this.finishNode(node, isExpression ? "LscTryExpression" : "TryStatement")
+        this.finishNode(node, nodeType)
 
   } // mixin
 })

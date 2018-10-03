@@ -30,7 +30,7 @@
     "interpreter": null,
     "body": [
       {
-        "type": "TryStatement",
+        "type": "LscTryStatement",
         "start": 0,
         "end": 8,
         "loc": {

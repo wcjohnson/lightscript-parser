@@ -59,7 +59,7 @@
           },
           "param": null,
           "body": {
-            "type": "TryStatement",
+            "type": "LscTryStatement",
             "start": 14,
             "end": 20,
             "loc": {
