@@ -1,0 +1,378 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 45,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 12
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 45,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 12
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LscMatchStatement",
+        "start": 0,
+        "end": 45,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 12
+          }
+        },
+        "discriminant": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "x"
+          },
+          "name": "x"
+        },
+        "cases": [
+          {
+            "type": "LscMatchCase",
+            "start": 11,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 2
+              },
+              "end": {
+                "line": 2,
+                "column": 11
+              }
+            },
+            "atoms": [
+              {
+                "type": "BinaryExpression",
+                "start": 13,
+                "end": 17,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 8
+                  }
+                },
+                "left": {
+                  "type": "LscMatchPlaceholderExpression",
+                  "start": 12,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 3
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 4
+                    }
+                  }
+                },
+                "operator": "===",
+                "right": {
+                  "type": "NumericLiteral",
+                  "start": 16,
+                  "end": 17,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 8
+                    }
+                  },
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                }
+              }
+            ],
+            "consequent": {
+              "type": "ExpressionStatement",
+              "start": 19,
+              "end": 20,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 10
+                },
+                "end": {
+                  "line": 2,
+                  "column": 11
+                }
+              },
+              "expression": {
+                "type": "NumericLiteral",
+                "start": 19,
+                "end": 20,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 11
+                  }
+                },
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          },
+          {
+            "type": "LscMatchCase",
+            "start": 23,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 2
+              },
+              "end": {
+                "line": 3,
+                "column": 11
+              }
+            },
+            "atoms": [
+              {
+                "type": "BinaryExpression",
+                "start": 25,
+                "end": 29,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 8
+                  }
+                },
+                "left": {
+                  "type": "LscMatchPlaceholderExpression",
+                  "start": 24,
+                  "end": 25,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 3
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 4
+                    }
+                  }
+                },
+                "operator": "!==",
+                "right": {
+                  "type": "NumericLiteral",
+                  "start": 28,
+                  "end": 29,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 8
+                    }
+                  },
+                  "extra": {
+                    "rawValue": 6,
+                    "raw": "6"
+                  },
+                  "value": 6
+                }
+              }
+            ],
+            "consequent": {
+              "type": "ExpressionStatement",
+              "start": 31,
+              "end": 32,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 10
+                },
+                "end": {
+                  "line": 3,
+                  "column": 11
+                }
+              },
+              "expression": {
+                "type": "NumericLiteral",
+                "start": 31,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 11
+                  }
+                },
+                "extra": {
+                  "rawValue": 6,
+                  "raw": "6"
+                },
+                "value": 6
+              }
+            }
+          },
+          {
+            "type": "LscMatchCase",
+            "start": 35,
+            "end": 45,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 2
+              },
+              "end": {
+                "line": 4,
+                "column": 12
+              }
+            },
+            "atoms": [
+              {
+                "type": "BinaryExpression",
+                "start": 37,
+                "end": 42,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 9
+                  }
+                },
+                "left": {
+                  "type": "LscMatchPlaceholderExpression",
+                  "start": 36,
+                  "end": 37,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 3
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 4
+                    }
+                  }
+                },
+                "operator": "===",
+                "right": {
+                  "type": "NumericLiteral",
+                  "start": 41,
+                  "end": 42,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 9
+                    }
+                  },
+                  "extra": {
+                    "rawValue": 7,
+                    "raw": "7"
+                  },
+                  "value": 7
+                }
+              }
+            ],
+            "consequent": {
+              "type": "ExpressionStatement",
+              "start": 44,
+              "end": 45,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 11
+                },
+                "end": {
+                  "line": 4,
+                  "column": 12
+                }
+              },
+              "expression": {
+                "type": "NumericLiteral",
+                "start": 44,
+                "end": 45,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 12
+                  }
+                },
+                "extra": {
+                  "rawValue": 7,
+                  "raw": "7"
+                },
+                "value": 7
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

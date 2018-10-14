@@ -541,7 +541,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      if (code === charCodes.lessThan && this.state.exprAllowed) {
+      // LSC: Don't parse jsxTagStarts in MatchCaseTests
+      if (code === charCodes.lessThan && this.state.exprAllowed && (!this.state.inMatchCaseTest)) {
         ++this.state.pos;
         return this.finishToken(tt.jsxTagStart);
       }

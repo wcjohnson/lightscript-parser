@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 54,
+  "end": 52,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 54,
+    "end": 52,
     "loc": {
       "start": {
         "line": 1,
@@ -32,7 +32,7 @@
       {
         "type": "LscMatchStatement",
         "start": 0,
-        "end": 54,
+        "end": 52,
         "loc": {
           "start": {
             "line": 1,
@@ -64,7 +64,7 @@
           {
             "type": "LscMatchCase",
             "start": 11,
-            "end": 28,
+            "end": 26,
             "loc": {
               "start": {
                 "line": 2,
@@ -72,14 +72,14 @@
               },
               "end": {
                 "line": 2,
-                "column": 19
+                "column": 17
               }
             },
             "atoms": [
               {
                 "type": "LscTildeCallExpression",
                 "start": 13,
-                "end": 22,
+                "end": 20,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -87,38 +87,36 @@
                   },
                   "end": {
                     "line": 2,
-                    "column": 13
+                    "column": 11
                   }
                 },
                 "left": {
-                  "type": "Identifier",
-                  "start": 13,
-                  "end": 15,
+                  "type": "LscMatchPlaceholderExpression",
+                  "start": 12,
+                  "end": 13,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 4
+                      "column": 3
                     },
                     "end": {
                       "line": 2,
-                      "column": 6
-                    },
-                    "identifierName": "it"
-                  },
-                  "name": "it"
+                      "column": 4
+                    }
+                  }
                 },
                 "callee": {
                   "type": "Identifier",
-                  "start": 16,
-                  "end": 20,
+                  "start": 14,
+                  "end": 18,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 7
+                      "column": 5
                     },
                     "end": {
                       "line": 2,
-                      "column": 11
+                      "column": 9
                     },
                     "identifierName": "good"
                   },
@@ -129,30 +127,30 @@
             ],
             "consequent": {
               "type": "ExpressionStatement",
-              "start": 24,
-              "end": 28,
+              "start": 22,
+              "end": 26,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 15
+                  "column": 13
                 },
                 "end": {
                   "line": 2,
-                  "column": 19
+                  "column": 17
                 }
               },
               "expression": {
                 "type": "BooleanLiteral",
-                "start": 24,
-                "end": 28,
+                "start": 22,
+                "end": 26,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 15
+                    "column": 13
                   },
                   "end": {
                     "line": 2,
-                    "column": 19
+                    "column": 17
                   }
                 },
                 "value": true
@@ -161,8 +159,8 @@
           },
           {
             "type": "LscMatchCase",
-            "start": 31,
-            "end": 54,
+            "start": 29,
+            "end": 52,
             "loc": {
               "start": {
                 "line": 3,
@@ -175,8 +173,8 @@
             },
             "outerGuard": {
               "type": "LscMatchElse",
-              "start": 33,
-              "end": 37,
+              "start": 31,
+              "end": 35,
               "loc": {
                 "start": {
                   "line": 3,
@@ -190,8 +188,8 @@
             },
             "consequent": {
               "type": "ThrowStatement",
-              "start": 39,
-              "end": 54,
+              "start": 37,
+              "end": 52,
               "loc": {
                 "start": {
                   "line": 3,
@@ -204,8 +202,8 @@
               },
               "argument": {
                 "type": "NewExpression",
-                "start": 45,
-                "end": 54,
+                "start": 43,
+                "end": 52,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -218,8 +216,8 @@
                 },
                 "callee": {
                   "type": "Identifier",
-                  "start": 49,
-                  "end": 54,
+                  "start": 47,
+                  "end": 52,
                   "loc": {
                     "start": {
                       "line": 3,

@@ -14,13 +14,25 @@ findLeftmostInvalidMatchAtom(atom) -> {
     | "Literal": null // estree
     | "Identifier": null
     | "ThisExpression": null
-    | "LscTildeCallExpression": null
+    | "LscTildeCallExpression":
+      if atom.left.type == "LscMatchPlaceholderExpression": null else: atom
+    | "CallExpression":
+      if (
+        atom.callee.type == "MemberExpression"
+        and atom.callee.object.type == "LscMatchPlaceholderExpression"
+      ): null else: atom
+    | "LscMatchPlaceholderExpression": null
     | "LogicalExpression":
       findLeftmostInvalidMatchAtom(atom.left) or
       findLeftmostInvalidMatchAtom(atom.right)
     | "UnaryExpression":
       match atom.operator:
         | "!", "+", "-": findLeftmostInvalidMatchAtom(atom.argument)
+        | else: atom
+    | "BinaryExpression":
+      match atom.operator:
+        | ">", "<", ">=", "<=", "==", "===", "!=", "!==", "instanceof":
+          if atom.left.type == "LscMatchPlaceholderExpression": null else: atom
         | else: atom
     | "MemberExpression":
       findLeftmostInvalidMatchAtom(atom.object) or
@@ -106,9 +118,6 @@ matchPlugin = new Plugin({
       match_parseCase(isExpression) -> {
         const node = this.startNode();
 
-        this.expect(tt.bitwiseOR);
-        if (this.isLineBreak()) this.unexpected(this.state.lastTokEnd, "Illegal newline.");
-
         this.match_parseCaseTest(node);
         this.match_parseCaseConsequent(node, isExpression);
 
@@ -129,6 +138,9 @@ matchPlugin = new Plugin({
       match_parseCaseTest(node): void -> {
         // can't be nested so no need to read/restore old value
         this.state.inMatchCaseTest = true;
+
+        this.expect(tt.bitwiseOR);
+        if (this.isLineBreak()) this.unexpected(this.state.lastTokEnd, "Illegal newline.");
 
         if (this.match(tt._else)) {
           const elseNode = this.startNode();
@@ -193,12 +205,16 @@ matchPlugin = new Plugin({
         const atoms = [];
         while (true) {
           this.state.inMatchCaseAtom = true
-          atoms.push(this.match_validateAtom(this.parseExprOps()));
+          atoms.push(this.match_validateAtom(this.match_parseAtom()));
           this.state.inMatchCaseAtom = false
           if (!this.eat(tt.comma)) break;
         }
 
         node.atoms = atoms;
+      }
+
+      match_parseAtom() -> {
+        this.parseExprOps()
       }
 
       match_validateAtom(atom) -> {
@@ -207,6 +223,14 @@ matchPlugin = new Plugin({
           this.unexpected(leftmost.start, "Illegal expression in match atom.")
         else:
           atom
+      }
+
+      match_isMatchPlaceholderOperator() -> {
+        this.state.type == this.tt_tildeCall or
+        this.state.type == tt.dot or
+        this.state.type == tt.equality or
+        this.state.type == tt.relational or
+        this.state.type == tt._instanceof
       }
 
       ///////////////
@@ -227,9 +251,9 @@ matchPlugin = new Plugin({
       parseExprAtom(refShorthandDefaultPos) -> {
         if this.state.type == tt._match:
           this.match_parseExpression(this.startNode())
-        elif this.state.type == this.tt_tildeCall and this.state.inMatchCaseAtom:
+        elif this.state.inMatchCaseAtom and this.match_isMatchPlaceholderOperator():
           // Special case: in a match case atom, allow the discriminant to be
-          // predicated with `~`
+          // operated upon implicitly
           node = this.startNodeAt(this.state.lastTokEnd, this.state.lastTokEndLoc)
           this.finishNodeAt(node, "LscMatchPlaceholderExpression", this.state.start, this.state.startLoc)
         else:

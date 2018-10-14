@@ -1,3 +1,3 @@
 match x:
-  | ~good(): true
+  | it~good(): true
   | else: throw new Error
