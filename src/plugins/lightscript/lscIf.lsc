@@ -44,10 +44,7 @@ lscIf = new Plugin({
           //
           // Note that setting `state.inFunction` to `false` is BAD -- that fools
           // many other parts of the parser.
-          const oldBanInvalidIifeStatements = this.state.banInvalidIifeStatements
-          this.state.banInvalidIifeStatements = true;
-          const oldLabels = this.state.labels;
-          this.state.labels = [];
+          restoreVector = this.banInvalidIifeStatements(true)
 
           if (this.match(tt.braceL)) {
             node.consequent = this.parseBlock(false);
@@ -57,8 +54,7 @@ lscIf = new Plugin({
             node.consequent = this.parseWhiteBlock(true);
           }
 
-          this.state.banInvalidIifeStatements = oldBanInvalidIifeStatements;
-          this.state.labels = oldLabels;
+          this.unbanInvalidIifeStatements(restoreVector)
         } else {
           this.state.nextBraceIsBlock = true;
           node.consequent = this.parseStatement(false);

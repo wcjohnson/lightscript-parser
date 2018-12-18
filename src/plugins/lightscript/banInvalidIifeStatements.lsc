@@ -12,13 +12,16 @@ banInvalidIifeStatements = new Plugin({
       constructor(options, input) ->
         super(options, input)
         this.state.banInvalidIifeStatements = false
+        this.state.banInvalidIifeAwait = false
 
-      banInvalidIifeStatements() -> {
+      banInvalidIifeStatements(banAwait) -> {
         restoreVector = {
           banInvalidIifeStatements: this.state.banInvalidIifeStatements
+          banInvalidIifeAwait: this.state.banInvalidIifeAwait
           labels: this.state.labels
         }
         this.state.banInvalidIifeStatements = true
+        if banAwait: this.state.banInvalidIifeAwait = true
         this.state.labels = []
         restoreVector
       }
@@ -40,6 +43,9 @@ banInvalidIifeStatements = new Plugin({
               this.unexpected(null, "Illegal `" + this.state.type.label + "` keyword in expression.")
               break;
           }
+
+        if this.state.banInvalidIifeAwait and this.state.type == tt._await:
+          this.unexpected(null, "Illegal `await` keyword in expression.")
 
         super.parseStatementContent(declaration, topLevel)
       }
