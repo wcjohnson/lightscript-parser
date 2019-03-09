@@ -33,6 +33,7 @@ significantWhitespace = new Plugin({
                 this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
               ) {
                 ++this.state.pos;
+                break;
               }
 
             case charCodes.lineSeparator:
