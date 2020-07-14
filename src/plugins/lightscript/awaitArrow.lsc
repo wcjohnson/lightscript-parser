@@ -2,6 +2,10 @@
 import { Plugin } from '../core/plugin'
 import { TokenType } from "../../tokenizer/register"
 
+isValidSafeAwaitPattern(lhs) ->
+  lhs.type == "ArrayPattern"
+  and lhs.elements?.length == 2
+
 awaitArrow = new Plugin({
   name: 'awaitArrow'
   dependencies: ['awaitArrow_tokenizer']
@@ -41,9 +45,10 @@ awaitArrow = new Plugin({
           if(
             forbidDestructuring and
             left and
-            ((left.type == "ObjectPattern") or (left.type == "ArrayPattern"))
+            ((left.type == "ObjectPattern") or (left.type == "ArrayPattern")) and
+            (not left~isValidSafeAwaitPattern())
           ):
-            this.unexpected(arrowPos - 3, "Destructuring is not allowed with safe await.")
+            this.unexpected(arrowPos - 3, "Safe await can only be destructured into a pattern of the form [result, error].")
           this.awaitArrow_parseSafeAwait(node)
         else:
           awaitNode = this.parseAwait(node)
