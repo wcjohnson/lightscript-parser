@@ -28,6 +28,9 @@ export registerPlugins(registerPlugin, Plugin) ->
   registerPlugin(new Plugin({ name: 'exportDefaultFrom' }))
   registerPlugin(new Plugin({ name: 'exportNamespaceFrom' }))
   registerPlugin(new Plugin({ name: 'jsonStrings' }))
+  // XXX: add topLevelAwait plugin because some build tools seem to require it
+  // Implementation will have to wait until next merge of babel-parser
+  registerPlugin(new Plugin({ name: 'topLevelAwait' }))
 
   registerPlugin(new Plugin({
     name: 'pipelineOperator'
