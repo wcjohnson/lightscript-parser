@@ -4,12 +4,12 @@ function getParser(code, plugins) {
   return () => parse(code, { plugins, sourceType: "module" });
 }
 
-describe("plugin options", function() {
-  describe("the first options are used", function() {
+describe("plugin options", function () {
+  describe("the first options are used", function () {
     // NOTE: This test is not specific about decorators, it can be applied
     // to any plugin with options.
 
-    it("when they aren't specified", function() {
+    it("when they aren't specified", function () {
       const WITHOUT_FLAG = "flow";
       const WITH_FLAG = ["flow", { all: true }];
 
@@ -52,7 +52,7 @@ describe("plugin options", function() {
       ).toMatchObject(AST_WITH_FLAG);
     });
 
-    it("when they are specified", function() {
+    it("when they are specified", function () {
       const NAME = "decorators";
       const OPT_1 = [NAME, { decoratorsBeforeExport: true }];
       const OPT_2 = [NAME, { decoratorsBeforeExport: false }];
@@ -63,6 +63,15 @@ describe("plugin options", function() {
       expect(getParser(SYNTAX_2, [OPT_2, OPT_1])).not.toThrow();
       expect(getParser(SYNTAX_1, [OPT_2, OPT_1])).toThrow();
       expect(getParser(SYNTAX_2, [OPT_1, OPT_2])).toThrow();
+    });
+  });
+  describe("'moduleAttributes' plugin", () => {
+    (process.env.BABEL_8_BREAKING ? it : it.skip)("removed in Babel 8", () => {
+      expect(
+        getParser("", ["moduleAttributes"]),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"\`moduleAttributes\` has been removed in Babel 8, please use \`importAssertions\` parser plugin, or \`@babel/plugin-syntax-import-assertions\`."`,
+      );
     });
   });
 });

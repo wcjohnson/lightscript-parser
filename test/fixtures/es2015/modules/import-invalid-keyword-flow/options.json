@@ -1,4 +1,4 @@
 {
-  "plugins": ["flow"],
-  "throws": "default is a reserved word (1:9)"
+  "sourceType": "module",
+  "plugins": ["flow"]
 }

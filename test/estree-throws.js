@@ -1,5 +1,13 @@
 import path from "path";
-import { runThrowTestsWithEstree } from "./helpers/runFixtureTests";
+import { runFixtureTestsWithoutExactASTMatch } from "./helpers/runFixtureTests";
 import { parse } from "../lib";
+import { fileURLToPath } from "url";
 
-runThrowTestsWithEstree(path.join(__dirname, "fixtures"), parse);
+runFixtureTestsWithoutExactASTMatch(
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
+  (input, options = {}) => {
+    options.plugins = options.plugins || [];
+    options.plugins.push("estree");
+    return parse(input, options);
+  },
+);

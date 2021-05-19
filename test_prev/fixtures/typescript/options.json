@@ -1,0 +1,6 @@
+{
+  "_comment": "LightScript+TypeScript is temporarily disabled",
+  "banPlugins": ["lscCoreSyntax", "bangCall"],
+  "sourceType": "module",
+  "plugins": ["typescript"]
+}

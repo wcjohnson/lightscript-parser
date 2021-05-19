@@ -1,19 +1,46 @@
 // @flow
 
+// Error messages are colocated with the plugin.
+/* eslint-disable @babel/development-internal/dry-error-messages */
+
 import * as charCodes from "charcodes";
 
 import XHTMLEntities from "./xhtml";
 import type Parser from "../../parser";
+import type { ExpressionErrors } from "../../parser/util";
 import { TokenType, types as tt } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
-import type { Pos, Position } from "../../util/location";
+import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
+import { Errors, makeErrorTemplates, ErrorCodes } from "../../parser/error";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
+/* eslint sort-keys: "error" */
+const JsxErrors = makeErrorTemplates(
+  {
+    AttributeIsEmpty:
+      "JSX attributes must only be assigned a non-empty expression.",
+    MissingClosingTagElement:
+      "Expected corresponding JSX closing tag for <%0>.",
+    MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>.",
+    UnexpectedSequenceExpression:
+      "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
+    UnsupportedJsxValue:
+      "JSX value should be either an expression or a quoted JSX text.",
+    UnterminatedJsxContent: "Unterminated JSX contents.",
+    UnwrappedAdjacentJSXElements:
+      "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
+  },
+  /* code */ ErrorCodes.SyntaxError,
+);
+/* eslint-disable sort-keys */
+
+// Be aware that this file is always executed and not only when the plugin is enabled.
+// Therefore this contexts and tokens do always exist.
 tc.j_oTag = new TokContext("<tag", false);
 tc.j_cTag = new TokContext("</tag", false);
 tc.j_expr = new TokContext("<tag>...</tag>", true, true);
@@ -23,13 +50,13 @@ tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
 tt.jsxTagStart = new TokenType("jsxTagStart", { startsExpr: true });
 tt.jsxTagEnd = new TokenType("jsxTagEnd");
 
-tt.jsxTagStart.updateContext = function() {
+tt.jsxTagStart.updateContext = function () {
   this.state.context.push(tc.j_expr); // treat as beginning of JSX expression
   this.state.context.push(tc.j_oTag); // start opening tag context
   this.state.exprAllowed = false;
 };
 
-tt.jsxTagEnd.updateContext = function(prevType) {
+tt.jsxTagEnd.updateContext = function (prevType) {
   const out = this.state.context.pop();
   if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
     this.state.context.pop();
@@ -79,8 +106,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let out = "";
       let chunkStart = this.state.pos;
       for (;;) {
-        if (this.state.pos >= this.input.length) {
-          this.raise(this.state.start, "Unterminated JSX contents");
+        if (this.state.pos >= this.length) {
+          throw this.raise(this.state.start, JsxErrors.UnterminatedJsxContent);
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -93,7 +120,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 ++this.state.pos;
                 return this.finishToken(tt.jsxTagStart);
               }
-              return this.getTokenFromCode(ch);
+              return super.getTokenFromCode(ch);
             }
             out += this.input.slice(chunkStart, this.state.pos);
             return this.finishToken(tt.jsxText, out);
@@ -103,6 +130,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             out += this.jsxReadEntity();
             chunkStart = this.state.pos;
             break;
+
+          case charCodes.greaterThan:
+          case charCodes.rightCurlyBrace:
+            if (process.env.BABEL_8_BREAKING) {
+              const htmlEntity =
+                ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
+              const char = this.input[this.state.pos];
+              this.raise(this.state.pos, {
+                code: ErrorCodes.SyntaxError,
+                reasonCode: "UnexpectedToken",
+                template: `Unexpected token \`${char}\`. Did you mean \`${htmlEntity}\` or \`{'${char}'}\`?`,
+              });
+            }
+          /* falls through */
 
           default:
             if (isNewLine(ch)) {
@@ -139,8 +180,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let out = "";
       let chunkStart = ++this.state.pos;
       for (;;) {
-        if (this.state.pos >= this.input.length) {
-          this.raise(this.state.start, "Unterminated string constant");
+        if (this.state.pos >= this.length) {
+          throw this.raise(this.state.start, Errors.UnterminatedString);
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -168,7 +209,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let ch = this.input[this.state.pos];
 
       const startPos = ++this.state.pos;
-      while (this.state.pos < this.input.length && count++ < 10) {
+      while (this.state.pos < this.length && count++ < 10) {
         ch = this.input[this.state.pos++];
         if (ch === ";") {
           if (str[0] === "#") {
@@ -248,10 +289,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Parses element name in any form - namespaced, member
     // or single identifier.
 
-    jsxParseElementName(): N.JSXNamespacedName | N.JSXMemberExpression {
+    jsxParseElementName():
+      | N.JSXIdentifier
+      | N.JSXNamespacedName
+      | N.JSXMemberExpression {
       const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       let node = this.jsxParseNamespacedName();
+      if (node.type === "JSXNamespacedName") {
+        return node;
+      }
       while (this.eat(tt.dot)) {
         const newNode = this.startNodeAt(startPos, startLoc);
         newNode.object = node;
@@ -267,25 +314,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let node;
       switch (this.state.type) {
         case tt.braceL:
-          node = this.jsxParseExpressionContainer();
+          node = this.startNode();
+          this.next();
+          node = this.jsxParseExpressionContainer(node);
           if (node.expression.type === "JSXEmptyExpression") {
-            throw this.raise(
-              node.start,
-              "JSX attributes must only be assigned a non-empty expression",
-            );
-          } else {
-            return node;
+            this.raise(node.start, JsxErrors.AttributeIsEmpty);
           }
+          return node;
 
         case tt.jsxTagStart:
         case tt.string:
           return this.parseExprAtom();
 
         default:
-          throw this.raise(
-            this.state.start,
-            "JSX value should be either an expression or a quoted JSX text",
-          );
+          throw this.raise(this.state.start, JsxErrors.UnsupportedJsxValue);
       }
     }
 
@@ -308,10 +350,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Parse JSX spread child
 
-    jsxParseSpreadChild(): N.JSXSpreadChild {
-      const node = this.startNode();
-      this.expect(tt.braceL);
-      this.expect(tt.ellipsis);
+    jsxParseSpreadChild(node: N.JSXSpreadChild): N.JSXSpreadChild {
+      this.next(); // ellipsis
       node.expression = this.parseExpression();
       this.expect(tt.braceR);
 
@@ -320,18 +360,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Parses JSX expression enclosed into curly brackets.
 
-    jsxParseExpressionContainer(): N.JSXExpressionContainer {
-      const node = this.startNode();
-      this.next();
+    jsxParseExpressionContainer(
+      node: N.JSXExpressionContainer,
+    ): N.JSXExpressionContainer {
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
-      } else if (this.hasPlugin("spreadLoop") && this.match(this.tt_spreadLoop)) {
-        // LSC: spread loops
-        node.expression = this.spreadLoop_parseSpreadLoop(null);
       } else {
-        node.expression = this.parseExpression();
+        const expression = this.parseExpression();
+
+        if (process.env.BABEL_8_BREAKING) {
+          if (
+            expression.type === "SequenceExpression" &&
+            !expression.extra?.parenthesized
+          ) {
+            this.raise(
+              expression.expressions[1].start,
+              JsxErrors.UnexpectedSequenceExpression,
+            );
+          }
+        }
+
+        node.expression = expression;
       }
       this.expect(tt.braceR);
+
       return this.finishNode(node, "JSXExpressionContainer");
     }
 
@@ -341,7 +393,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
       if (this.eat(tt.braceL)) {
         this.expect(tt.ellipsis);
-        node.argument = this.parseMaybeAssign();
+        node.argument = this.parseMaybeAssignAllowIn();
         this.expect(tt.braceR);
         return this.finishNode(node, "JSXSpreadAttribute");
       }
@@ -424,15 +476,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               children.push(this.parseExprAtom());
               break;
 
-            case tt.braceL:
-              if (this.lookahead().type === tt.ellipsis) {
-                children.push(this.jsxParseSpreadChild());
+            case tt.braceL: {
+              const node = this.startNode();
+              this.next();
+              if (this.match(tt.ellipsis)) {
+                children.push(this.jsxParseSpreadChild(node));
               } else {
-                children.push(this.jsxParseExpressionContainer());
+                children.push(this.jsxParseExpressionContainer(node));
               }
 
               break;
-
+            }
             // istanbul ignore next - should never happen
             default:
               throw this.unexpected();
@@ -443,15 +497,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(
             // $FlowIgnore
             closingElement.start,
-            "Expected corresponding JSX closing tag for <>",
+            JsxErrors.MissingClosingTagFragment,
           );
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
           this.raise(
             // $FlowIgnore
             closingElement.start,
-            "Expected corresponding JSX closing tag for <" +
-              getQualifiedJSXName(openingElement.name) +
-              ">",
+            JsxErrors.MissingClosingTagElement,
+            getQualifiedJSXName(openingElement.name),
           );
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
           if (
@@ -462,9 +515,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.raise(
               // $FlowIgnore
               closingElement.start,
-              "Expected corresponding JSX closing tag for <" +
-                getQualifiedJSXName(openingElement.name) +
-                ">",
+              JsxErrors.MissingClosingTagElement,
+              getQualifiedJSXName(openingElement.name),
             );
           }
         }
@@ -478,11 +530,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.closingElement = closingElement;
       }
       node.children = children;
-      if (this.match(tt.relational) && this.state.value === "<") {
-        this.raise(
+      if (this.isRelational("<")) {
+        throw this.raise(
           this.state.start,
-          "Adjacent JSX elements must be wrapped in an enclosing tag. " +
-            "Did you want a JSX fragment <>...</>?",
+          JsxErrors.UnwrappedAdjacentJSXElements,
         );
       }
 
@@ -504,18 +555,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Overrides
     // ==================================
 
-    parseExprAtom(refShortHandDefaultPos: ?Pos): N.Expression {
+    parseExprAtom(refExpressionErrors: ?ExpressionErrors): N.Expression {
       if (this.match(tt.jsxText)) {
         return this.parseLiteral(this.state.value, "JSXText");
       } else if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
+      } else if (
+        this.isRelational("<") &&
+        this.input.charCodeAt(this.state.pos) !== charCodes.exclamationMark
+      ) {
+        // In case we encounter an lt token here it will always be the start of
+        // jsx as the lt sign is not allowed in places that expect an expression
+        this.finishToken(tt.jsxTagStart);
+        return this.jsxParseElement();
       } else {
-        return super.parseExprAtom(refShortHandDefaultPos);
+        return super.parseExprAtom(refExpressionErrors);
       }
     }
 
-    readToken(code: number): void {
-      if (this.state.inPropertyName) return super.readToken(code);
+    getTokenFromCode(code: number): void {
+      if (this.state.inPropertyName) return super.getTokenFromCode(code);
 
       const context = this.curContext();
 
@@ -541,13 +600,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      // LSC: Don't parse jsxTagStarts in MatchCaseTests
-      if (code === charCodes.lessThan && this.state.exprAllowed && (!this.state.inMatchCaseTest)) {
+      if (
+        code === charCodes.lessThan &&
+        this.state.exprAllowed &&
+        this.input.charCodeAt(this.state.pos + 1) !== charCodes.exclamationMark
+      ) {
         ++this.state.pos;
         return this.finishToken(tt.jsxTagStart);
       }
 
-      return super.readToken(code);
+      return super.getTokenFromCode(code);
     }
 
     updateContext(prevType: TokenType): void {
